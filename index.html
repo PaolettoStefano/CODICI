@@ -243,7 +243,11 @@
       box-shadow: 0 0 0 4px rgba(22, 119, 255, .1);
     }
 
-    button {
+    button, a.btn-link {
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
+      box-sizing: border-box;
       border: 0;
       border-radius: 15px;
       padding: 14px 19px;
@@ -253,7 +257,7 @@
       transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
     }
 
-    button:hover {
+    button:hover, a.btn-link:hover {
       transform: translateY(-2px);
       filter: brightness(1.04);
     }
@@ -288,7 +292,7 @@
       gap: 10px;
     }
 
-    .actions button {
+    .actions button, .actions a.btn-link {
       flex: 1;
       min-width: 170px;
     }
@@ -322,7 +326,7 @@
       animation: fade .25s ease both;
     }
 
-    .nota, .contatore {
+    .nota {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.55;
@@ -361,62 +365,6 @@
 
     #risultato {
       display: none;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    .section-head h2 {
-      margin: 0;
-    }
-
-    .tabella-container {
-      position: relative;
-      z-index: 1;
-      overflow-x: auto;
-      margin-top: 20px;
-      border: 1px solid rgba(130, 148, 177, .16);
-      border-radius: 18px;
-    }
-
-    table {
-      width: 100%;
-      min-width: 650px;
-      border-collapse: collapse;
-      background: rgba(255, 255, 255, .25);
-    }
-
-    th {
-      padding: 14px 12px;
-      color: var(--muted);
-      border-bottom: 1px solid rgba(130, 148, 177, .2);
-      font-size: 11px;
-      letter-spacing: .1em;
-      text-align: left;
-      text-transform: uppercase;
-    }
-
-    td {
-      padding: 15px 12px;
-      border-bottom: 1px solid rgba(130, 148, 177, .12);
-      font-size: 14px;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .codice-tabella {
-      color: var(--blue);
-      font-family: monospace;
-      font-weight: 700;
     }
 
     @keyframes rise {
@@ -566,27 +514,10 @@
     </section>
 
     <section class="card">
-      <div class="section-head">
-        <h2>Codici generati</h2>
-        <button class="success" onclick="ghFetch()">Aggiorna elenco</button>
-      </div>
-
-      <div id="contatore" class="contatore">Nessun dato caricato.</div>
-
-      <div class="tabella-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-              <th>Codice</th>
-              <th>Cliente</th>
-              <th>Data</th>
-              <th>Ora</th>
-            </tr>
-          </thead>
-          <tbody id="tabella"></tbody>
-        </table>
-      </div>
+      <h2>Archivio Codici</h2>
+      <a href="codici_generati.html" class="primary btn-link" style="width: 100%;">
+        Apri lettura codici generati
+      </a>
     </section>
   </main>
 
@@ -640,7 +571,6 @@
       try {
         await ghFetchSilenzioso();
         await caricaDominio();
-        renderTable();
         setStatus("Connesso e aggiornato", "var(--green)");
       } catch (error) {
         console.error(error);
@@ -825,7 +755,6 @@
         document.getElementById("risultato").style.display = "block";
 
         nomeInput.value = "";
-        renderTable();
         setStatus("Codice salvato su GitHub", "var(--green)");
       } catch (error) {
         console.error(error);
@@ -880,48 +809,6 @@
       if (risultato.content && risultato.content.sha) {
         fileSha = risultato.content.sha;
       }
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById("tabella");
-      tbody.innerHTML = "";
-
-      document.getElementById("contatore").textContent =
-        "Totale codici: " + records.length;
-
-      if (!records.length) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" style="text-align:center;padding:28px;color:var(--muted)">
-              Nessun codice presente.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      [...records].reverse().forEach(record => {
-        const tr = document.createElement("tr");
-
-        [
-          record.nome || "",
-          record.codice || "",
-          record.cliente || "",
-          record.data || "",
-          record.ora || ""
-        ].forEach((value, index) => {
-          const td = document.createElement("td");
-          td.textContent = value;
-
-          if (index === 1) {
-            td.className = "codice-tabella";
-          }
-
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
     }
 
     nomeInput.addEventListener("keydown", event => {
