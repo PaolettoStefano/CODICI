@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -100,6 +101,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 20px;
       background: rgba(10, 13, 20, 0.65);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(20px) saturate(180%);
@@ -110,6 +112,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      min-width: 0;
     }
 
     .brand-mark {
@@ -117,6 +120,7 @@
       height: 40px;
       display: grid;
       place-items: center;
+      flex-shrink: 0;
       border-radius: 10px;
       color: #fff;
       font: 800 16px "Plus Jakarta Sans", sans-serif;
@@ -130,7 +134,6 @@
       font-size: 17px;
       font-weight: 700;
       letter-spacing: -0.02em;
-      color: var(--text);
     }
 
     .brand small {
@@ -140,6 +143,42 @@
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .archive-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      color: #fff;
+      text-decoration: none;
+      white-space: nowrap;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .archive-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(59, 130, 246, 0.35);
+      background: linear-gradient(135deg, #60a5fa, var(--accent-blue));
+    }
+
+    .archive-btn:active {
+      transform: translateY(0);
     }
 
     .logo-frame {
@@ -501,17 +540,51 @@
       }
     }
 
-    @media (max-width: 650px) {
+    @media (max-width: 800px) {
       .topbar {
-        padding: 0 20px;
+        padding: 12px 20px;
+        min-height: auto;
       }
 
-      .brand small {
-        display: none;
+      .topbar-actions {
+        gap: 8px;
+      }
+
+      .archive-btn {
+        padding: 10px 12px;
+        font-size: 12px;
       }
 
       .logo-frame {
         height: 38px;
+        padding: 4px 10px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .brand small {
+        display: none;
+      }
+
+      .brand strong {
+        font-size: 15px;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+      }
+
+      .archive-btn {
+        font-size: 0;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+      }
+
+      .archive-btn::before {
+        content: "📖";
+        font-size: 17px;
       }
 
       .hero {
@@ -545,12 +618,27 @@
 
     </div>
 
-    <div class="logo-frame" aria-label="Logo">
+    <div class="topbar-actions">
 
-      <img
-        src="HALINK_3.jpeg"
-        alt="HA LINK Logo"
+      <!-- PULSANTE LETTURA CODICI SPOSTATO IN ALTO -->
+
+      <a
+        href="elenco_codici.html"
+        class="archive-btn"
+        aria-label="Apri lettura codici generati"
       >
+        <span>📖</span>
+        <span>Leggi codici</span>
+      </a>
+
+      <div class="logo-frame" aria-label="Logo">
+
+        <img
+          src="HALINK_3.jpeg"
+          alt="HA LINK Logo"
+        >
+
+      </div>
 
     </div>
 
@@ -855,28 +943,6 @@
         ></div>
 
       </div>
-
-    </section>
-
-
-    <!-- =========================================
-         ARCHIVIO
-         ========================================= -->
-
-    <section class="card">
-
-      <h2>
-        Archivio Codici
-      </h2>
-
-
-      <a
-        href="elenco_codici.html"
-        class="primary btn-link"
-        style="width: 100%;"
-      >
-        Apri lettura codici generati
-      </a>
 
     </section>
 
@@ -2091,3 +2157,4 @@
 
 </body>
 </html>
+```
