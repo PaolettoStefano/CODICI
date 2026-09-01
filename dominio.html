@@ -1,0 +1,817 @@
+```html
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestione dominio.json</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #24292f;
+            color: white;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-save {
+            background: #1f883d;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #1a7f37;
+        }
+
+        .btn-back {
+            background: #6e7781;
+            color: white;
+        }
+
+        .btn-format {
+            background: #0969da;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #editor {
+            width: 100%;
+            min-height: 600px;
+            resize: vertical;
+            padding: 18px;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #24292f;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            tab-size: 2;
+            outline: none;
+        }
+
+        #editor:focus {
+            border-color: #0969da;
+            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+        }
+
+        .info {
+            background: white;
+            border: 1px solid #d0d7de;
+            border-radius: 8px;
+            padding: 15px 18px;
+            margin-bottom: 15px;
+        }
+
+        .info strong {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        #status {
+            margin-top: 15px;
+            padding: 13px 16px;
+            border-radius: 6px;
+            display: none;
+            white-space: pre-wrap;
+        }
+
+        #status.success {
+            display: block;
+            background: #dafbe1;
+            color: #116329;
+            border: 1px solid #aceebb;
+        }
+
+        #status.error {
+            display: block;
+            background: #ffebe9;
+            color: #cf222e;
+            border: 1px solid #ff8182;
+        }
+
+        #status.info-status {
+            display: block;
+            background: #ddf4ff;
+            color: #0550ae;
+            border: 1px solid #80ccff;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            padding: 25px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #editor {
+                min-height: 500px;
+                font-size: 13px;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚙ Gestione dominio.json</h1>
+    <button class="btn-back" onclick="tornaIndex()">
+        ← Torna a index.html
+    </button>
+</header>
+
+<div class="container">
+
+    <div class="info">
+        <div>
+            <strong>File:</strong> dominio.json
+        </div>
+        <div>
+            <strong>Repository:</strong>
+            <span id="repositoryInfo">caricamento...</span>
+        </div>
+        <div>
+            <strong>Branch:</strong>
+            <span id="branchInfo"></span>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <button class="btn-save" id="saveButton" onclick="salvaFile()">
+            💾 Salva su GitHub
+        </button>
+
+        <button class="btn-format" onclick="formattaJSON()">
+            ✨ Formatta JSON
+        </button>
+
+        <button class="btn-back" onclick="caricaFile()">
+            ↻ Ricarica
+        </button>
+
+        <button class="btn-back" onclick="tornaIndex()">
+            ← Torna a index.html
+        </button>
+    </div>
+
+    <textarea
+        id="editor"
+        spellcheck="false"
+        placeholder="Caricamento dominio.json..."
+    ></textarea>
+
+    <div id="status"></div>
+
+</div>
+
+<footer>
+    Gestione dominio.json tramite GitHub API
+</footer>
+
+
+<script>
+
+    /*
+     * ============================================================
+     * CONFIGURAZIONE GITHUB
+     * ============================================================
+     *
+     * MODIFICA QUESTI VALORI.
+     */
+
+    const GITHUB_OWNER = "TUO_USERNAME";
+    const GITHUB_REPO = "TUO_REPOSITORY";
+    const GITHUB_BRANCH = "main";
+
+    /*
+     * ATTENZIONE:
+     *
+     * NON è sicuro mettere un Personal Access Token direttamente
+     * dentro un file HTML pubblicamente accessibile.
+     *
+     * Inserisci qui il token SOLO se questo pannello è protetto
+     * e non è accessibile al pubblico.
+     */
+
+    const GITHUB_TOKEN = "INCOLLA_QUI_IL_TUO_TOKEN";
+
+
+    /*
+     * Nome del file da gestire
+     */
+    const FILE_PATH = "dominio.json";
+
+
+    /*
+     * URL API GitHub
+     */
+    const API_URL =
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+
+
+    /*
+     * SHA attuale del file.
+     *
+     * GitHub lo richiede quando vogliamo aggiornare un file.
+     */
+    let fileSHA = null;
+
+
+    /*
+     * Elementi HTML
+     */
+    const editor = document.getElementById("editor");
+    const statusBox = document.getElementById("status");
+    const saveButton = document.getElementById("saveButton");
+
+
+    /*
+     * Avvio pagina
+     */
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.getElementById("repositoryInfo").textContent =
+            `${GITHUB_OWNER}/${GITHUB_REPO}`;
+
+        document.getElementById("branchInfo").textContent =
+            GITHUB_BRANCH;
+
+        caricaFile();
+    });
+
+
+    /*
+     * ============================================================
+     * MESSAGGI
+     * ============================================================
+     */
+
+    function mostraStatus(tipo, messaggio) {
+
+        statusBox.className = "";
+
+        if (tipo === "success") {
+            statusBox.classList.add("success");
+        }
+
+        if (tipo === "error") {
+            statusBox.classList.add("error");
+        }
+
+        if (tipo === "info") {
+            statusBox.classList.add("info-status");
+        }
+
+        statusBox.textContent = messaggio;
+    }
+
+
+    /*
+     * ============================================================
+     * HEADERS GITHUB
+     * ============================================================
+     */
+
+    function getHeaders() {
+
+        return {
+            "Accept": "application/vnd.github+json",
+            "Authorization": `Bearer ${GITHUB_TOKEN}`,
+            "X-GitHub-Api-Version": "2022-11-28"
+        };
+    }
+
+
+    /*
+     * ============================================================
+     * CARICA dominio.json
+     * ============================================================
+     */
+
+    async function caricaFile() {
+
+        if (!GITHUB_TOKEN ||
+            GITHUB_TOKEN === "INCOLLA_QUI_IL_TUO_TOKEN") {
+
+            mostraStatus(
+                "error",
+                "Token GitHub non configurato.\n\n" +
+                "Inserisci il Personal Access Token nella variabile GITHUB_TOKEN."
+            );
+
+            return;
+        }
+
+        editor.disabled = true;
+
+        mostraStatus(
+            "info",
+            "⏳ Caricamento dominio.json da GitHub..."
+        );
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}?ref=${encodeURIComponent(GITHUB_BRANCH)}`,
+                {
+                    method: "GET",
+                    headers: getHeaders()
+                }
+            );
+
+
+            if (!response.ok) {
+
+                await gestisciErroreGitHub(response, "lettura");
+
+                return;
+            }
+
+
+            const data = await response.json();
+
+
+            /*
+             * Salviamo lo SHA.
+             */
+            fileSHA = data.sha;
+
+
+            /*
+             * GitHub restituisce il contenuto
+             * in Base64.
+             */
+            const decoded = decodeBase64UTF8(data.content);
+
+
+            /*
+             * Proviamo a interpretare il JSON.
+             */
+            const json = JSON.parse(decoded);
+
+
+            /*
+             * Lo mostriamo formattato.
+             */
+            editor.value = JSON.stringify(json, null, 2);
+
+
+            mostraStatus(
+                "success",
+                "✓ dominio.json caricato correttamente."
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            mostraStatus(
+                "error",
+                "Errore durante il caricamento:\n\n" +
+                error.message
+            );
+
+        } finally {
+
+            editor.disabled = false;
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * SALVA dominio.json
+     * ============================================================
+     */
+
+    async function salvaFile() {
+
+        /*
+         * Controlliamo che il JSON sia valido.
+         */
+        let json;
+
+        try {
+
+            json = JSON.parse(editor.value);
+
+        } catch (error) {
+
+            mostraStatus(
+                "error",
+                "❌ Il contenuto non è un JSON valido.\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+
+        /*
+         * Controllo SHA.
+         */
+        if (!fileSHA) {
+
+            mostraStatus(
+                "error",
+                "SHA del file non disponibile.\n" +
+                "Prova prima a ricaricare dominio.json."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Convertiamo il JSON in stringa.
+         */
+        const contenuto = JSON.stringify(json, null, 2) + "\n";
+
+
+        /*
+         * Codifica Base64 UTF-8.
+         */
+        const encodedContent = encodeBase64UTF8(contenuto);
+
+
+        /*
+         * Disabilitiamo il pulsante.
+         */
+        saveButton.disabled = true;
+
+
+        mostraStatus(
+            "info",
+            "⏳ Salvataggio di dominio.json su GitHub..."
+        );
+
+
+        try {
+
+            const response = await fetch(
+                API_URL,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        ...getHeaders(),
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        message: "Aggiornamento dominio.json",
+
+                        content: encodedContent,
+
+                        sha: fileSHA,
+
+                        branch: GITHUB_BRANCH
+
+                    })
+                }
+            );
+
+
+            if (!response.ok) {
+
+                await gestisciErroreGitHub(response, "salvataggio");
+
+                return;
+            }
+
+
+            const data = await response.json();
+
+
+            /*
+             * Aggiorniamo lo SHA.
+             */
+            if (data.content && data.content.sha) {
+
+                fileSHA = data.content.sha;
+            }
+
+
+            /*
+             * Riscriviamo il JSON formattato.
+             */
+            editor.value = JSON.stringify(json, null, 2);
+
+
+            mostraStatus(
+                "success",
+                "✓ dominio.json salvato correttamente su GitHub."
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            mostraStatus(
+                "error",
+                "Errore durante il salvataggio:\n\n" +
+                error.message
+            );
+
+        } finally {
+
+            saveButton.disabled = false;
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * FORMATTA JSON
+     * ============================================================
+     */
+
+    function formattaJSON() {
+
+        try {
+
+            const json = JSON.parse(editor.value);
+
+            editor.value =
+                JSON.stringify(json, null, 2);
+
+            mostraStatus(
+                "success",
+                "✓ JSON formattato correttamente."
+            );
+
+        } catch (error) {
+
+            mostraStatus(
+                "error",
+                "❌ JSON non valido.\n\n" +
+                error.message
+            );
+        }
+    }
+
+
+    /*
+     * ============================================================
+     * TORNA A index.html
+     * ============================================================
+     */
+
+    function tornaIndex() {
+
+        window.location.href = "index.html";
+    }
+
+
+    /*
+     * ============================================================
+     * GESTIONE ERRORI GITHUB
+     * ============================================================
+     */
+
+    async function gestisciErroreGitHub(response, operazione) {
+
+        let data = null;
+
+        try {
+            data = await response.json();
+        } catch (e) {
+            // Nessun JSON nella risposta
+        }
+
+
+        const message =
+            data && data.message
+                ? data.message
+                : "Errore HTTP " + response.status;
+
+
+        /*
+         * Errore 401
+         */
+        if (response.status === 401) {
+
+            mostraStatus(
+                "error",
+                "❌ GitHub ha rifiutato il token.\n\n" +
+                "Controlla che il Personal Access Token sia valido " +
+                "e non sia scaduto.\n\n" +
+                "Risposta GitHub:\n" +
+                message
+            );
+
+            return;
+        }
+
+
+        /*
+         * Errore 403
+         */
+        if (response.status === 403) {
+
+            mostraStatus(
+                "error",
+                "❌ GitHub HTTP 403\n\n" +
+
+                "Il token è stato riconosciuto, ma NON ha " +
+                "l'autorizzazione necessaria per " +
+                operazione + " il file.\n\n" +
+
+                "Per un Fine-grained Personal Access Token " +
+                "controlla:\n\n" +
+
+                "• Repository access → repository corretto\n" +
+                "• Repository permissions → Contents → Read and write\n\n" +
+
+                "Se il repository appartiene a un'organizzazione, " +
+                "controlla anche le eventuali policy dell'organizzazione.\n\n" +
+
+                "Risposta GitHub:\n" +
+                message
+            );
+
+            return;
+        }
+
+
+        /*
+         * Errore 404
+         */
+        if (response.status === 404) {
+
+            mostraStatus(
+                "error",
+                "❌ GitHub HTTP 404\n\n" +
+
+                "Repository o file non trovato.\n\n" +
+
+                "Controlla:\n" +
+
+                "• GITHUB_OWNER\n" +
+                "• GITHUB_REPO\n" +
+                "• GITHUB_BRANCH\n" +
+                "• nome di dominio.json\n\n" +
+
+                "Risposta GitHub:\n" +
+                message
+            );
+
+            return;
+        }
+
+
+        /*
+         * Errore 409
+         */
+        if (response.status === 409) {
+
+            mostraStatus(
+                "error",
+                "❌ GitHub HTTP 409\n\n" +
+
+                "Il file è stato modificato da un'altra operazione " +
+                "oppure lo SHA non è più aggiornato.\n\n" +
+
+                "Ricarica il file e prova nuovamente."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Errore generico
+         */
+        mostraStatus(
+            "error",
+            `❌ GitHub HTTP ${response.status}\n\n` +
+            `Operazione: ${operazione}\n\n` +
+            message
+        );
+    }
+
+
+    /*
+     * ============================================================
+     * BASE64 UTF-8
+     * ============================================================
+     *
+     * GitHub usa Base64.
+     * Queste funzioni gestiscono correttamente anche
+     * caratteri accentati e Unicode.
+     */
+
+    function decodeBase64UTF8(base64) {
+
+        const binary = atob(
+            base64.replace(/\n/g, "")
+        );
+
+        const bytes = Uint8Array.from(
+            binary,
+            char => char.charCodeAt(0)
+        );
+
+        return new TextDecoder("utf-8").decode(bytes);
+    }
+
+
+    function encodeBase64UTF8(text) {
+
+        const bytes =
+            new TextEncoder().encode(text);
+
+        let binary = "";
+
+        const chunkSize = 0x8000;
+
+        for (
+            let i = 0;
+            i < bytes.length;
+            i += chunkSize
+        ) {
+
+            binary += String.fromCharCode(
+                ...bytes.subarray(
+                    i,
+                    Math.min(i + chunkSize, bytes.length)
+                )
+            );
+        }
+
+        return btoa(binary);
+    }
+
+</script>
+
+</body>
+</html>
+```
