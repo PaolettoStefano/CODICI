@@ -26,5 +26,12 @@
     "cliente": "NT8J2RRWP3O.aaaaa.ee",
     "data": "01/09/2026",
     "ora": "13:58:23"
+  },
+  {
+    "nome": "pippo",
+    "codice": "SI80W4QHM5Y",
+    "cliente": "SI80W4QHM5Y.tuodominio.it",
+    "data": "01/09/2026",
+    "ora": "14:23:21"
   }
 ]
