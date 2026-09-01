@@ -2,813 +2,915 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Gestione dominio.json</title>
+<title>Gestione dominio</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f6f8;
-            color: #222;
-        }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            Helvetica,
+            Arial,
+            sans-serif;
 
-        header {
-            background: #24292f;
-            color: white;
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-        }
+        background: linear-gradient(135deg, #f4f7fb, #e9eef7);
 
-        header h1 {
-            margin: 0;
-            font-size: 21px;
-        }
+        color: #1f2937;
 
-        .container {
-            max-width: 1200px;
-            margin: 25px auto;
-            padding: 0 20px;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .toolbar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
+    .card {
+        width: min(520px, calc(100% - 32px));
 
-        button {
-            border: 0;
-            border-radius: 6px;
-            padding: 11px 18px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+        background: rgba(255,255,255,0.96);
 
-        .btn-save {
-            background: #1f883d;
-            color: white;
-        }
+        border-radius: 20px;
 
-        .btn-save:hover {
-            background: #1a7f37;
-        }
+        padding: 34px;
 
-        .btn-back {
-            background: #6e7781;
-            color: white;
-        }
+        box-shadow:
+            0 20px 50px rgba(0,0,0,0.10),
+            0 4px 12px rgba(0,0,0,0.05);
+    }
 
-        .btn-format {
-            background: #0969da;
-            color: white;
-        }
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+    .icon {
+        width: 58px;
+        height: 58px;
 
-        #editor {
-            width: 100%;
-            min-height: 600px;
-            resize: vertical;
-            padding: 18px;
-            border: 1px solid #d0d7de;
-            border-radius: 8px;
-            background: #ffffff;
-            color: #24292f;
-            font-family: Consolas, Monaco, monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            tab-size: 2;
-            outline: none;
-        }
+        margin: 0 auto 16px;
 
-        #editor:focus {
-            border-color: #0969da;
-            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
-        }
+        border-radius: 16px;
 
-        .info {
-            background: white;
-            border: 1px solid #d0d7de;
-            border-radius: 8px;
-            padding: 15px 18px;
-            margin-bottom: 15px;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .info strong {
-            display: inline-block;
-            margin-right: 5px;
-        }
+        background: #eef2ff;
 
-        #status {
-            margin-top: 15px;
-            padding: 13px 16px;
-            border-radius: 6px;
-            display: none;
-            white-space: pre-wrap;
-        }
+        font-size: 28px;
+    }
 
-        #status.success {
-            display: block;
-            background: #dafbe1;
-            color: #116329;
-            border: 1px solid #aceebb;
-        }
+    h1 {
+        margin: 0;
 
-        #status.error {
-            display: block;
-            background: #ffebe9;
-            color: #cf222e;
-            border: 1px solid #ff8182;
-        }
+        font-size: 25px;
 
-        #status.info-status {
-            display: block;
-            background: #ddf4ff;
-            color: #0550ae;
-            border: 1px solid #80ccff;
-        }
+        font-weight: 700;
 
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
+        color: #111827;
+    }
 
-        footer {
-            text-align: center;
-            color: #666;
-            font-size: 12px;
+    .subtitle {
+        margin-top: 8px;
+
+        color: #6b7280;
+
+        font-size: 14px;
+    }
+
+    .field {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+
+        margin-bottom: 8px;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        color: #374151;
+    }
+
+    input {
+        width: 100%;
+
+        height: 50px;
+
+        border-radius: 10px;
+
+        border: 1px solid #d1d5db;
+
+        padding: 0 15px;
+
+        font-size: 16px;
+
+        outline: none;
+
+        transition: all 0.2s ease;
+    }
+
+    input:focus {
+        border-color: #6366f1;
+
+        box-shadow:
+            0 0 0 3px rgba(99,102,241,0.12);
+    }
+
+    input.readonly {
+        background: #f3f4f6;
+
+        color: #6b7280;
+
+        cursor: not-allowed;
+    }
+
+    .row {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 14px;
+    }
+
+    .status {
+        display: none;
+
+        padding: 12px 14px;
+
+        margin-bottom: 20px;
+
+        border-radius: 10px;
+
+        font-size: 14px;
+
+        line-height: 1.4;
+    }
+
+    .status.success {
+        display: block;
+
+        background: #ecfdf3;
+
+        color: #067647;
+
+        border: 1px solid #abefc6;
+    }
+
+    .status.error {
+        display: block;
+
+        background: #fef3f2;
+
+        color: #b42318;
+
+        border: 1px solid #fecdca;
+    }
+
+    .status.loading {
+        display: block;
+
+        background: #eff8ff;
+
+        color: #175cd3;
+
+        border: 1px solid #b2ddff;
+    }
+
+    .buttons {
+        display: flex;
+
+        gap: 12px;
+
+        margin-top: 28px;
+    }
+
+    button {
+        flex: 1;
+
+        height: 48px;
+
+        border: 0;
+
+        border-radius: 10px;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+    .save {
+        background: #4f46e5;
+
+        color: white;
+    }
+
+    .save:hover {
+        background: #4338ca;
+
+        transform: translateY(-1px);
+    }
+
+    .back {
+        background: #f3f4f6;
+
+        color: #374151;
+    }
+
+    .back:hover {
+        background: #e5e7eb;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+
+        cursor: not-allowed;
+
+        transform: none !important;
+    }
+
+    .footer {
+        margin-top: 25px;
+
+        text-align: center;
+
+        color: #9ca3af;
+
+        font-size: 11px;
+    }
+
+    @media (max-width: 500px) {
+
+        .card {
             padding: 25px;
         }
 
-        @media (max-width: 600px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            #editor {
-                min-height: 500px;
-                font-size: 13px;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            .toolbar {
-                flex-direction: column;
-            }
+        .row {
+            grid-template-columns: 1fr;
         }
-    </style>
+
+        .buttons {
+            flex-direction: column;
+        }
+    }
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>⚙ Gestione dominio.json</h1>
-    <button class="btn-back" onclick="tornaIndex()">
-        ← Torna a index.html
-    </button>
-</header>
+<div class="card">
 
-<div class="container">
+    <div class="header">
 
-    <div class="info">
-        <div>
-            <strong>File:</strong> dominio.json
+        <div class="icon">
+            🌐
         </div>
-        <div>
-            <strong>Repository:</strong>
-            <span id="repositoryInfo">caricamento...</span>
+
+        <h1>Gestione dominio</h1>
+
+        <div class="subtitle">
+            Modifica le impostazioni del dominio
         </div>
-        <div>
-            <strong>Branch:</strong>
-            <span id="branchInfo"></span>
-        </div>
+
     </div>
 
-    <div class="toolbar">
-        <button class="btn-save" id="saveButton" onclick="salvaFile()">
-            💾 Salva su GitHub
-        </button>
 
-        <button class="btn-format" onclick="formattaJSON()">
-            ✨ Formatta JSON
-        </button>
+    <div id="status" class="status"></div>
 
-        <button class="btn-back" onclick="caricaFile()">
-            ↻ Ricarica
-        </button>
 
-        <button class="btn-back" onclick="tornaIndex()">
-            ← Torna a index.html
-        </button>
+    <!-- DOMINIO -->
+
+    <div class="field">
+
+        <label for="dominio">
+            Dominio
+        </label>
+
+        <input
+            type="text"
+            id="dominio"
+            placeholder="esempio.it"
+            autocomplete="off"
+        >
+
     </div>
 
-    <textarea
-        id="editor"
-        spellcheck="false"
-        placeholder="Caricamento dominio.json..."
-    ></textarea>
 
-    <div id="status"></div>
+    <!-- DATA E ORA -->
+
+    <div class="row">
+
+        <div class="field">
+
+            <label for="data">
+                Data
+            </label>
+
+            <input
+                type="text"
+                id="data"
+                class="readonly"
+                readonly
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="ora">
+                Ora
+            </label>
+
+            <input
+                type="text"
+                id="ora"
+                class="readonly"
+                readonly
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- PULSANTI -->
+
+    <div class="buttons">
+
+        <button
+            class="back"
+            onclick="tornaIndex()"
+        >
+            ← Torna al sito
+        </button>
+
+        <button
+            class="save"
+            id="saveButton"
+            onclick="salva()"
+        >
+            Salva
+        </button>
+
+    </div>
+
+
+    <div class="footer">
+        Ultima lettura da GitHub: <span id="lettura">—</span>
+    </div>
 
 </div>
-
-<footer>
-    Gestione dominio.json tramite GitHub API
-</footer>
 
 
 <script>
 
-    /*
-     * ============================================================
-     * CONFIGURAZIONE GITHUB
-     * ============================================================
-     *
-     * MODIFICA QUESTI VALORI.
-     */
+/* =========================================================
+   CONFIGURAZIONE GITHUB
+   ========================================================= */
 
-    const GITHUB_OWNER = "TUO_USERNAME";
-    const GITHUB_REPO = "TUO_REPOSITORY";
-    const GITHUB_BRANCH = "main";
+const GITHUB_OWNER = "TUO_USERNAME";
 
-    /*
-     * ATTENZIONE:
-     *
-     * NON è sicuro mettere un Personal Access Token direttamente
-     * dentro un file HTML pubblicamente accessibile.
-     *
-     * Inserisci qui il token SOLO se questo pannello è protetto
-     * e non è accessibile al pubblico.
-     */
+const GITHUB_REPO = "TUO_REPOSITORY";
 
-    const GITHUB_TOKEN = "INCOLLA_QUI_IL_TUO_TOKEN";
+const GITHUB_BRANCH = "main";
 
+const GITHUB_TOKEN = "INCOLLA_QUI_IL_TUO_TOKEN";
 
-    /*
-     * Nome del file da gestire
-     */
-    const FILE_PATH = "dominio.json";
 
+/* =========================================================
+   FILE
+   ========================================================= */
 
-    /*
-     * URL API GitHub
-     */
-    const API_URL =
-        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+const FILE_PATH = "dominio.json";
 
+const API_URL =
+    `https://api.github.com/repos/` +
+    `${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
 
-    /*
-     * SHA attuale del file.
-     *
-     * GitHub lo richiede quando vogliamo aggiornare un file.
-     */
-    let fileSHA = null;
 
+/* SHA necessario per aggiornare il file */
 
-    /*
-     * Elementi HTML
-     */
-    const editor = document.getElementById("editor");
-    const statusBox = document.getElementById("status");
-    const saveButton = document.getElementById("saveButton");
+let fileSHA = null;
 
 
-    /*
-     * Avvio pagina
-     */
-    document.addEventListener("DOMContentLoaded", function () {
+/* =========================================================
+   ELEMENTI
+   ========================================================= */
 
-        document.getElementById("repositoryInfo").textContent =
-            `${GITHUB_OWNER}/${GITHUB_REPO}`;
+const dominioInput =
+    document.getElementById("dominio");
 
-        document.getElementById("branchInfo").textContent =
-            GITHUB_BRANCH;
+const dataInput =
+    document.getElementById("data");
 
-        caricaFile();
-    });
+const oraInput =
+    document.getElementById("ora");
 
+const statusBox =
+    document.getElementById("status");
 
-    /*
-     * ============================================================
-     * MESSAGGI
-     * ============================================================
-     */
+const saveButton =
+    document.getElementById("saveButton");
 
-    function mostraStatus(tipo, messaggio) {
 
-        statusBox.className = "";
+/* =========================================================
+   OROLOGIO
+   ========================================================= */
 
-        if (tipo === "success") {
-            statusBox.classList.add("success");
-        }
+function aggiornaDataOra() {
 
-        if (tipo === "error") {
-            statusBox.classList.add("error");
-        }
+    const now = new Date();
 
-        if (tipo === "info") {
-            statusBox.classList.add("info-status");
-        }
+    dataInput.value =
+        now.toLocaleDateString("it-IT", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
 
-        statusBox.textContent = messaggio;
-    }
+    oraInput.value =
+        now.toLocaleTimeString("it-IT", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+}
 
 
-    /*
-     * ============================================================
-     * HEADERS GITHUB
-     * ============================================================
-     */
+/* Aggiorna immediatamente */
 
-    function getHeaders() {
+aggiornaDataOra();
 
-        return {
-            "Accept": "application/vnd.github+json",
-            "Authorization": `Bearer ${GITHUB_TOKEN}`,
-            "X-GitHub-Api-Version": "2022-11-28"
-        };
-    }
 
+/* Aggiorna ogni secondo */
 
-    /*
-     * ============================================================
-     * CARICA dominio.json
-     * ============================================================
-     */
+setInterval(
+    aggiornaDataOra,
+    1000
+);
 
-    async function caricaFile() {
 
-        if (!GITHUB_TOKEN ||
-            GITHUB_TOKEN === "INCOLLA_QUI_IL_TUO_TOKEN") {
+/* =========================================================
+   STATUS
+   ========================================================= */
 
-            mostraStatus(
-                "error",
-                "Token GitHub non configurato.\n\n" +
-                "Inserisci il Personal Access Token nella variabile GITHUB_TOKEN."
-            );
+function mostraStatus(tipo, testo) {
 
-            return;
-        }
+    statusBox.className = "status " + tipo;
 
-        editor.disabled = true;
+    statusBox.textContent = testo;
+}
 
-        mostraStatus(
-            "info",
-            "⏳ Caricamento dominio.json da GitHub..."
-        );
 
-        try {
+/* =========================================================
+   HEADER GITHUB
+   ========================================================= */
 
-            const response = await fetch(
-                `${API_URL}?ref=${encodeURIComponent(GITHUB_BRANCH)}`,
-                {
-                    method: "GET",
-                    headers: getHeaders()
-                }
-            );
+function headersGitHub() {
 
+    return {
 
-            if (!response.ok) {
+        "Accept":
+            "application/vnd.github+json",
 
-                await gestisciErroreGitHub(response, "lettura");
+        "Authorization":
+            `Bearer ${GITHUB_TOKEN}`,
 
-                return;
-            }
+        "X-GitHub-Api-Version":
+            "2022-11-28"
+    };
+}
 
 
-            const data = await response.json();
+/* =========================================================
+   CARICAMENTO JSON
+   ========================================================= */
 
+async function carica() {
 
-            /*
-             * Salviamo lo SHA.
-             */
-            fileSHA = data.sha;
+    if (
+        !GITHUB_TOKEN ||
+        GITHUB_TOKEN === "INCOLLA_QUI_IL_TUO_TOKEN"
+    ) {
 
-
-            /*
-             * GitHub restituisce il contenuto
-             * in Base64.
-             */
-            const decoded = decodeBase64UTF8(data.content);
-
-
-            /*
-             * Proviamo a interpretare il JSON.
-             */
-            const json = JSON.parse(decoded);
-
-
-            /*
-             * Lo mostriamo formattato.
-             */
-            editor.value = JSON.stringify(json, null, 2);
-
-
-            mostraStatus(
-                "success",
-                "✓ dominio.json caricato correttamente."
-            );
-
-        } catch (error) {
-
-            console.error(error);
-
-            mostraStatus(
-                "error",
-                "Errore durante il caricamento:\n\n" +
-                error.message
-            );
-
-        } finally {
-
-            editor.disabled = false;
-        }
-    }
-
-
-    /*
-     * ============================================================
-     * SALVA dominio.json
-     * ============================================================
-     */
-
-    async function salvaFile() {
-
-        /*
-         * Controlliamo che il JSON sia valido.
-         */
-        let json;
-
-        try {
-
-            json = JSON.parse(editor.value);
-
-        } catch (error) {
-
-            mostraStatus(
-                "error",
-                "❌ Il contenuto non è un JSON valido.\n\n" +
-                error.message
-            );
-
-            return;
-        }
-
-
-        /*
-         * Controllo SHA.
-         */
-        if (!fileSHA) {
-
-            mostraStatus(
-                "error",
-                "SHA del file non disponibile.\n" +
-                "Prova prima a ricaricare dominio.json."
-            );
-
-            return;
-        }
-
-
-        /*
-         * Convertiamo il JSON in stringa.
-         */
-        const contenuto = JSON.stringify(json, null, 2) + "\n";
-
-
-        /*
-         * Codifica Base64 UTF-8.
-         */
-        const encodedContent = encodeBase64UTF8(contenuto);
-
-
-        /*
-         * Disabilitiamo il pulsante.
-         */
-        saveButton.disabled = true;
-
-
-        mostraStatus(
-            "info",
-            "⏳ Salvataggio di dominio.json su GitHub..."
-        );
-
-
-        try {
-
-            const response = await fetch(
-                API_URL,
-                {
-                    method: "PUT",
-
-                    headers: {
-                        ...getHeaders(),
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        message: "Aggiornamento dominio.json",
-
-                        content: encodedContent,
-
-                        sha: fileSHA,
-
-                        branch: GITHUB_BRANCH
-
-                    })
-                }
-            );
-
-
-            if (!response.ok) {
-
-                await gestisciErroreGitHub(response, "salvataggio");
-
-                return;
-            }
-
-
-            const data = await response.json();
-
-
-            /*
-             * Aggiorniamo lo SHA.
-             */
-            if (data.content && data.content.sha) {
-
-                fileSHA = data.content.sha;
-            }
-
-
-            /*
-             * Riscriviamo il JSON formattato.
-             */
-            editor.value = JSON.stringify(json, null, 2);
-
-
-            mostraStatus(
-                "success",
-                "✓ dominio.json salvato correttamente su GitHub."
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            mostraStatus(
-                "error",
-                "Errore durante il salvataggio:\n\n" +
-                error.message
-            );
-
-        } finally {
-
-            saveButton.disabled = false;
-        }
-    }
-
-
-    /*
-     * ============================================================
-     * FORMATTA JSON
-     * ============================================================
-     */
-
-    function formattaJSON() {
-
-        try {
-
-            const json = JSON.parse(editor.value);
-
-            editor.value =
-                JSON.stringify(json, null, 2);
-
-            mostraStatus(
-                "success",
-                "✓ JSON formattato correttamente."
-            );
-
-        } catch (error) {
-
-            mostraStatus(
-                "error",
-                "❌ JSON non valido.\n\n" +
-                error.message
-            );
-        }
-    }
-
-
-    /*
-     * ============================================================
-     * TORNA A index.html
-     * ============================================================
-     */
-
-    function tornaIndex() {
-
-        window.location.href = "index.html";
-    }
-
-
-    /*
-     * ============================================================
-     * GESTIONE ERRORI GITHUB
-     * ============================================================
-     */
-
-    async function gestisciErroreGitHub(response, operazione) {
-
-        let data = null;
-
-        try {
-            data = await response.json();
-        } catch (e) {
-            // Nessun JSON nella risposta
-        }
-
-
-        const message =
-            data && data.message
-                ? data.message
-                : "Errore HTTP " + response.status;
-
-
-        /*
-         * Errore 401
-         */
-        if (response.status === 401) {
-
-            mostraStatus(
-                "error",
-                "❌ GitHub ha rifiutato il token.\n\n" +
-                "Controlla che il Personal Access Token sia valido " +
-                "e non sia scaduto.\n\n" +
-                "Risposta GitHub:\n" +
-                message
-            );
-
-            return;
-        }
-
-
-        /*
-         * Errore 403
-         */
-        if (response.status === 403) {
-
-            mostraStatus(
-                "error",
-                "❌ GitHub HTTP 403\n\n" +
-
-                "Il token è stato riconosciuto, ma NON ha " +
-                "l'autorizzazione necessaria per " +
-                operazione + " il file.\n\n" +
-
-                "Per un Fine-grained Personal Access Token " +
-                "controlla:\n\n" +
-
-                "• Repository access → repository corretto\n" +
-                "• Repository permissions → Contents → Read and write\n\n" +
-
-                "Se il repository appartiene a un'organizzazione, " +
-                "controlla anche le eventuali policy dell'organizzazione.\n\n" +
-
-                "Risposta GitHub:\n" +
-                message
-            );
-
-            return;
-        }
-
-
-        /*
-         * Errore 404
-         */
-        if (response.status === 404) {
-
-            mostraStatus(
-                "error",
-                "❌ GitHub HTTP 404\n\n" +
-
-                "Repository o file non trovato.\n\n" +
-
-                "Controlla:\n" +
-
-                "• GITHUB_OWNER\n" +
-                "• GITHUB_REPO\n" +
-                "• GITHUB_BRANCH\n" +
-                "• nome di dominio.json\n\n" +
-
-                "Risposta GitHub:\n" +
-                message
-            );
-
-            return;
-        }
-
-
-        /*
-         * Errore 409
-         */
-        if (response.status === 409) {
-
-            mostraStatus(
-                "error",
-                "❌ GitHub HTTP 409\n\n" +
-
-                "Il file è stato modificato da un'altra operazione " +
-                "oppure lo SHA non è più aggiornato.\n\n" +
-
-                "Ricarica il file e prova nuovamente."
-            );
-
-            return;
-        }
-
-
-        /*
-         * Errore generico
-         */
         mostraStatus(
             "error",
-            `❌ GitHub HTTP ${response.status}\n\n` +
-            `Operazione: ${operazione}\n\n` +
-            message
+            "Token GitHub non configurato."
         );
+
+        return;
+    }
+
+
+    mostraStatus(
+        "loading",
+        "Caricamento configurazione..."
+    );
+
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}?ref=${encodeURIComponent(GITHUB_BRANCH)}`,
+            {
+                method: "GET",
+
+                headers: headersGitHub()
+            }
+        );
+
+
+        if (!response.ok) {
+
+            await erroreGitHub(response);
+
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Salviamo lo SHA
+         */
+
+        fileSHA = data.sha;
+
+
+        /*
+         * Decodifica Base64
+         */
+
+        const testo =
+            decodeBase64(data.content);
+
+
+        /*
+         * Convertiamo in JSON
+         */
+
+        const json =
+            JSON.parse(testo);
+
+
+        /*
+         * Prendiamo SOLO il campo dominio
+         */
+
+        dominioInput.value =
+            json.dominio || "";
+
+
+        /*
+         * Data/ora ultima lettura
+         */
+
+        document.getElementById("lettura")
+            .textContent =
+            new Date().toLocaleString("it-IT");
+
+
+        statusBox.className =
+            "status";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        mostraStatus(
+            "error",
+            "Errore nel caricamento del file."
+        );
+    }
+}
+
+
+/* =========================================================
+   SALVATAGGIO
+   ========================================================= */
+
+async function salva() {
+
+    const dominio =
+        dominioInput.value.trim();
+
+
+    /*
+     * Controllo dominio vuoto
+     */
+
+    if (!dominio) {
+
+        mostraStatus(
+            "error",
+            "Inserisci un dominio."
+        );
+
+        dominioInput.focus();
+
+        return;
     }
 
 
     /*
-     * ============================================================
-     * BASE64 UTF-8
-     * ============================================================
-     *
-     * GitHub usa Base64.
-     * Queste funzioni gestiscono correttamente anche
-     * caratteri accentati e Unicode.
+     * Controllo SHA
      */
 
-    function decodeBase64UTF8(base64) {
+    if (!fileSHA) {
 
-        const binary = atob(
+        mostraStatus(
+            "error",
+            "Impossibile salvare: il file non è stato caricato."
+        );
+
+        return;
+    }
+
+
+    /*
+     * Disabilita pulsante
+     */
+
+    saveButton.disabled = true;
+
+    saveButton.textContent =
+        "Salvataggio...";
+
+
+    mostraStatus(
+        "loading",
+        "Salvataggio su GitHub..."
+    );
+
+
+    try {
+
+        /*
+         * Creiamo il JSON.
+         *
+         * Se in futuro aggiungerai altri campi,
+         * qui possiamo conservarli.
+         */
+
+        const nuovoJSON = {
+
+            dominio: dominio
+
+        };
+
+
+        const contenuto =
+            JSON.stringify(
+                nuovoJSON,
+                null,
+                2
+            ) + "\n";
+
+
+        /*
+         * Base64
+         */
+
+        const encoded =
+            encodeBase64(contenuto);
+
+
+        /*
+         * PUT GitHub
+         */
+
+        const response = await fetch(
+            API_URL,
+            {
+
+                method: "PUT",
+
+                headers: {
+
+                    ...headersGitHub(),
+
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    message:
+                        `Aggiornamento dominio.json - ${dominio}`,
+
+                    content:
+                        encoded,
+
+                    sha:
+                        fileSHA,
+
+                    branch:
+                        GITHUB_BRANCH
+
+                })
+            }
+        );
+
+
+        if (!response.ok) {
+
+            await erroreGitHub(response);
+
+            return;
+        }
+
+
+        const result =
+            await response.json();
+
+
+        /*
+         * Aggiorniamo SHA
+         */
+
+        if (
+            result.content &&
+            result.content.sha
+        ) {
+
+            fileSHA =
+                result.content.sha;
+        }
+
+
+        mostraStatus(
+            "success",
+            "✓ Dominio salvato correttamente."
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        mostraStatus(
+            "error",
+            "Errore durante il salvataggio."
+        );
+
+    } finally {
+
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+            "Salva";
+    }
+}
+
+
+/* =========================================================
+   TORNA A INDEX
+   ========================================================= */
+
+function tornaIndex() {
+
+    window.location.href =
+        "index.html";
+}
+
+
+/* =========================================================
+   GESTIONE ERRORI GITHUB
+   ========================================================= */
+
+async function erroreGitHub(response) {
+
+    let messaggio =
+        `Errore GitHub HTTP ${response.status}`;
+
+
+    try {
+
+        const data =
+            await response.json();
+
+        if (data.message) {
+
+            messaggio +=
+                "\n\n" + data.message;
+        }
+
+    } catch (e) {
+        // nessun dettaglio
+    }
+
+
+    if (response.status === 403) {
+
+        messaggio +=
+            "\n\nControlla il Personal Access Token:" +
+            "\n• repository corretto" +
+            "\n• Contents → Read and write";
+    }
+
+
+    if (response.status === 404) {
+
+        messaggio +=
+            "\n\nControlla owner, repository, branch e file.";
+    }
+
+
+    if (response.status === 409) {
+
+        messaggio +=
+            "\n\nIl file è stato modificato. " +
+            "Ricarica la pagina e riprova.";
+    }
+
+
+    mostraStatus(
+        "error",
+        messaggio
+    );
+}
+
+
+/* =========================================================
+   BASE64 UTF-8
+   ========================================================= */
+
+function decodeBase64(base64) {
+
+    const binary =
+        atob(
             base64.replace(/\n/g, "")
         );
 
-        const bytes = Uint8Array.from(
+    const bytes =
+        Uint8Array.from(
             binary,
-            char => char.charCodeAt(0)
+            c => c.charCodeAt(0)
         );
 
-        return new TextDecoder("utf-8").decode(bytes);
-    }
+    return new TextDecoder(
+        "utf-8"
+    ).decode(bytes);
+}
 
 
-    function encodeBase64UTF8(text) {
+function encodeBase64(text) {
 
-        const bytes =
-            new TextEncoder().encode(text);
+    const bytes =
+        new TextEncoder().encode(text);
 
-        let binary = "";
+    let binary = "";
 
-        const chunkSize = 0x8000;
+    const chunkSize =
+        0x8000;
 
-        for (
-            let i = 0;
-            i < bytes.length;
-            i += chunkSize
-        ) {
 
-            binary += String.fromCharCode(
-                ...bytes.subarray(
-                    i,
-                    Math.min(i + chunkSize, bytes.length)
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += chunkSize
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                Math.min(
+                    i + chunkSize,
+                    bytes.length
                 )
-            );
-        }
-
-        return btoa(binary);
+            )
+        );
     }
+
+
+    return btoa(binary);
+}
+
+
+/* =========================================================
+   AVVIO
+   ========================================================= */
+
+carica();
 
 </script>
 
