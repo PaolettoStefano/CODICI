@@ -206,7 +206,7 @@
       max-height: 100%;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
     }
 
     .hero {
@@ -481,6 +481,10 @@
       margin-bottom: 16px;
     }
 
+    .campo:last-child {
+      margin-bottom: 0;
+    }
+
     .campo b {
       display: block;
       font-size: 11px;
@@ -516,6 +520,12 @@
     #risultato {
       display: none;
       border-color: rgba(6, 182, 212, 0.3);
+    }
+
+    .ip-risultato {
+      color: var(--accent-blue);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
     }
 
     @keyframes rise {
@@ -619,8 +629,6 @@
     </div>
 
     <div class="topbar-actions">
-
-      <!-- PULSANTE LETTURA CODICI SPOSTATO IN ALTO -->
 
       <a
         href="elenco_codici.html"
@@ -757,11 +765,15 @@
           Il token deve avere permessi sufficienti per leggere e modificare
           i contenuti del repository.
 
-          Il file
+          I file
           <b style="color:var(--text);">
             dominio.json
           </b>
-          deve essere presente nella root.
+          e
+          <b style="color:var(--text);">
+            CODICI_GENERATI.json
+          </b>
+          devono essere presenti nella root.
 
         </div>
 
@@ -810,8 +822,6 @@
         Non ancora caricato
       </div>
 
-
-      <!-- ULTIMO INDIRIZZO IP -->
 
       <div
         id="ipVisualizzato"
@@ -920,6 +930,20 @@
       <div class="campo">
 
         <b>
+          Indirizzo IP
+        </b>
+
+        <div
+          id="risultatoIP"
+          class="valore ip-risultato"
+        ></div>
+
+      </div>
+
+
+      <div class="campo">
+
+        <b>
           Data
         </b>
 
@@ -976,6 +1000,8 @@
     let records = [];
 
     let fileSha = "";
+
+    let dominioFileSha = "";
 
     let dominioAttuale = "";
 
@@ -1342,6 +1368,16 @@
 
       /*
       ==================================================
+      SALVA SHA DI DOMINIO.JSON
+      ==================================================
+      */
+
+      dominioFileSha =
+        data.sha;
+
+
+      /*
+      ==================================================
       DECODIFICA
       ==================================================
       */
@@ -1514,6 +1550,336 @@
           "Ultimo indirizzo IP: Non disponibile";
 
       }
+
+    }
+
+
+    /*
+    ==================================================
+    INCREMENTA INDIRIZZO IP
+    ==================================================
+
+    Esempio:
+
+    192.168.1.10
+    diventa
+    192.168.1.11
+
+    Gestisce anche il passaggio:
+
+    192.168.1.255
+    diventa
+    192.168.2.0
+
+    ==================================================
+    */
+
+    function incrementaIndirizzoIP(
+      ip
+    ) {
+
+      if (!ip) {
+
+        throw new Error(
+          "Nel dominio.json il campo ultimoindirizzoip è vuoto."
+        );
+
+      }
+
+
+      const parti =
+        ip.split(".").map(
+          parte => Number(parte)
+        );
+
+
+      if (
+        parti.length !== 4 ||
+        parti.some(
+          parte =>
+            !Number.isInteger(parte) ||
+            parte < 0 ||
+            parte > 255
+        )
+      ) {
+
+        throw new Error(
+          "L'indirizzo IP presente nel campo ultimoindirizzoip non è un IPv4 valido: " +
+          ip
+        );
+
+      }
+
+
+      /*
+      Incremento con riporto
+      */
+
+      for (
+        let i = 3;
+        i >= 0;
+        i--
+      ) {
+
+        if (
+          parti[i] < 255
+        ) {
+
+          parti[i]++;
+
+          break;
+
+        }
+
+
+        parti[i] = 0;
+
+
+        if (
+          i === 0
+        ) {
+
+          throw new Error(
+            "Impossibile incrementare l'indirizzo IP oltre 255.255.255.255."
+          );
+
+        }
+
+      }
+
+
+      return parti.join(".");
+
+    }
+
+
+    /*
+    ==================================================
+    AGGIORNA DOMINIO.JSON
+    ==================================================
+    */
+
+    async function aggiornaDominioIP(
+      nuovoIP
+    ) {
+
+      const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/dominio.json`;
+
+
+      /*
+      Rileggiamo dominio.json prima della modifica
+      per utilizzare sempre lo SHA più recente.
+      */
+
+      const response =
+        await fetch(
+          url,
+          {
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json"
+
+            }
+
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Impossibile rileggere dominio.json prima del salvataggio. HTTP " +
+          response.status
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      const testo =
+        decodeBase64UTF8(
+          data.content
+        );
+
+
+      let contenuto;
+
+
+      try {
+
+        contenuto =
+          JSON.parse(
+            testo
+          );
+
+      } catch (error) {
+
+        throw new Error(
+          "Il file dominio.json non contiene un JSON valido."
+        );
+
+      }
+
+
+      /*
+      Il campo richiesto deve esistere
+      all'interno di un oggetto JSON.
+      */
+
+      if (
+        !contenuto ||
+        typeof contenuto !== "object" ||
+        Array.isArray(contenuto)
+      ) {
+
+        throw new Error(
+          "Impossibile aggiornare dominio.json: il file deve contenere un oggetto JSON con il campo ultimoindirizzoip."
+        );
+
+      }
+
+
+      /*
+      Aggiorna ESATTAMENTE lo stesso campo.
+      */
+
+      contenuto.ultimoindirizzoip =
+        nuovoIP;
+
+
+      const nuovoContenuto =
+        JSON.stringify(
+          contenuto,
+          null,
+          2
+        );
+
+
+      const body = {
+
+        message:
+          "Aggiornato ultimo indirizzo IP",
+
+        content:
+          encodeBase64UTF8(
+            nuovoContenuto
+          ),
+
+        sha:
+          data.sha
+
+      };
+
+
+      const pushResponse =
+        await fetch(
+          url,
+          {
+
+            method:
+              "PUT",
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json",
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify(
+                body
+              )
+
+          }
+        );
+
+
+      if (!pushResponse.ok) {
+
+        let messaggio =
+          "Errore GitHub durante l'aggiornamento di dominio.json. HTTP " +
+          pushResponse.status;
+
+
+        try {
+
+          const errore =
+            await pushResponse.json();
+
+
+          if (
+            errore.message
+          ) {
+
+            messaggio +=
+              ": " +
+              errore.message;
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+        }
+
+
+        throw new Error(
+          messaggio
+        );
+
+      }
+
+
+      const risultato =
+        await pushResponse.json();
+
+
+      if (
+        risultato.content &&
+        risultato.content.sha
+      ) {
+
+        dominioFileSha =
+          risultato.content.sha;
+
+      }
+
+
+      /*
+      Aggiorna il valore locale.
+      */
+
+      ultimoIndirizzoIP =
+        nuovoIP;
+
+
+      document
+        .getElementById(
+          "ipVisualizzato"
+        )
+        .innerText =
+        "Ultimo indirizzo IP: " +
+        nuovoIP;
 
     }
 
@@ -1762,7 +2128,9 @@
       try {
 
         /*
-        Ricarica sempre i dati aggiornati
+        ==================================================
+        RICARICA SEMPRE I DATI AGGIORNATI
+        ==================================================
         */
 
         await ghFetchSilenzioso();
@@ -1771,7 +2139,9 @@
 
 
         /*
-        Controlla che il dominio sia disponibile
+        ==================================================
+        CONTROLLA DOMINIO
+        ==================================================
         */
 
         if (!dominioAttuale) {
@@ -1784,7 +2154,36 @@
 
 
         /*
-        Genera codice
+        ==================================================
+        CONTROLLA IP
+        ==================================================
+        */
+
+        if (!ultimoIndirizzoIP) {
+
+          throw new Error(
+            "Il campo ultimoindirizzoip non è presente o è vuoto nel file dominio.json."
+          );
+
+        }
+
+
+        /*
+        ==================================================
+        INCREMENTA IP
+        ==================================================
+        */
+
+        const nuovoIndirizzoIP =
+          incrementaIndirizzoIP(
+            ultimoIndirizzoIP
+          );
+
+
+        /*
+        ==================================================
+        GENERA CODICE
+        ==================================================
         */
 
         const codice =
@@ -1832,7 +2231,9 @@
 
 
         /*
-        Crea record
+        ==================================================
+        CREA NUOVO RECORD
+        ==================================================
         */
 
         const nuovoRecord = {
@@ -1846,6 +2247,9 @@
             "." +
             dominioAttuale,
 
+          indirizzoip:
+            nuovoIndirizzoIP,
+
           data,
 
           ora
@@ -1853,20 +2257,53 @@
         };
 
 
+        /*
+        ==================================================
+        SALVA PRIMA IL NUOVO IP IN DOMINIO.JSON
+        ==================================================
+        */
+
+        setStatus(
+          "Aggiornamento indirizzo IP...",
+          "var(--accent-blue)"
+        );
+
+
+        await aggiornaDominioIP(
+          nuovoIndirizzoIP
+        );
+
+
+        /*
+        ==================================================
+        AGGIUNGE IL RECORD
+        ==================================================
+        */
+
         records.push(
           nuovoRecord
         );
 
 
         /*
-        Salva CODICI_GENERATI.json
+        ==================================================
+        SALVA CODICI_GENERATI.JSON
+        ==================================================
         */
+
+        setStatus(
+          "Salvataggio codice su GitHub...",
+          "var(--accent-blue)"
+        );
+
 
         await ghPush();
 
 
         /*
-        Mostra risultato
+        ==================================================
+        MOSTRA RISULTATO
+        ==================================================
         */
 
         document
@@ -1891,6 +2328,14 @@
           )
           .textContent =
           nuovoRecord.cliente;
+
+
+        document
+          .getElementById(
+            "risultatoIP"
+          )
+          .textContent =
+          nuovoRecord.indirizzoip;
 
 
         document
@@ -1922,7 +2367,7 @@
 
 
         setStatus(
-          "Codice salvato su GitHub",
+          "Codice e indirizzo IP salvati su GitHub",
           "var(--status-green)"
         );
 
