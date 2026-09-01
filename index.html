@@ -16,14 +16,14 @@
       --surface-solid: #0d121d;
       --border: rgba(255, 255, 255, 0.08);
       --border-glow: rgba(56, 189, 248, 0.25);
-      
+
       --text: #f1f5f9;
       --text-muted: #8493a8;
-      
+
       --accent-blue: #3b82f6;
       --accent-cyan: #06b6d4;
       --accent-purple: #6366f1;
-      
+
       --status-green: #10b981;
       --status-red: #ef4444;
       --status-orange: #f59e0b;
@@ -46,7 +46,7 @@
       color: var(--text);
       font-family: "Plus Jakarta Sans", sans-serif;
       background-color: var(--bg);
-      background-image: 
+      background-image:
         radial-gradient(circle at 20% 15%, rgba(14, 165, 233, 0.12) 0%, transparent 40%),
         radial-gradient(circle at 80% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 45%),
         radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
@@ -55,20 +55,18 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Griglia cyber e rumore di fondo */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background-image: 
+      background-image:
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 40px 40px;
       z-index: -2;
     }
 
-    /* Orb luminosi di sfondo */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -93,7 +91,6 @@
       background: rgba(99, 102, 241, 0.12);
     }
 
-    /* Topbar Glass */
     .topbar {
       position: sticky;
       top: 0;
@@ -145,7 +142,6 @@
       text-transform: uppercase;
     }
 
-    /* Logo Frame Glass */
     .logo-frame {
       height: 46px;
       padding: 4px 16px;
@@ -174,7 +170,6 @@
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
 
-    /* Hero Section */
     .hero {
       width: min(1000px, calc(100% - 40px));
       margin: 0 auto;
@@ -217,7 +212,6 @@
       font-weight: 400;
     }
 
-    /* Container & Cards */
     .container {
       width: min(840px, calc(100% - 40px));
       margin: 0 auto;
@@ -238,7 +232,6 @@
       overflow: hidden;
     }
 
-    /* Effetto Luce Top-Edge */
     .card::before {
       content: "";
       position: absolute;
@@ -246,7 +239,12 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
     }
 
     h2 {
@@ -290,8 +288,8 @@
       background: rgba(10, 13, 20, 0.8);
     }
 
-    /* Buttons */
-    button, a.btn-link {
+    button,
+    a.btn-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -307,12 +305,14 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    button:hover, a.btn-link:hover {
+    button:hover,
+    a.btn-link:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
-    button:active, a.btn-link:active {
+    button:active,
+    a.btn-link:active {
       transform: translateY(0);
     }
 
@@ -361,12 +361,12 @@
       gap: 12px;
     }
 
-    .actions button, .actions a.btn-link {
+    .actions button,
+    .actions a.btn-link {
       flex: 1;
       min-width: 160px;
     }
 
-    /* Status Bar */
     #status {
       margin-bottom: 20px;
       padding: 12px 20px;
@@ -422,6 +422,20 @@
       font-weight: 700;
       font-family: "JetBrains Mono", monospace;
       letter-spacing: 0.05em;
+      overflow-wrap: anywhere;
+    }
+
+    .ip-box {
+      margin-top: 10px;
+      padding: 16px 20px;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.05);
+      font-weight: 700;
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: 0.03em;
+      overflow-wrap: anywhere;
     }
 
     .campo {
@@ -466,13 +480,25 @@
     }
 
     @keyframes rise {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes fade {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @media (max-width: 650px) {
@@ -500,428 +526,1568 @@
 </head>
 
 <body>
+
   <div class="orb one"></div>
   <div class="orb two"></div>
 
   <header class="topbar">
+
     <div class="brand">
-      <div class="brand-mark">GC</div>
+
+      <div class="brand-mark">
+        GC
+      </div>
+
       <div>
         <strong>Generatore Codici</strong>
         <small>Access management system</small>
       </div>
+
     </div>
 
-    <!-- Logo Aziendale -->
     <div class="logo-frame" aria-label="Logo">
-      <img src="HALINK_3.jpeg" alt="HA LINK Logo">
+
+      <img
+        src="HALINK_3.jpeg"
+        alt="HA LINK Logo"
+      >
+
     </div>
+
   </header>
 
+
   <section class="hero">
+
     <div class="eyebrow">
-      <span style="width:6px; height:6px; border-radius:50%; background:var(--accent-cyan); display:inline-block;"></span>
+
+      <span
+        style="
+          width:6px;
+          height:6px;
+          border-radius:50%;
+          background:var(--accent-cyan);
+          display:inline-block;
+        "
+      ></span>
+
       Secure code workspace
+
     </div>
-    <h1>Codici pronti.<br>Accessi fluidi.</h1>
+
+    <h1>
+      Codici pronti.<br>
+      Accessi fluidi.
+    </h1>
+
     <p class="hero-copy">
+
       Genera, archivia e sincronizza i tuoi codici direttamente con GitHub,
       attraverso un'interfaccia chiara, veloce e progettata per il futuro.
+
     </p>
+
   </section>
 
+
   <main class="container">
+
+
     <div id="status">
-      <span>Stato:</span>
-      <span id="statusText">Non connesso a GitHub</span>
+
+      <span>
+        Stato:
+      </span>
+
+      <span id="statusText">
+        Non connesso a GitHub
+      </span>
+
     </div>
 
+
+    <!-- =========================================
+         CONFIGURAZIONE GITHUB
+         ========================================= -->
+
     <section class="card">
-      <button type="button" class="gray" onclick="toggleImpostazioni()">
-        <span>Configura connessione GitHub</span>
-        <span style="opacity: 0.5;">⚙️</span>
+
+      <button
+        type="button"
+        class="gray"
+        onclick="toggleImpostazioni()"
+      >
+
+        <span>
+          Configura connessione GitHub
+        </span>
+
+        <span style="opacity: 0.5;">
+          ⚙️
+        </span>
+
       </button>
 
-      <div id="impostazioni" class="impostazioni">
-        <label for="ghToken">Personal Access Token</label>
-        <input type="password" id="ghToken" placeholder="Inserisci il token GitHub" autocomplete="off">
 
-        <label for="ghRepo">Repository</label>
-        <input type="text" id="ghRepo" placeholder="utente/nome-repository">
+      <div
+        id="impostazioni"
+        class="impostazioni"
+      >
+
+        <label for="ghToken">
+          Personal Access Token
+        </label>
+
+        <input
+          type="password"
+          id="ghToken"
+          placeholder="Inserisci il token GitHub"
+          autocomplete="off"
+        >
+
+
+        <label for="ghRepo">
+          Repository
+        </label>
+
+        <input
+          type="text"
+          id="ghRepo"
+          placeholder="utente/nome-repository"
+        >
+
 
         <div class="nota">
-          Esempio: <b style="color:var(--text);">mario123/mio-repository</b><br><br>
+
+          Esempio:
+          <b style="color:var(--text);">
+            mario123/mio-repository
+          </b>
+
+          <br><br>
+
           Il token deve avere permessi sufficienti per leggere e modificare
-          i contenuti del repository. Il file <b style="color:var(--text);">dominio.json</b> deve essere
-          presente nella root.
+          i contenuti del repository.
+
+          Il file
+          <b style="color:var(--text);">
+            dominio.json
+          </b>
+          deve essere presente nella root.
+
         </div>
+
 
         <br>
 
+
         <div class="actions">
-          <button class="primary" onclick="salvaConfigurazione()">Salva configurazione</button>
-          <button class="success" onclick="ghFetch()">Leggi dati</button>
+
+          <button
+            class="primary"
+            onclick="salvaConfigurazione()"
+          >
+            Salva configurazione
+          </button>
+
+          <button
+            class="success"
+            onclick="ghFetch()"
+          >
+            Leggi dati
+          </button>
+
         </div>
+
       </div>
+
     </section>
 
+
+    <!-- =========================================
+         DOMINIO E IP
+         ========================================= -->
+
     <section class="card">
-      <h2>Dominio attuale</h2>
-      <div id="dominioVisualizzato" class="dominio-box">Non ancora caricato</div>
+
+      <h2>
+        Dominio attuale
+      </h2>
+
+
+      <div
+        id="dominioVisualizzato"
+        class="dominio-box"
+      >
+        Non ancora caricato
+      </div>
+
+
+      <!-- ULTIMO INDIRIZZO IP -->
+
+      <div
+        id="ipVisualizzato"
+        class="ip-box"
+      >
+        Ultimo indirizzo IP: Non ancora caricato
+      </div>
+
     </section>
 
+
+    <!-- =========================================
+         GENERA CODICE
+         ========================================= -->
+
     <section class="card">
-      <h2>Genera nuovo codice</h2>
 
-      <label for="nome">Nome utente</label>
-      <input type="text" id="nome" maxlength="100" placeholder="Inserisci il nome" autocomplete="off">
+      <h2>
+        Genera nuovo codice
+      </h2>
 
-      <button id="generaBtn" class="primary" style="width:100%" onclick="generaESalva()">
+
+      <label for="nome">
+        Nome utente
+      </label>
+
+
+      <input
+        type="text"
+        id="nome"
+        maxlength="100"
+        placeholder="Inserisci il nome"
+        autocomplete="off"
+      >
+
+
+      <button
+        id="generaBtn"
+        class="primary"
+        style="width:100%"
+        onclick="generaESalva()"
+      >
         Genera codice
       </button>
+
     </section>
 
-    <section id="risultato" class="card">
-      <h2 style="color: var(--accent-cyan);">Codice generato</h2>
+
+    <!-- =========================================
+         RISULTATO
+         ========================================= -->
+
+    <section
+      id="risultato"
+      class="card"
+    >
+
+      <h2 style="color: var(--accent-cyan);">
+        Codice generato
+      </h2>
+
 
       <div class="campo">
-        <b>Nome</b>
-        <div id="risultatoNome" class="valore"></div>
+
+        <b>
+          Nome
+        </b>
+
+        <div
+          id="risultatoNome"
+          class="valore"
+        ></div>
+
       </div>
 
-      <div class="campo">
-        <b>Codice</b>
-        <div id="risultatoCodice" class="valore codice"></div>
-      </div>
 
       <div class="campo">
-        <b>Cliente</b>
-        <div id="risultatoCliente" class="valore" style="font-family: monospace;"></div>
+
+        <b>
+          Codice
+        </b>
+
+        <div
+          id="risultatoCodice"
+          class="valore codice"
+        ></div>
+
       </div>
 
-      <div class="campo">
-        <b>Data</b>
-        <div id="risultatoData" class="valore"></div>
-      </div>
 
       <div class="campo">
-        <b>Ora</b>
-        <div id="risultatoOra" class="valore"></div>
+
+        <b>
+          Cliente
+        </b>
+
+        <div
+          id="risultatoCliente"
+          class="valore"
+          style="font-family: monospace;"
+        ></div>
+
       </div>
+
+
+      <div class="campo">
+
+        <b>
+          Data
+        </b>
+
+        <div
+          id="risultatoData"
+          class="valore"
+        ></div>
+
+      </div>
+
+
+      <div class="campo">
+
+        <b>
+          Ora
+        </b>
+
+        <div
+          id="risultatoOra"
+          class="valore"
+        ></div>
+
+      </div>
+
     </section>
+
+
+    <!-- =========================================
+         ARCHIVIO
+         ========================================= -->
 
     <section class="card">
-      <h2>Archivio Codici</h2>
-      <a href="elenco_codici.html" class="primary btn-link" style="width: 100%;">
+
+      <h2>
+        Archivio Codici
+      </h2>
+
+
+      <a
+        href="elenco_codici.html"
+        class="primary btn-link"
+        style="width: 100%;"
+      >
         Apri lettura codici generati
       </a>
+
     </section>
+
+
   </main>
 
+
   <script>
-    let config = JSON.parse(localStorage.getItem("gh_codici_config")) || null;
+
+
+    /*
+    ==================================================
+    CONFIGURAZIONE
+    ==================================================
+    */
+
+    let config =
+      JSON.parse(
+        localStorage.getItem(
+          "gh_codici_config"
+        )
+      ) || null;
+
+
+    /*
+    ==================================================
+    DATI
+    ==================================================
+    */
+
     let records = [];
+
     let fileSha = "";
+
     let dominioAttuale = "";
 
-    const nomeInput = document.getElementById("nome");
-    const generaBtn = document.getElementById("generaBtn");
+    let ultimoIndirizzoIP = "";
 
-    function setStatus(messaggio, colore) {
-      document.getElementById("statusText").innerText = messaggio;
-      document.getElementById("statusText").style.color = colore || "var(--status-orange)";
+
+    /*
+    ==================================================
+    ELEMENTI
+    ==================================================
+    */
+
+    const nomeInput =
+      document.getElementById(
+        "nome"
+      );
+
+
+    const generaBtn =
+      document.getElementById(
+        "generaBtn"
+      );
+
+
+    /*
+    ==================================================
+    STATO
+    ==================================================
+    */
+
+    function setStatus(
+      messaggio,
+      colore
+    ) {
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .innerText =
+        messaggio;
+
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .style.color =
+        colore ||
+        "var(--status-orange)";
+
     }
+
+
+    /*
+    ==================================================
+    IMPOSTAZIONI
+    ==================================================
+    */
 
     function toggleImpostazioni() {
-      document.getElementById("impostazioni").classList.toggle("aperta");
+
+      document
+        .getElementById(
+          "impostazioni"
+        )
+        .classList.toggle(
+          "aperta"
+        );
+
     }
+
+
+    /*
+    ==================================================
+    SALVA CONFIGURAZIONE
+    ==================================================
+    */
 
     function salvaConfigurazione() {
-      const token = document.getElementById("ghToken").value.trim();
-      const repo = document.getElementById("ghRepo").value.trim();
+
+      const token =
+        document
+          .getElementById(
+            "ghToken"
+          )
+          .value
+          .trim();
+
+
+      const repo =
+        document
+          .getElementById(
+            "ghRepo"
+          )
+          .value
+          .trim();
+
 
       if (!token) {
-        alert("Inserisci il Personal Access Token.");
+
+        alert(
+          "Inserisci il Personal Access Token."
+        );
+
         return;
+
       }
 
-      if (!repo || !repo.includes("/")) {
-        alert("Inserisci il repository nel formato:\nutente/nome-repository");
+
+      if (
+        !repo ||
+        !repo.includes("/")
+      ) {
+
+        alert(
+          "Inserisci il repository nel formato:\nutente/nome-repository"
+        );
+
         return;
+
       }
 
-      config = { token, repo };
-      localStorage.setItem("gh_codici_config", JSON.stringify(config));
-      setStatus("Configurazione salvata", "var(--status-green)");
-      ghFetch();
-    }
 
-    async function ghFetch() {
-      if (!config) {
-        setStatus("Configura prima GitHub", "var(--status-orange)");
-        document.getElementById("impostazioni").classList.add("aperta");
-        return;
-      }
+      config = {
 
-      setStatus("Lettura dati da GitHub...", "var(--accent-blue)");
+        token,
 
-      try {
-        await ghFetchSilenzioso();
-        await caricaDominio();
-        setStatus("Connesso e aggiornato", "var(--status-green)");
-      } catch (error) {
-        console.error(error);
-        setStatus("Errore: " + error.message, "var(--status-red)");
-        alert("Errore durante la lettura:\n\n" + error.message);
-      }
-    }
+        repo
 
-    async function ghFetchSilenzioso() {
-      const url = `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
-
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `token ${config.token}`,
-          Accept: "application/vnd.github+json"
-        }
-      });
-
-      if (response.status === 404) {
-        records = [];
-        fileSha = "";
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error("Impossibile leggere CODICI_GENERATI.json. HTTP " + response.status);
-      }
-
-      const data = await response.json();
-      fileSha = data.sha;
-      records = JSON.parse(decodeBase64UTF8(data.content));
-
-      if (!Array.isArray(records)) {
-        throw new Error("CODICI_GENERATI.json deve contenere un array.");
-      }
-    }
-
-    async function caricaDominio() {
-      const url = `https://api.github.com/repos/${config.repo}/contents/dominio.json`;
-
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `token ${config.token}`,
-          Accept: "application/vnd.github+json"
-        }
-      });
-
-      if (response.status === 404) {
-        throw new Error("Il file dominio.json non esiste nel repository.");
-      }
-
-      if (!response.ok) {
-        throw new Error("Impossibile leggere dominio.json. HTTP " + response.status);
-      }
-
-      const data = await response.json();
-      const contenuto = JSON.parse(decodeBase64UTF8(data.content));
-
-      if (contenuto && typeof contenuto === "object" && !Array.isArray(contenuto)) {
-        dominioAttuale = String(contenuto.dominio || contenuto.domain || "").trim();
-      } else if (typeof contenuto === "string") {
-        dominioAttuale = contenuto.trim();
-      } else {
-        throw new Error("Nel dominio.json non è stato trovato il campo dominio.");
-      }
-
-      dominioAttuale = dominioAttuale
-        .replace(/^https?:\/\//i, "")
-        .replace(/\/+$/, "")
-        .trim();
-
-      if (!dominioAttuale) {
-        throw new Error("Il dominio presente in dominio.json è vuoto.");
-      }
-
-      document.getElementById("dominioVisualizzato").innerText = dominioAttuale;
-    }
-
-    function decodeBase64UTF8(base64) {
-      const binary = atob(base64.replace(/\s/g, ""));
-      const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
-      return new TextDecoder("utf-8").decode(bytes);
-    }
-
-    function encodeBase64UTF8(testo) {
-      const bytes = new TextEncoder().encode(testo);
-      let binary = "";
-
-      for (let i = 0; i < bytes.length; i += 0x8000) {
-        binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-      }
-
-      return btoa(binary);
-    }
-
-    function generaCodice() {
-      const caratteri = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let codice = "";
-
-      for (let i = 0; i < 11; i++) {
-        codice += caratteri[Math.floor(Math.random() * caratteri.length)];
-      }
-
-      return codice;
-    }
-
-    function codiceEsistente(codice) {
-      return records.some(record =>
-        String(record.codice || "").toUpperCase() === codice.toUpperCase()
-      );
-    }
-
-    function generaCodiceUnico() {
-      let codice;
-      let tentativi = 0;
-
-      do {
-        codice = generaCodice();
-        tentativi++;
-
-        if (tentativi > 1000) {
-          throw new Error("Impossibile generare un codice unico.");
-        }
-      } while (codiceEsistente(codice));
-
-      return codice;
-    }
-
-    async function generaESalva() {
-      if (!config) {
-        alert("Prima configura GitHub nelle impostazioni.");
-        document.getElementById("impostazioni").classList.add("aperta");
-        return;
-      }
-
-      const nome = nomeInput.value.trim();
-
-      if (!nome) {
-        alert("Inserisci un nome utente.");
-        nomeInput.focus();
-        return;
-      }
-
-      generaBtn.disabled = true;
-      generaBtn.innerText = "Generazione...";
-
-      try {
-        await ghFetchSilenzioso();
-        await caricaDominio();
-
-        const codice = generaCodiceUnico();
-        const adesso = new Date();
-
-        const data = adesso.toLocaleDateString("it-IT", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric"
-        });
-
-        const ora = adesso.toLocaleTimeString("it-IT", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        });
-
-        const nuovoRecord = {
-          nome,
-          codice,
-          cliente: codice + "." + dominioAttuale,
-          data,
-          ora
-        };
-
-        records.push(nuovoRecord);
-        await ghPush();
-
-        document.getElementById("risultatoNome").textContent = nome;
-        document.getElementById("risultatoCodice").textContent = codice;
-        document.getElementById("risultatoCliente").textContent = nuovoRecord.cliente;
-        document.getElementById("risultatoData").textContent = data;
-        document.getElementById("risultatoOra").textContent = ora;
-        document.getElementById("risultato").style.display = "block";
-
-        nomeInput.value = "";
-        setStatus("Codice salvato su GitHub", "var(--status-green)");
-      } catch (error) {
-        console.error(error);
-        setStatus("Errore durante il salvataggio", "var(--status-red)");
-        alert("Errore:\n\n" + error.message);
-      } finally {
-        generaBtn.disabled = false;
-        generaBtn.innerText = "Genera codice";
-      }
-    }
-
-    async function ghPush() {
-      const url = `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
-      const contenuto = JSON.stringify(records, null, 2);
-
-      const body = {
-        message: "Nuovo codice generato",
-        content: encodeBase64UTF8(contenuto)
       };
 
-      if (fileSha) {
-        body.sha = fileSha;
+
+      localStorage.setItem(
+        "gh_codici_config",
+        JSON.stringify(config)
+      );
+
+
+      setStatus(
+        "Configurazione salvata",
+        "var(--status-green)"
+      );
+
+
+      ghFetch();
+
+    }
+
+
+    /*
+    ==================================================
+    LETTURA DATI
+    ==================================================
+    */
+
+    async function ghFetch() {
+
+      if (!config) {
+
+        setStatus(
+          "Configura prima GitHub",
+          "var(--status-orange)"
+        );
+
+
+        document
+          .getElementById(
+            "impostazioni"
+          )
+          .classList.add(
+            "aperta"
+          );
+
+
+        return;
+
       }
 
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${config.token}`,
-          Accept: "application/vnd.github+json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
+
+      setStatus(
+        "Lettura dati da GitHub...",
+        "var(--accent-blue)"
+      );
+
+
+      try {
+
+        await ghFetchSilenzioso();
+
+        await caricaDominio();
+
+
+        setStatus(
+          "Connesso e aggiornato",
+          "var(--status-green)"
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        setStatus(
+          "Errore: " +
+          error.message,
+          "var(--status-red)"
+        );
+
+
+        alert(
+          "Errore durante la lettura:\n\n" +
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /*
+    ==================================================
+    LETTURA CODICI_GENERATI.JSON
+    ==================================================
+    */
+
+    async function ghFetchSilenzioso() {
+
+      const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/CODICI_GENERATI.json`;
+
+
+      const response =
+        await fetch(
+          url,
+          {
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json"
+
+            }
+
+          }
+        );
+
+
+      if (
+        response.status ===
+        404
+      ) {
+
+        records = [];
+
+        fileSha = "";
+
+        return;
+
+      }
+
 
       if (!response.ok) {
-        let messaggio = "Errore GitHub HTTP " + response.status;
 
-        try {
-          const errore = await response.json();
-          if (errore.message) {
-            messaggio += ": " + errore.message;
+        throw new Error(
+          "Impossibile leggere CODICI_GENERATI.json. HTTP " +
+          response.status
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      fileSha =
+        data.sha;
+
+
+      records =
+        JSON.parse(
+          decodeBase64UTF8(
+            data.content
+          )
+        );
+
+
+      if (
+        !Array.isArray(records)
+      ) {
+
+        throw new Error(
+          "CODICI_GENERATI.json deve contenere un array."
+        );
+
+      }
+
+    }
+
+
+    /*
+    ==================================================
+    LETTURA DOMINIO.JSON
+    ==================================================
+    */
+
+    async function caricaDominio() {
+
+      const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/dominio.json`;
+
+
+      const response =
+        await fetch(
+          url,
+          {
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json"
+
+            }
+
           }
-        } catch (error) {
-          console.error(error);
+        );
+
+
+      if (
+        response.status ===
+        404
+      ) {
+
+        throw new Error(
+          "Il file dominio.json non esiste nel repository."
+        );
+
+      }
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Impossibile leggere dominio.json. HTTP " +
+          response.status
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      /*
+      ==================================================
+      DECODIFICA
+      ==================================================
+      */
+
+      const testo =
+        decodeBase64UTF8(
+          data.content
+        );
+
+
+      /*
+      ==================================================
+      PARSE DEL JSON
+      ==================================================
+      */
+
+      let contenuto;
+
+
+      try {
+
+        contenuto =
+          JSON.parse(
+            testo
+          );
+
+      } catch (error) {
+
+        throw new Error(
+          "Il file dominio.json non contiene un JSON valido."
+        );
+
+      }
+
+
+      /*
+      ==================================================
+      LETTURA DOMINIO
+      ==================================================
+      */
+
+      if (
+        contenuto &&
+        typeof contenuto === "object" &&
+        !Array.isArray(contenuto)
+      ) {
+
+        dominioAttuale =
+          String(
+            contenuto.dominio ||
+            contenuto.domain ||
+            ""
+          ).trim();
+
+
+        /*
+        ==================================================
+        LETTURA ULTIMO INDIRIZZO IP
+        ==================================================
+        */
+
+        ultimoIndirizzoIP =
+          String(
+            contenuto.ultimoindirizzoip ||
+            ""
+          ).trim();
+
+      }
+
+
+      /*
+      ==================================================
+      SUPPORTO SE DOMINIO.JSON È UNA STRINGA
+      ==================================================
+      */
+
+      else if (
+        typeof contenuto === "string"
+      ) {
+
+        dominioAttuale =
+          contenuto.trim();
+
+        ultimoIndirizzoIP =
+          "";
+
+      }
+
+
+      else {
+
+        throw new Error(
+          "Nel dominio.json non è stato trovato un contenuto valido."
+        );
+
+      }
+
+
+      /*
+      ==================================================
+      NORMALIZZA DOMINIO
+      ==================================================
+      */
+
+      dominioAttuale =
+        dominioAttuale
+          .replace(
+            /^https?:\/\//i,
+            ""
+          )
+          .replace(
+            /\/+$/,
+            ""
+          )
+          .trim();
+
+
+      /*
+      ==================================================
+      VISUALIZZA DOMINIO
+      ==================================================
+      */
+
+      if (
+        dominioAttuale
+      ) {
+
+        document
+          .getElementById(
+            "dominioVisualizzato"
+          )
+          .innerText =
+          dominioAttuale;
+
+      } else {
+
+        document
+          .getElementById(
+            "dominioVisualizzato"
+          )
+          .innerText =
+          "Dominio non impostato";
+
+      }
+
+
+      /*
+      ==================================================
+      VISUALIZZA ULTIMO INDIRIZZO IP
+      ==================================================
+      */
+
+      const ipElement =
+        document.getElementById(
+          "ipVisualizzato"
+        );
+
+
+      if (
+        ultimoIndirizzoIP
+      ) {
+
+        ipElement.innerText =
+          "Ultimo indirizzo IP: " +
+          ultimoIndirizzoIP;
+
+      } else {
+
+        ipElement.innerText =
+          "Ultimo indirizzo IP: Non disponibile";
+
+      }
+
+    }
+
+
+    /*
+    ==================================================
+    DECODIFICA BASE64 UTF-8
+    ==================================================
+    */
+
+    function decodeBase64UTF8(
+      base64
+    ) {
+
+      const binary =
+        atob(
+          base64.replace(
+            /\s/g,
+            ""
+          )
+        );
+
+
+      const bytes =
+        Uint8Array.from(
+          binary,
+          char =>
+            char.charCodeAt(0)
+        );
+
+
+      return new TextDecoder(
+        "utf-8"
+      ).decode(
+        bytes
+      );
+
+    }
+
+
+    /*
+    ==================================================
+    CODIFICA BASE64 UTF-8
+    ==================================================
+    */
+
+    function encodeBase64UTF8(
+      testo
+    ) {
+
+      const bytes =
+        new TextEncoder().encode(
+          testo
+        );
+
+
+      let binary =
+        "";
+
+
+      for (
+        let i = 0;
+        i < bytes.length;
+        i += 0x8000
+      ) {
+
+        binary +=
+          String.fromCharCode(
+            ...bytes.subarray(
+              i,
+              i + 0x8000
+            )
+          );
+
+      }
+
+
+      return btoa(
+        binary
+      );
+
+    }
+
+
+    /*
+    ==================================================
+    GENERAZIONE CODICE
+    ==================================================
+    */
+
+    function generaCodice() {
+
+      const caratteri =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+      let codice =
+        "";
+
+
+      for (
+        let i = 0;
+        i < 11;
+        i++
+      ) {
+
+        codice +=
+          caratteri[
+            Math.floor(
+              Math.random() *
+              caratteri.length
+            )
+          ];
+
+      }
+
+
+      return codice;
+
+    }
+
+
+    /*
+    ==================================================
+    CONTROLLO CODICE ESISTENTE
+    ==================================================
+    */
+
+    function codiceEsistente(
+      codice
+    ) {
+
+      return records.some(
+        record =>
+          String(
+            record.codice ||
+            ""
+          ).toUpperCase() ===
+          codice.toUpperCase()
+      );
+
+    }
+
+
+    /*
+    ==================================================
+    CODICE UNICO
+    ==================================================
+    */
+
+    function generaCodiceUnico() {
+
+      let codice;
+
+      let tentativi =
+        0;
+
+
+      do {
+
+        codice =
+          generaCodice();
+
+
+        tentativi++;
+
+
+        if (
+          tentativi >
+          1000
+        ) {
+
+          throw new Error(
+            "Impossibile generare un codice unico."
+          );
+
         }
 
-        throw new Error(messaggio);
-      }
+      } while (
+        codiceEsistente(
+          codice
+        )
+      );
 
-      const risultato = await response.json();
 
-      if (risultato.content && risultato.content.sha) {
-        fileSha = risultato.content.sha;
-      }
+      return codice;
+
     }
 
-    nomeInput.addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        generaESalva();
+
+    /*
+    ==================================================
+    GENERA E SALVA
+    ==================================================
+    */
+
+    async function generaESalva() {
+
+      if (!config) {
+
+        alert(
+          "Prima configura GitHub nelle impostazioni."
+        );
+
+
+        document
+          .getElementById(
+            "impostazioni"
+          )
+          .classList.add(
+            "aperta"
+          );
+
+
+        return;
+
       }
-    });
+
+
+      const nome =
+        nomeInput.value.trim();
+
+
+      if (!nome) {
+
+        alert(
+          "Inserisci un nome utente."
+        );
+
+
+        nomeInput.focus();
+
+        return;
+
+      }
+
+
+      generaBtn.disabled =
+        true;
+
+
+      generaBtn.innerText =
+        "Generazione...";
+
+
+      try {
+
+        /*
+        Ricarica sempre i dati aggiornati
+        */
+
+        await ghFetchSilenzioso();
+
+        await caricaDominio();
+
+
+        /*
+        Controlla che il dominio sia disponibile
+        */
+
+        if (!dominioAttuale) {
+
+          throw new Error(
+            "Il dominio non è impostato nel file dominio.json."
+          );
+
+        }
+
+
+        /*
+        Genera codice
+        */
+
+        const codice =
+          generaCodiceUnico();
+
+
+        const adesso =
+          new Date();
+
+
+        const data =
+          adesso.toLocaleDateString(
+            "it-IT",
+            {
+
+              day:
+                "2-digit",
+
+              month:
+                "2-digit",
+
+              year:
+                "numeric"
+
+            }
+          );
+
+
+        const ora =
+          adesso.toLocaleTimeString(
+            "it-IT",
+            {
+
+              hour:
+                "2-digit",
+
+              minute:
+                "2-digit",
+
+              second:
+                "2-digit"
+
+            }
+          );
+
+
+        /*
+        Crea record
+        */
+
+        const nuovoRecord = {
+
+          nome,
+
+          codice,
+
+          cliente:
+            codice +
+            "." +
+            dominioAttuale,
+
+          data,
+
+          ora
+
+        };
+
+
+        records.push(
+          nuovoRecord
+        );
+
+
+        /*
+        Salva CODICI_GENERATI.json
+        */
+
+        await ghPush();
+
+
+        /*
+        Mostra risultato
+        */
+
+        document
+          .getElementById(
+            "risultatoNome"
+          )
+          .textContent =
+          nome;
+
+
+        document
+          .getElementById(
+            "risultatoCodice"
+          )
+          .textContent =
+          codice;
+
+
+        document
+          .getElementById(
+            "risultatoCliente"
+          )
+          .textContent =
+          nuovoRecord.cliente;
+
+
+        document
+          .getElementById(
+            "risultatoData"
+          )
+          .textContent =
+          data;
+
+
+        document
+          .getElementById(
+            "risultatoOra"
+          )
+          .textContent =
+          ora;
+
+
+        document
+          .getElementById(
+            "risultato"
+          )
+          .style.display =
+          "block";
+
+
+        nomeInput.value =
+          "";
+
+
+        setStatus(
+          "Codice salvato su GitHub",
+          "var(--status-green)"
+        );
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        setStatus(
+          "Errore durante il salvataggio",
+          "var(--status-red)"
+        );
+
+
+        alert(
+          "Errore:\n\n" +
+          error.message
+        );
+
+      } finally {
+
+        generaBtn.disabled =
+          false;
+
+
+        generaBtn.innerText =
+          "Genera codice";
+
+      }
+
+    }
+
+
+    /*
+    ==================================================
+    SALVA CODICI_GENERATI.JSON
+    ==================================================
+    */
+
+    async function ghPush() {
+
+      const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/CODICI_GENERATI.json`;
+
+
+      const contenuto =
+        JSON.stringify(
+          records,
+          null,
+          2
+        );
+
+
+      const body = {
+
+        message:
+          "Nuovo codice generato",
+
+        content:
+          encodeBase64UTF8(
+            contenuto
+          )
+
+      };
+
+
+      if (fileSha) {
+
+        body.sha =
+          fileSha;
+
+      }
+
+
+      const response =
+        await fetch(
+          url,
+          {
+
+            method:
+              "PUT",
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json",
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify(
+                body
+              )
+
+          }
+        );
+
+
+      if (!response.ok) {
+
+        let messaggio =
+          "Errore GitHub HTTP " +
+          response.status;
+
+
+        try {
+
+          const errore =
+            await response.json();
+
+
+          if (
+            errore.message
+          ) {
+
+            messaggio +=
+              ": " +
+              errore.message;
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+        }
+
+
+        throw new Error(
+          messaggio
+        );
+
+      }
+
+
+      const risultato =
+        await response.json();
+
+
+      if (
+        risultato.content &&
+        risultato.content.sha
+      ) {
+
+        fileSha =
+          risultato.content.sha;
+
+      }
+
+    }
+
+
+    /*
+    ==================================================
+    ENTER SUL NOME
+    ==================================================
+    */
+
+    nomeInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key ===
+          "Enter"
+        ) {
+
+          generaESalva();
+
+        }
+
+      }
+    );
+
+
+    /*
+    ==================================================
+    AVVIO
+    ==================================================
+    */
 
     if (config) {
-      document.getElementById("ghToken").value = config.token || "";
-      document.getElementById("ghRepo").value = config.repo || "";
+
+      document
+        .getElementById(
+          "ghToken"
+        )
+        .value =
+        config.token || "";
+
+
+      document
+        .getElementById(
+          "ghRepo"
+        )
+        .value =
+        config.repo || "";
+
+
       ghFetch();
+
     } else {
-      document.getElementById("impostazioni").classList.add("aperta");
-      setStatus("Inserisci le impostazioni GitHub", "var(--status-orange)");
+
+      document
+        .getElementById(
+          "impostazioni"
+        )
+        .classList.add(
+          "aperta"
+        );
+
+
+      setStatus(
+        "Inserisci le impostazioni GitHub",
+        "var(--status-orange)"
+      );
+
     }
+
   </script>
+
 </body>
 </html>
