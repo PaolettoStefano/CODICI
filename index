@@ -1,1 +1,318 @@
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Nome Utente - Data e Ora</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f1f5f9;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+
+        background: white;
+
+        padding: 35px;
+
+        border-radius: 16px;
+
+        box-shadow:
+            0 10px 30px rgba(0,0,0,0.10);
+
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 0;
+        color: #111827;
+    }
+
+    label {
+        display: block;
+
+        text-align: left;
+
+        font-weight: bold;
+
+        margin-bottom: 8px;
+
+        color: #374151;
+    }
+
+    input {
+        width: 100%;
+
+        padding: 14px;
+
+        border: 1px solid #d1d5db;
+
+        border-radius: 8px;
+
+        font-size: 16px;
+
+        margin-bottom: 15px;
+    }
+
+    input:focus {
+        outline: none;
+
+        border-color: #2563eb;
+    }
+
+    button {
+        width: 100%;
+
+        padding: 14px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #2563eb;
+
+        color: white;
+
+        font-size: 17px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    .risultato {
+        margin-top: 25px;
+
+        padding: 20px;
+
+        background: #f8fafc;
+
+        border-radius: 10px;
+    }
+
+    .nome {
+        font-size: 22px;
+
+        font-weight: bold;
+
+        color: #111827;
+
+        margin-bottom: 20px;
+    }
+
+    .data {
+        font-size: 18px;
+
+        color: #374151;
+
+        margin-bottom: 10px;
+    }
+
+    .ora {
+        font-size: 32px;
+
+        font-weight: bold;
+
+        color: #2563eb;
+
+        font-family: monospace;
+
+        letter-spacing: 2px;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="container">
+
+```
+<h1>Benvenuto</h1>
+
+
+<label for="nome">
+    Nome utente
+</label>
+
+
+<input
+    type="text"
+    id="nome"
+    placeholder="Inserisci il tuo nome"
+    maxlength="100"
+>
+
+
+<button onclick="mostraNome()">
+    Conferma
+</button>
+
+
+<div class="risultato">
+
+    <div
+        id="nomeVisualizzato"
+        class="nome"
+    >
+        Inserisci il tuo nome
+    </div>
+
+
+    <div
+        id="data"
+        class="data"
+    >
+    </div>
+
+
+    <div
+        id="ora"
+        class="ora"
+    >
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+
+function mostraNome() {
+
+    const nome =
+        document
+            .getElementById("nome")
+            .value
+            .trim();
+
+
+    if (nome === "") {
+
+        document
+            .getElementById("nomeVisualizzato")
+            .textContent =
+                "Inserisci il tuo nome";
+
+        return;
+    }
+
+
+    document
+        .getElementById("nomeVisualizzato")
+        .textContent =
+            "Ciao, " + nome + "!";
+
+}
+
+
+function aggiornaDataOra() {
+
+    const adesso =
+        new Date();
+
+
+    const data =
+        adesso.toLocaleDateString(
+            "it-IT",
+            {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+
+
+    const ora =
+        adesso.toLocaleTimeString(
+            "it-IT",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        );
+
+
+    document
+        .getElementById("data")
+        .textContent =
+            data;
+
+
+    document
+        .getElementById("ora")
+        .textContent =
+            ora;
+
+}
+
+
+mostraNome();
+
+aggiornaDataOra();
+
+
+setInterval(
+    aggiornaDataOra,
+    1000
+);
+
+
+document
+    .getElementById("nome")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                mostraNome();
+
+            }
+
+        }
+    );
+
+
+</script>
+
+</body>
+
+</html>
 
