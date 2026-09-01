@@ -407,7 +407,7 @@
       .card {
         border-radius: 23px;
       }
-      
+
       .nav-bar {
         flex-direction: column;
         align-items: stretch;
@@ -627,7 +627,6 @@
         return;
       }
 
-      // Mappatura per formattare correttamente le intestazioni di colonna
       const datiMappati = [...records].reverse().map(item => ({
         "Nome": item.nome || "",
         "Codice": item.codice || "",
@@ -636,17 +635,14 @@
         "Ora": item.ora || ""
       }));
 
-      // Creazione del foglio di calcolo con SheetJS
       const worksheet = XLSX.utils.json_to_sheet(datiMappati);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Codici Generati");
 
-      // Generazione dinamica del nome del file con data corrente
       const oggi = new Date().toISOString().slice(0, 10);
       XLSX.writeFile(workbook, `codici_generati_${oggi}.xlsx`);
     }
 
-    // Avvio automatico al caricamento della pagina
     if (config) {
       ghFetch();
     } else {
