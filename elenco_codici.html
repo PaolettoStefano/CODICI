@@ -384,8 +384,15 @@
     }
 
     @keyframes rise {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 650px) {
@@ -432,12 +439,14 @@
 </head>
 
 <body>
+
   <div class="orb one"></div>
   <div class="orb two"></div>
 
   <header class="topbar">
     <div class="brand">
       <div class="brand-mark">GC</div>
+
       <div>
         <strong>Generatore Codici</strong>
         <small>Access management system</small>
@@ -451,19 +460,27 @@
 
   <section class="hero">
     <p class="eyebrow">Database & Archivio</p>
-    <h1>Elenco Completo<br>Codici Generati.</h1>
+
+    <h1>
+      Elenco Completo<br>
+      Codici Generati.
+    </h1>
+
     <p class="hero-copy">
       Consulta la lista aggiornata di tutti i codici di accesso salvati su GitHub con tutti i dettagli.
     </p>
   </section>
 
   <main class="container">
+
     <div class="nav-bar">
+
       <a href="index.html" class="btn primary">
         &larr; Torna alla Creazione Codici
       </a>
 
       <div class="action-group">
+
         <button class="btn excel-btn" onclick="esportaExcel()">
           &#x2193; Esporta Excel (.xlsx)
         </button>
@@ -471,22 +488,33 @@
         <button class="btn success" onclick="ghFetch()">
           &#x21bb; Aggiorna Elenco
         </button>
+
       </div>
     </div>
 
     <div id="status">
-      Stato: <span id="statusText">Lettura configurazione...</span>
+      Stato:
+      <span id="statusText">
+        Lettura configurazione...
+      </span>
     </div>
 
     <section class="card">
+
       <div class="section-head">
+
         <div>
           <h2>Archivio Codici</h2>
-          <div id="contatore" class="contatore">Caricamento dati...</div>
+
+          <div id="contatore" class="contatore">
+            Caricamento dati...
+          </div>
         </div>
+
       </div>
 
       <div class="search-box">
+
         <input
           type="text"
           id="searchInput"
@@ -494,11 +522,15 @@
           placeholder="Cerca per nome, codice, cliente o indirizzo IP..."
           oninput="filtraTabella()"
         >
+
       </div>
 
       <div class="tabella-container">
+
         <table>
+
           <thead>
+
             <tr>
               <th>Nome</th>
               <th>Codice</th>
@@ -507,97 +539,455 @@
               <th>Data</th>
               <th>Ora</th>
             </tr>
+
           </thead>
 
           <tbody id="tabella"></tbody>
+
         </table>
+
       </div>
+
     </section>
+
   </main>
 
   <!-- Libreria SheetJS per l'esportazione nativa in formato Excel (.xlsx) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <script>
-    let config = JSON.parse(localStorage.getItem("gh_codici_config")) || null;
+
+    let config =
+      JSON.parse(localStorage.getItem("gh_codici_config")) || null;
+
     let records = [];
-    let indirizzoIP = "";
+
+    /*
+     * Mappa degli indirizzi IP.
+     *
+     * NON viene più usato un unico IP globale.
+     *
+     * La chiave della mappa viene ricavata dal record
+     * di CODICI_GENERATI.json e utilizzata per associare
+     * il relativo IP.
+     */
+    let mappaIP = {};
 
     function setStatus(messaggio, colore) {
+
       document.getElementById("statusText").innerText = messaggio;
+
       document.getElementById("statusText").style.color =
         colore || "var(--orange)";
     }
 
+
     function decodeBase64UTF8(base64) {
-      const binary = atob(base64.replace(/\s/g, ""));
-      const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+
+      const binary =
+        atob(base64.replace(/\s/g, ""));
+
+      const bytes =
+        Uint8Array.from(
+          binary,
+          char => char.charCodeAt(0)
+        );
+
       return new TextDecoder("utf-8").decode(bytes);
     }
 
-    async function caricaIndirizzoIP() {
-      const url = `https://api.github.com/repos/${config.repo}/contents/dominio.json`;
+
+    /*
+     * Normalizza un valore per poter effettuare
+     * confronti sicuri tra dominio/cliente.
+     */
+    function normalizzaValore(valore) {
+
+      return String(valore || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\//i, "")
+        .replace(/\/+$/, "")
+        .trim();
+    }
+
+
+    /*
+     * Estrae il dominio da un valore come:
+     *
+     * ABC123.miodominio.it
+     *
+     * ottenendo:
+     *
+     * miodominio.it
+     *
+     * Se il valore è già un dominio semplice,
+     * viene restituito così com'è.
+     */
+    function estraiDominioDaCliente(cliente) {
+
+      let valore = normalizzaValore(cliente);
+
+      if (!valore) {
+        return "";
+      }
+
+      /*
+       * Rimuove eventuale porta.
+       */
+      valore = valore.split("/")[0];
+
+      /*
+       * Se contiene più parti separate da ".",
+       * prova a ricavare il dominio dalla parte finale.
+       *
+       * Esempio:
+       * codice.dominio.it
+       *
+       * diventa:
+       * dominio.it
+       */
+      const parti = valore.split(".");
+
+      if (parti.length >= 3) {
+
+        return parti
+          .slice(1)
+          .join(".");
+      }
+
+      return valore;
+    }
+
+
+    /*
+     * Carica dominio.json.
+     *
+     * IMPORTANTE:
+     * vengono caricati TUTTI i record presenti nel file
+     * e viene costruita una mappa dominio -> indirizzo IP.
+     */
+    async function caricaDominiIP() {
+
+      mappaIP = {};
+
+      const url =
+        `https://api.github.com/repos/${config.repo}/contents/dominio.json`;
 
       const response = await fetch(url, {
+
         headers: {
+
           Authorization: `token ${config.token}`,
+
           Accept: "application/vnd.github+json"
         }
+
       });
 
+
       if (response.status === 404) {
-        indirizzoIP = "";
+
         return;
       }
 
+
       if (!response.ok) {
+
         throw new Error(
-          "Impossibile leggere dominio.json. HTTP " + response.status
+          "Impossibile leggere dominio.json. HTTP " +
+          response.status
         );
       }
 
-      const data = await response.json();
-      const testo = decodeBase64UTF8(data.content).trim();
+
+      const data =
+        await response.json();
+
+
+      const testo =
+        decodeBase64UTF8(data.content).trim();
+
 
       if (!testo) {
-        indirizzoIP = "";
+
         return;
       }
+
 
       let contenuto;
 
       try {
-        contenuto = JSON.parse(testo);
+
+        contenuto =
+          JSON.parse(testo);
+
       } catch (error) {
-        throw new Error("dominio.json non contiene un JSON valido.");
+
+        throw new Error(
+          "dominio.json non contiene un JSON valido."
+        );
       }
 
-      if (
-        !contenuto ||
-        typeof contenuto !== "object" ||
-        Array.isArray(contenuto)
+
+      /*
+       * Supporta sia:
+       *
+       * [
+       *   {...},
+       *   {...}
+       * ]
+       *
+       * sia un singolo oggetto:
+       *
+       * {
+       *   ...
+       * }
+       */
+      let listaDomini;
+
+      if (Array.isArray(contenuto)) {
+
+        listaDomini = contenuto;
+
+      } else if (
+        contenuto &&
+        typeof contenuto === "object"
       ) {
-        indirizzoIP = "";
+
+        /*
+         * Se il JSON contiene una proprietà array,
+         * prova a utilizzarla.
+         */
+        if (Array.isArray(contenuto.domini)) {
+
+          listaDomini = contenuto.domini;
+
+        } else if (Array.isArray(contenuto.records)) {
+
+          listaDomini = contenuto.records;
+
+        } else {
+
+          listaDomini = [contenuto];
+        }
+
+      } else {
+
         return;
       }
 
+
       /*
-       * Legge il campo:
-       * "indirizzoip": "..."
+       * Costruzione della mappa:
        *
-       * Viene supportato anche "ultimoindirizzoip" nel caso
-       * il file dominio.json utilizzi quel nome.
+       * dominio -> IP
        */
-      indirizzoIP = String(
-        contenuto.indirizzoip ??
-        contenuto.ultimoindirizzoip ??
-        contenuto.ultimoIndirizzoIp ??
-        ""
-      ).trim();
+      listaDomini.forEach(record => {
+
+        if (
+          !record ||
+          typeof record !== "object"
+        ) {
+          return;
+        }
+
+
+        const ip = String(
+          record.indirizzoip ??
+          record.ultimoindirizzoip ??
+          record.ultimoIndirizzoIp ??
+          record.ip ??
+          ""
+        ).trim();
+
+
+        /*
+         * Possibili nomi del campo dominio.
+         */
+        const dominio = String(
+          record.dominio ??
+          record.domain ??
+          ""
+        ).trim();
+
+
+        if (!dominio) {
+          return;
+        }
+
+
+        /*
+         * Salva la corrispondenza principale.
+         */
+        const dominioNormalizzato =
+          normalizzaValore(dominio);
+
+
+        if (dominioNormalizzato) {
+
+          mappaIP[dominioNormalizzato] = ip;
+        }
+
+
+        /*
+         * Salva anche senza eventuale www.
+         */
+        const senzaWWW =
+          dominioNormalizzato.replace(/^www\./i, "");
+
+
+        if (senzaWWW) {
+
+          mappaIP[senzaWWW] = ip;
+        }
+
+      });
+
     }
 
+
+    /*
+     * Restituisce l'IP corretto per OGNI record
+     * di CODICI_GENERATI.json.
+     *
+     * Il collegamento viene fatto partendo dal campo
+     * "cliente" del record.
+     */
+    function trovaIPPerRecord(record) {
+
+      if (!record) {
+        return "";
+      }
+
+
+      /*
+       * Prima possibilità:
+       * se CODICI_GENERATI.json contiene già indirizzoip,
+       * utilizziamo direttamente quello.
+       */
+      if (record.indirizzoip) {
+
+        return String(
+          record.indirizzoip
+        ).trim();
+      }
+
+
+      /*
+       * Supporto per eventuali varianti.
+       */
+      if (record.ip) {
+
+        return String(
+          record.ip
+        ).trim();
+      }
+
+
+      if (record.ultimoindirizzoip) {
+
+        return String(
+          record.ultimoindirizzoip
+        ).trim();
+      }
+
+
+      /*
+       * Recuperiamo il dominio dal campo cliente.
+       */
+      const cliente =
+        normalizzaValore(record.cliente);
+
+
+      if (!cliente) {
+        return "";
+      }
+
+
+      /*
+       * Proviamo prima una corrispondenza esatta.
+       *
+       * Questo è utile se il campo cliente contiene
+       * direttamente il dominio.
+       */
+      if (mappaIP[cliente]) {
+
+        return mappaIP[cliente];
+      }
+
+
+      /*
+       * Poi cerchiamo il dominio contenuto nel cliente.
+       *
+       * Esempio:
+       *
+       * cliente:
+       * ABC123.miodominio.it
+       *
+       * dominio:
+       * miodominio.it
+       */
+      const dominio =
+        estraiDominioDaCliente(cliente);
+
+
+      if (dominio && mappaIP[dominio]) {
+
+        return mappaIP[dominio];
+      }
+
+
+      /*
+       * Ultimo controllo:
+       * cerca quale dominio di dominio.json
+       * è contenuto nel valore cliente.
+       */
+      const chiavi =
+        Object.keys(mappaIP);
+
+
+      for (const chiave of chiavi) {
+
+        if (
+          cliente === chiave ||
+          cliente.endsWith("." + chiave) ||
+          cliente.includes(chiave)
+        ) {
+
+          return mappaIP[chiave];
+        }
+      }
+
+
+      return "";
+    }
+
+
+    /*
+     * Aggiunge l'IP corretto a ogni record.
+     *
+     * ATTENZIONE:
+     * non modifica CODICI_GENERATI.json.
+     * Crea solamente una proprietà temporanea
+     * utilizzata dalla visualizzazione e dall'Excel.
+     */
+    function associaIPAiRecord() {
+
+      records.forEach(record => {
+
+        record.__indirizzoip =
+          trovaIPPerRecord(record);
+
+      });
+
+    }
+
+
     async function ghFetch() {
+
       if (!config) {
+
         setStatus(
           "Configurazione GitHub mancante. Torna alla pagina iniziale.",
           "var(--red)"
@@ -609,29 +999,47 @@
         return;
       }
 
-      setStatus("Lettura dati da GitHub...", "var(--blue)");
+
+      setStatus(
+        "Lettura dati da GitHub...",
+        "var(--blue)"
+      );
+
 
       try {
-        /*
-         * Prima leggiamo dominio.json per recuperare l'indirizzo IP.
-         */
-        await caricaIndirizzoIP();
 
         /*
-         * Poi leggiamo l'archivio dei codici.
+         * 1. Carica TUTTI i domini e relativi IP.
+         */
+        await caricaDominiIP();
+
+
+        /*
+         * 2. Carica CODICI_GENERATI.json.
          */
         const url =
           `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
 
-        const response = await fetch(url, {
-          headers: {
-            Authorization: `token ${config.token}`,
-            Accept: "application/vnd.github+json"
-          }
-        });
+
+        const response =
+          await fetch(url, {
+
+            headers: {
+
+              Authorization:
+                `token ${config.token}`,
+
+              Accept:
+                "application/vnd.github+json"
+            }
+
+          });
+
 
         if (response.status === 404) {
+
           records = [];
+
           renderTable();
 
           setStatus(
@@ -642,44 +1050,62 @@
           return;
         }
 
+
         if (!response.ok) {
+
           throw new Error(
             "Impossibile leggere CODICI_GENERATI.json. HTTP " +
             response.status
           );
         }
 
-        const data = await response.json();
 
-        const testoCodici = decodeBase64UTF8(data.content).trim();
+        const data =
+          await response.json();
 
-        if (!testoCodici) {
+
+        const testo =
+          decodeBase64UTF8(data.content).trim();
+
+
+        if (!testo) {
+
           records = [];
+
         } else {
-          records = JSON.parse(testoCodici);
+
+          records =
+            JSON.parse(testo);
         }
 
+
         if (!Array.isArray(records)) {
+
           throw new Error(
             "CODICI_GENERATI.json deve contenere un array."
           );
         }
 
+
+        /*
+         * 3. Associa ad ogni record il suo IP.
+         */
+        associaIPAiRecord();
+
+
+        /*
+         * 4. Visualizza la tabella.
+         */
         renderTable();
 
-        if (indirizzoIP) {
-          setStatus(
-            "Sincronizzato con GitHub • IP: " + indirizzoIP,
-            "var(--green)"
-          );
-        } else {
-          setStatus(
-            "Sincronizzato con GitHub • indirizzo IP non disponibile",
-            "var(--orange)"
-          );
-        }
+
+        setStatus(
+          "Sincronizzato con GitHub",
+          "var(--green)"
+        );
 
       } catch (error) {
+
         console.error(error);
 
         setStatus(
@@ -687,120 +1113,283 @@
           "var(--red)"
         );
       }
+
     }
 
+
     function renderTable(datiDaMostrare) {
-      const tbody = document.getElementById("tabella");
-      const list = datiDaMostrare || records;
+
+      const tbody =
+        document.getElementById("tabella");
+
+
+      const list =
+        datiDaMostrare || records;
+
 
       tbody.innerHTML = "";
 
+
       document.getElementById("contatore").textContent =
         `Totale codici: ${list.length}` +
-        (datiDaMostrare
-          ? ` (filtrati da ${records.length})`
-          : "");
+        (
+          datiDaMostrare
+            ? ` (filtrati da ${records.length})`
+            : ""
+        );
+
 
       if (!list.length) {
+
         tbody.innerHTML = `
+
           <tr>
-            <td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">
+
+            <td
+              colspan="6"
+              style="
+                text-align:center;
+                padding:32px;
+                color:var(--muted)
+              "
+            >
+
               ${
                 records.length === 0
                   ? "Nessun codice presente nel file."
                   : "Nessun risultato corrispondente alla ricerca."
               }
+
             </td>
+
           </tr>
+
         `;
 
         return;
       }
 
-      [...list].reverse().forEach(record => {
-        const tr = document.createElement("tr");
 
-        /*
-         * L'indirizzo IP viene letto da dominio.json
-         * e mostrato su ogni riga dell'elenco.
-         */
-        const valori = [
-          record.nome || "",
-          record.codice || "",
-          record.cliente || "",
-          indirizzoIP || "Non disponibile",
-          record.data || "",
-          record.ora || ""
-        ];
+      /*
+       * Mostra i record dal più recente al più vecchio.
+       */
+      [...list]
+        .reverse()
+        .forEach(record => {
 
-        valori.forEach((value, index) => {
-          const td = document.createElement("td");
+          const tr =
+            document.createElement("tr");
 
-          td.textContent = value;
 
           /*
-           * Colonna Codice
+           * L'IP viene calcolato sul SINGOLO record.
            */
-          if (index === 1) {
-            td.className = "codice-tabella";
-          }
+          const indirizzoIP =
+            record.__indirizzoip || "";
 
-          /*
-           * Colonna Indirizzo IP
-           */
-          if (index === 3) {
-            td.className = "ip-tabella";
-          }
 
-          tr.appendChild(td);
+          const valori = [
+
+            record.nome || "",
+
+            record.codice || "",
+
+            record.cliente || "",
+
+            indirizzoIP || "Non disponibile",
+
+            record.data || "",
+
+            record.ora || ""
+
+          ];
+
+
+          valori.forEach((value, index) => {
+
+            const td =
+              document.createElement("td");
+
+
+            td.textContent =
+              value;
+
+
+            /*
+             * Colonna Codice.
+             */
+            if (index === 1) {
+
+              td.className =
+                "codice-tabella";
+            }
+
+
+            /*
+             * Colonna IP.
+             */
+            if (index === 3) {
+
+              td.className =
+                "ip-tabella";
+            }
+
+
+            tr.appendChild(td);
+
+          });
+
+
+          tbody.appendChild(tr);
+
         });
 
-        tbody.appendChild(tr);
-      });
     }
+
 
     function filtraTabella() {
-      const query = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
+
+      const query =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
+
 
       if (!query) {
+
         renderTable();
+
         return;
       }
 
-      const filtrati = records.filter(r =>
-        (r.nome && String(r.nome).toLowerCase().includes(query)) ||
-        (r.codice && String(r.codice).toLowerCase().includes(query)) ||
-        (r.cliente && String(r.cliente).toLowerCase().includes(query)) ||
-        (indirizzoIP && String(indirizzoIP).toLowerCase().includes(query)) ||
-        (r.data && String(r.data).toLowerCase().includes(query)) ||
-        (r.ora && String(r.ora).toLowerCase().includes(query))
-      );
+
+      const filtrati =
+        records.filter(record => {
+
+          const ip =
+            record.__indirizzoip || "";
+
+
+          return (
+
+            (
+              record.nome &&
+              String(record.nome)
+                .toLowerCase()
+                .includes(query)
+            )
+
+            ||
+
+            (
+              record.codice &&
+              String(record.codice)
+                .toLowerCase()
+                .includes(query)
+            )
+
+            ||
+
+            (
+              record.cliente &&
+              String(record.cliente)
+                .toLowerCase()
+                .includes(query)
+            )
+
+            ||
+
+            (
+              ip &&
+              String(ip)
+                .toLowerCase()
+                .includes(query)
+            )
+
+            ||
+
+            (
+              record.data &&
+              String(record.data)
+                .toLowerCase()
+                .includes(query)
+            )
+
+            ||
+
+            (
+              record.ora &&
+              String(record.ora)
+                .toLowerCase()
+                .includes(query)
+            )
+
+          );
+
+        });
+
 
       renderTable(filtrati);
+
     }
 
+
     function esportaExcel() {
-      if (!records || records.length === 0) {
-        alert("Nessun dato disponibile da esportare.");
+
+      if (
+        !records ||
+        records.length === 0
+      ) {
+
+        alert(
+          "Nessun dato disponibile da esportare."
+        );
+
         return;
       }
 
-      const datiMappati = [...records].reverse().map(item => ({
-        "Nome": item.nome || "",
-        "Codice": item.codice || "",
-        "Cliente": item.cliente || "",
-        "Indirizzo IP": indirizzoIP || "",
-        "Data": item.data || "",
-        "Ora": item.ora || ""
-      }));
 
-      const worksheet = XLSX.utils.json_to_sheet(datiMappati);
+      /*
+       * Anche nell'Excel ogni record riceve
+       * il PROPRIO indirizzo IP.
+       */
+      const datiMappati =
+        [...records]
+          .reverse()
+          .map(item => ({
 
-      const workbook = XLSX.utils.book_new();
+            "Nome":
+              item.nome || "",
+
+            "Codice":
+              item.codice || "",
+
+            "Cliente":
+              item.cliente || "",
+
+            "Indirizzo IP":
+              item.__indirizzoip || "",
+
+            "Data":
+              item.data || "",
+
+            "Ora":
+              item.ora || ""
+
+          }));
+
+
+      const worksheet =
+        XLSX.utils.json_to_sheet(
+          datiMappati
+        );
+
+
+      const workbook =
+        XLSX.utils.book_new();
+
 
       XLSX.utils.book_append_sheet(
         workbook,
@@ -808,22 +1397,30 @@
         "Codici Generati"
       );
 
-      const oggi = new Date()
-        .toISOString()
-        .slice(0, 10);
+
+      const oggi =
+        new Date()
+          .toISOString()
+          .slice(0, 10);
+
 
       XLSX.writeFile(
         workbook,
         `codici_generati_${oggi}.xlsx`
       );
+
     }
+
 
     /*
      * Avvio automatico.
      */
     if (config) {
+
       ghFetch();
+
     } else {
+
       setStatus(
         "Configurazione GitHub mancante. Torna alla pagina iniziale.",
         "var(--red)"
@@ -831,7 +1428,10 @@
 
       document.getElementById("contatore").textContent =
         "Nessuna configurazione trovata.";
+
     }
+
   </script>
+
 </body>
 </html>
