@@ -328,18 +328,9 @@
       line-height: 1.55;
     }
 
-    .dominio-container {
+    .dominio-box {
       position: relative;
       z-index: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .dominio-box {
-      flex: 1;
-      min-width: 200px;
       padding: 16px;
       border: 1px solid rgba(24, 173, 104, .22);
       border-radius: 16px;
@@ -464,11 +455,6 @@
       .card {
         border-radius: 23px;
       }
-
-      .dominio-container {
-        flex-direction: column;
-        align-items: stretch;
-      }
     }
   </style>
 </head>
@@ -536,12 +522,7 @@
 
     <section class="card">
       <h2>Dominio attuale</h2>
-      <div class="dominio-container">
-        <div id="dominioVisualizzato" class="dominio-box">Non ancora caricato</div>
-        <button type="button" class="primary" onclick="window.location.href='dominio.html'">
-          Apri dominio.html
-        </button>
-      </div>
+      <div id="dominioVisualizzato" class="dominio-box">Non ancora caricato</div>
     </section>
 
     <section class="card">
