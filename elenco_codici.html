@@ -338,7 +338,7 @@
 
     table {
       width: 100%;
-      min-width: 700px;
+      min-width: 850px;
       border-collapse: collapse;
       background: rgba(255, 255, 255, .25);
     }
@@ -374,6 +374,13 @@
       font-weight: 700;
       font-size: 15px;
       letter-spacing: .05em;
+    }
+
+    .ip-tabella {
+      color: var(--green);
+      font-family: monospace;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     @keyframes rise {
@@ -455,10 +462,12 @@
       <a href="index.html" class="btn primary">
         &larr; Torna alla Creazione Codici
       </a>
+
       <div class="action-group">
         <button class="btn excel-btn" onclick="esportaExcel()">
           &#x2193; Esporta Excel (.xlsx)
         </button>
+
         <button class="btn success" onclick="ghFetch()">
           &#x21bb; Aggiorna Elenco
         </button>
@@ -478,7 +487,13 @@
       </div>
 
       <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="Cerca per nome, codice o cliente..." oninput="filtraTabella()">
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Cerca per nome, codice, cliente o indirizzo IP..."
+          oninput="filtraTabella()"
+        >
       </div>
 
       <div class="tabella-container">
@@ -488,10 +503,12 @@
               <th>Nome</th>
               <th>Codice</th>
               <th>Cliente</th>
+              <th>Indirizzo IP</th>
               <th>Data</th>
               <th>Ora</th>
             </tr>
           </thead>
+
           <tbody id="tabella"></tbody>
         </table>
       </div>
@@ -504,10 +521,12 @@
   <script>
     let config = JSON.parse(localStorage.getItem("gh_codici_config")) || null;
     let records = [];
+    let indirizzoIP = "";
 
     function setStatus(messaggio, colore) {
       document.getElementById("statusText").innerText = messaggio;
-      document.getElementById("statusText").style.color = colore || "var(--orange)";
+      document.getElementById("statusText").style.color =
+        colore || "var(--orange)";
     }
 
     function decodeBase64UTF8(base64) {
@@ -516,17 +535,94 @@
       return new TextDecoder("utf-8").decode(bytes);
     }
 
+    async function caricaIndirizzoIP() {
+      const url = `https://api.github.com/repos/${config.repo}/contents/dominio.json`;
+
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `token ${config.token}`,
+          Accept: "application/vnd.github+json"
+        }
+      });
+
+      if (response.status === 404) {
+        indirizzoIP = "";
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          "Impossibile leggere dominio.json. HTTP " + response.status
+        );
+      }
+
+      const data = await response.json();
+      const testo = decodeBase64UTF8(data.content).trim();
+
+      if (!testo) {
+        indirizzoIP = "";
+        return;
+      }
+
+      let contenuto;
+
+      try {
+        contenuto = JSON.parse(testo);
+      } catch (error) {
+        throw new Error("dominio.json non contiene un JSON valido.");
+      }
+
+      if (
+        !contenuto ||
+        typeof contenuto !== "object" ||
+        Array.isArray(contenuto)
+      ) {
+        indirizzoIP = "";
+        return;
+      }
+
+      /*
+       * Legge il campo:
+       * "indirizzoip": "..."
+       *
+       * Viene supportato anche "ultimoindirizzoip" nel caso
+       * il file dominio.json utilizzi quel nome.
+       */
+      indirizzoIP = String(
+        contenuto.indirizzoip ??
+        contenuto.ultimoindirizzoip ??
+        contenuto.ultimoIndirizzoIp ??
+        ""
+      ).trim();
+    }
+
     async function ghFetch() {
       if (!config) {
-        setStatus("Configurazione GitHub mancante. Torna alla pagina iniziale.", "var(--red)");
-        document.getElementById("contatore").textContent = "Impossibile caricare i dati senza configurazione.";
+        setStatus(
+          "Configurazione GitHub mancante. Torna alla pagina iniziale.",
+          "var(--red)"
+        );
+
+        document.getElementById("contatore").textContent =
+          "Impossibile caricare i dati senza configurazione.";
+
         return;
       }
 
       setStatus("Lettura dati da GitHub...", "var(--blue)");
 
       try {
-        const url = `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
+        /*
+         * Prima leggiamo dominio.json per recuperare l'indirizzo IP.
+         */
+        await caricaIndirizzoIP();
+
+        /*
+         * Poi leggiamo l'archivio dei codici.
+         */
+        const url =
+          `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
+
         const response = await fetch(url, {
           headers: {
             Authorization: `token ${config.token}`,
@@ -537,63 +633,123 @@
         if (response.status === 404) {
           records = [];
           renderTable();
-          setStatus("Nessun codice trovato nel repository", "var(--orange)");
+
+          setStatus(
+            "Nessun codice trovato nel repository",
+            "var(--orange)"
+          );
+
           return;
         }
 
         if (!response.ok) {
-          throw new Error("Impossibile leggere CODICI_GENERATI.json. HTTP " + response.status);
+          throw new Error(
+            "Impossibile leggere CODICI_GENERATI.json. HTTP " +
+            response.status
+          );
         }
 
         const data = await response.json();
-        records = JSON.parse(decodeBase64UTF8(data.content));
+
+        const testoCodici = decodeBase64UTF8(data.content).trim();
+
+        if (!testoCodici) {
+          records = [];
+        } else {
+          records = JSON.parse(testoCodici);
+        }
 
         if (!Array.isArray(records)) {
-          throw new Error("CODICI_GENERATI.json deve contenere un array.");
+          throw new Error(
+            "CODICI_GENERATI.json deve contenere un array."
+          );
         }
 
         renderTable();
-        setStatus("Sincronizzato con GitHub", "var(--green)");
+
+        if (indirizzoIP) {
+          setStatus(
+            "Sincronizzato con GitHub • IP: " + indirizzoIP,
+            "var(--green)"
+          );
+        } else {
+          setStatus(
+            "Sincronizzato con GitHub • indirizzo IP non disponibile",
+            "var(--orange)"
+          );
+        }
+
       } catch (error) {
         console.error(error);
-        setStatus("Errore: " + error.message, "var(--red)");
+
+        setStatus(
+          "Errore: " + error.message,
+          "var(--red)"
+        );
       }
     }
 
     function renderTable(datiDaMostrare) {
       const tbody = document.getElementById("tabella");
       const list = datiDaMostrare || records;
+
       tbody.innerHTML = "";
 
-      document.getElementById("contatore").textContent = 
-        `Totale codici: ${list.length}${datiDaMostrare ? ` (filtrati da ${records.length})` : ''}`;
+      document.getElementById("contatore").textContent =
+        `Totale codici: ${list.length}` +
+        (datiDaMostrare
+          ? ` (filtrati da ${records.length})`
+          : "");
 
       if (!list.length) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" style="text-align:center;padding:32px;color:var(--muted)">
-              ${records.length === 0 ? "Nessun codice presente nel file." : "Nessun risultato corrispondente alla ricerca."}
+            <td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">
+              ${
+                records.length === 0
+                  ? "Nessun codice presente nel file."
+                  : "Nessun risultato corrispondente alla ricerca."
+              }
             </td>
           </tr>
         `;
+
         return;
       }
 
       [...list].reverse().forEach(record => {
         const tr = document.createElement("tr");
 
-        [
+        /*
+         * L'indirizzo IP viene letto da dominio.json
+         * e mostrato su ogni riga dell'elenco.
+         */
+        const valori = [
           record.nome || "",
           record.codice || "",
           record.cliente || "",
+          indirizzoIP || "Non disponibile",
           record.data || "",
           record.ora || ""
-        ].forEach((value, index) => {
+        ];
+
+        valori.forEach((value, index) => {
           const td = document.createElement("td");
+
           td.textContent = value;
 
+          /*
+           * Colonna Codice
+           */
           if (index === 1) {
             td.className = "codice-tabella";
+          }
+
+          /*
+           * Colonna Indirizzo IP
+           */
+          if (index === 3) {
+            td.className = "ip-tabella";
           }
 
           tr.appendChild(td);
@@ -604,18 +760,24 @@
     }
 
     function filtraTabella() {
-      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const query = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
       if (!query) {
         renderTable();
         return;
       }
 
-      const filtrati = records.filter(r => 
-        (r.nome && r.nome.toLowerCase().includes(query)) ||
-        (r.codice && r.codice.toLowerCase().includes(query)) ||
-        (r.cliente && r.cliente.toLowerCase().includes(query)) ||
-        (r.data && r.data.toLowerCase().includes(query)) ||
-        (r.ora && r.ora.toLowerCase().includes(query))
+      const filtrati = records.filter(r =>
+        (r.nome && String(r.nome).toLowerCase().includes(query)) ||
+        (r.codice && String(r.codice).toLowerCase().includes(query)) ||
+        (r.cliente && String(r.cliente).toLowerCase().includes(query)) ||
+        (indirizzoIP && String(indirizzoIP).toLowerCase().includes(query)) ||
+        (r.data && String(r.data).toLowerCase().includes(query)) ||
+        (r.ora && String(r.ora).toLowerCase().includes(query))
       );
 
       renderTable(filtrati);
@@ -631,23 +793,44 @@
         "Nome": item.nome || "",
         "Codice": item.codice || "",
         "Cliente": item.cliente || "",
+        "Indirizzo IP": indirizzoIP || "",
         "Data": item.data || "",
         "Ora": item.ora || ""
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(datiMappati);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Codici Generati");
 
-      const oggi = new Date().toISOString().slice(0, 10);
-      XLSX.writeFile(workbook, `codici_generati_${oggi}.xlsx`);
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Codici Generati"
+      );
+
+      const oggi = new Date()
+        .toISOString()
+        .slice(0, 10);
+
+      XLSX.writeFile(
+        workbook,
+        `codici_generati_${oggi}.xlsx`
+      );
     }
 
+    /*
+     * Avvio automatico.
+     */
     if (config) {
       ghFetch();
     } else {
-      setStatus("Configurazione GitHub mancante. Torna alla pagina iniziale.", "var(--red)");
-      document.getElementById("contatore").textContent = "Nessuna configurazione trovata.";
+      setStatus(
+        "Configurazione GitHub mancante. Torna alla pagina iniziale.",
+        "var(--red)"
+      );
+
+      document.getElementById("contatore").textContent =
+        "Nessuna configurazione trovata.";
     }
   </script>
 </body>
