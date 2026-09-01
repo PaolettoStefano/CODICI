@@ -6,5 +6,13 @@
     "data": "01/09/2026",
     "ora": "22:05:54",
     "indirizzoip": "192.168.111.10"
+  },
+  {
+    "nome": "PROVA_DA_CANCELLARE",
+    "codice": "KIC6XJ8SXPY",
+    "cliente": "KIC6XJ8SXPY.paoletto.eu",
+    "indirizzoip": "192.168.111.11",
+    "data": "01/09/2026",
+    "ora": "23:22:56"
   }
 ]
