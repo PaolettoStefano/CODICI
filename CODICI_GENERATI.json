@@ -5,54 +5,5 @@
     "cliente": "5BLNHB22GT9.aaaaa.ee",
     "data": "01/09/2026",
     "ora": "11:27:17"
-  },
-  {
-    "nome": "esmenegildo",
-    "codice": "QY92C4WZS45",
-    "cliente": "QY92C4WZS45.aaaaa.ee",
-    "data": "01/09/2026",
-    "ora": "11:27:48"
-  },
-  {
-    "nome": "asdrubale",
-    "codice": "STBI0GGTFMV",
-    "cliente": "STBI0GGTFMV.aaaaa.ee",
-    "data": "01/09/2026",
-    "ora": "13:51:58"
-  },
-  {
-    "nome": "desdemona",
-    "codice": "NT8J2RRWP3O",
-    "cliente": "NT8J2RRWP3O.aaaaa.ee",
-    "data": "01/09/2026",
-    "ora": "13:58:23"
-  },
-  {
-    "nome": "pippo",
-    "codice": "SI80W4QHM5Y",
-    "cliente": "SI80W4QHM5Y.tuodominio.it",
-    "data": "01/09/2026",
-    "ora": "14:23:21"
-  },
-  {
-    "nome": "andrei",
-    "codice": "73W0BLESV15",
-    "cliente": "73W0BLESV15.paoletto.eu",
-    "data": "01/09/2026",
-    "ora": "15:42:07"
-  },
-  {
-    "nome": "ermenegildo",
-    "codice": "T3JD0YU05TF",
-    "cliente": "T3JD0YU05TF.paoletto.eu",
-    "data": "01/09/2026",
-    "ora": "15:46:19"
-  },
-  {
-    "nome": "asterix",
-    "codice": "TJXPG366DOE",
-    "cliente": "TJXPG366DOE.paoletto.eu",
-    "data": "01/09/2026",
-    "ora": "15:52:48"
   }
 ]
