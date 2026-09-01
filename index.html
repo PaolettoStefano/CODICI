@@ -3,27 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#eef4ff">
-  <title>Generatore Codici</title>
+  <meta name="theme-color" content="#0a0d14">
+  <title>Generatore Codici | Glass System</title>
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap");
 
     :root {
-      --ink: #101522;
-      --muted: #687386;
-      --blue: #1677ff;
-      --green: #18ad68;
-      --red: #e24755;
-      --orange: #d98520;
-      --surface: rgba(255, 255, 255, .62);
-      --surface-strong: rgba(255, 255, 255, .82);
-      --line: rgba(255, 255, 255, .78);
-      --shadow: 0 24px 70px rgba(49, 79, 125, .16);
+      --bg: #0a0d14;
+      --surface: rgba(18, 24, 38, 0.45);
+      --surface-hover: rgba(28, 36, 56, 0.55);
+      --surface-solid: #0d121d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.25);
+      
+      --text: #f1f5f9;
+      --text-muted: #8493a8;
+      
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #6366f1;
+      
+      --status-green: #10b981;
+      --status-red: #ef4444;
+      --status-orange: #f59e0b;
+
+      --shadow-glass: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html {
@@ -31,286 +42,350 @@
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(80, 181, 255, .36), transparent 30rem),
-        radial-gradient(circle at 90% 12%, rgba(155, 122, 255, .3), transparent 28rem),
-        linear-gradient(135deg, #f4f8ff 0%, #e7eef9 48%, #f6f8fc 100%);
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 20% 15%, rgba(14, 165, 233, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* Griglia cyber e rumore di fondo */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: .26;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E");
-      mix-blend-mode: multiply;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
     }
 
+    /* Orb luminosi di sfondo */
     .orb {
       position: fixed;
-      width: 260px;
-      height: 260px;
       border-radius: 50%;
-      filter: blur(4px);
-      opacity: .45;
+      filter: blur(90px);
       pointer-events: none;
       z-index: -1;
     }
 
     .orb.one {
-      top: 38%;
-      left: -140px;
-      background: #72d5ff;
+      top: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: rgba(59, 130, 246, 0.15);
     }
 
     .orb.two {
-      right: -130px;
-      bottom: 8%;
-      background: #b7a1ff;
+      bottom: -150px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: rgba(99, 102, 241, 0.12);
     }
 
+    /* Topbar Glass */
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 20;
-      min-height: 86px;
-      padding: 18px clamp(20px, 5vw, 72px);
+      z-index: 50;
+      min-height: 80px;
+      padding: 0 clamp(20px, 5vw, 60px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      background: rgba(248, 251, 255, .58);
-      border-bottom: 1px solid rgba(255, 255, 255, .7);
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      background: rgba(10, 13, 20, 0.65);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 13px;
+      gap: 14px;
     }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      color: white;
-      font: 800 15px "Manrope", sans-serif;
-      background: linear-gradient(145deg, #1c88ff, #725df2);
-      box-shadow: 0 10px 22px rgba(32, 112, 244, .28);
+      border-radius: 10px;
+      color: #fff;
+      font: 800 16px "Plus Jakarta Sans", sans-serif;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     }
 
     .brand strong {
-      font: 800 18px "Manrope", sans-serif;
-      letter-spacing: -.04em;
+      display: block;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
 
     .brand small {
       display: block;
-      margin-top: 2px;
-      color: var(--muted);
+      color: var(--text-muted);
       font-size: 11px;
-      letter-spacing: .08em;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
+    /* Logo Frame Glass */
     .logo-frame {
-      position: absolute;
-      top: 15px;
-      right: clamp(20px, 5vw, 72px);
-      width: clamp(130px, 18vw, 230px);
-      height: 52px;
-      display: grid;
-      place-items: center;
+      height: 46px;
+      padding: 4px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, .8);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .38);
-      box-shadow: 0 12px 35px rgba(45, 75, 130, .12);
-      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .logo-frame:hover {
+      border-color: var(--border-glow);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
     }
 
     .logo-frame img {
-      width: 100%;
-      height: 100%;
+      max-height: 100%;
+      width: auto;
       object-fit: contain;
-      padding: 8px 15px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
 
+    /* Hero Section */
     .hero {
-      width: min(1120px, calc(100% - 36px));
+      width: min(1000px, calc(100% - 40px));
       margin: 0 auto;
-      padding: 76px 0 38px;
-      animation: rise .7s ease both;
+      padding: 60px 0 30px;
+      animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .eyebrow {
-      margin: 0 0 14px;
-      color: var(--blue);
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: var(--accent-cyan);
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: .16em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-    }
-
-    h1, h2 {
-      font-family: "Manrope", sans-serif;
-      letter-spacing: -.065em;
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.2);
     }
 
     h1 {
-      max-width: 700px;
-      margin: 0;
-      font-size: clamp(42px, 7vw, 82px);
-      line-height: .98;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero-copy {
       max-width: 540px;
-      margin: 22px 0 0;
-      color: var(--muted);
-      font-size: 17px;
+      margin-top: 18px;
+      color: var(--text-muted);
+      font-size: 16px;
       line-height: 1.6;
+      font-weight: 400;
     }
 
+    /* Container & Cards */
     .container {
-      width: min(920px, calc(100% - 36px));
+      width: min(840px, calc(100% - 40px));
       margin: 0 auto;
-      padding-bottom: 70px;
+      padding-bottom: 80px;
     }
 
     .card {
       position: relative;
-      margin-bottom: 18px;
-      padding: clamp(22px, 4vw, 34px);
-      border: 1px solid var(--line);
-      border-radius: 30px;
+      margin-bottom: 20px;
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
       background: var(--surface);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(26px) saturate(140%);
-      -webkit-backdrop-filter: blur(26px) saturate(140%);
-      animation: rise .7s ease both;
+      box-shadow: var(--shadow-glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      overflow: hidden;
     }
 
-    .card::after {
+    /* Effetto Luce Top-Edge */
+    .card::before {
       content: "";
       position: absolute;
-      inset: 1px;
-      border-radius: inherit;
-      pointer-events: none;
-      background: linear-gradient(125deg, rgba(255,255,255,.42), transparent 34%);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
     }
 
     h2 {
-      position: relative;
-      z-index: 1;
-      margin: 0 0 24px;
-      font-size: 25px;
+      margin-bottom: 20px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     label {
       display: block;
-      margin: 0 0 8px;
-      color: #394456;
-      font-size: 13px;
-      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
     input {
       width: 100%;
-      margin: 0 0 18px;
-      padding: 15px 16px;
-      color: var(--ink);
-      border: 1px solid rgba(130, 148, 177, .25);
-      border-radius: 15px;
+      margin-bottom: 20px;
+      padding: 14px 18px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
       outline: none;
-      background: rgba(255, 255, 255, .72);
-      font: inherit;
-      transition: .2s ease;
+      background: rgba(10, 13, 20, 0.6);
+      transition: all 0.2s ease;
     }
 
     input:focus {
-      border-color: rgba(22, 119, 255, .7);
-      box-shadow: 0 0 0 4px rgba(22, 119, 255, .1);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      background: rgba(10, 13, 20, 0.8);
     }
 
+    /* Buttons */
     button, a.btn-link {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       text-decoration: none;
-      text-align: center;
       box-sizing: border-box;
-      border: 0;
-      border-radius: 15px;
-      padding: 14px 19px;
-      color: var(--ink);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      font: 700 14px "DM Sans", sans-serif;
-      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     button:hover, a.btn-link:hover {
       transform: translateY(-2px);
-      filter: brightness(1.04);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active, a.btn-link:active {
+      transform: translateY(0);
     }
 
     button:disabled {
-      opacity: .58;
+      opacity: 0.5;
       cursor: not-allowed;
-      transform: none;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     .primary {
-      color: white;
-      background: linear-gradient(135deg, #1677ff, #625cf0);
-      box-shadow: 0 13px 25px rgba(35, 105, 236, .25);
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .primary:hover {
+      background: linear-gradient(135deg, #60a5fa, var(--accent-blue));
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     }
 
     .success {
-      color: white;
-      background: linear-gradient(135deg, #16af68, #10a89b);
-      box-shadow: 0 12px 24px rgba(17, 164, 110, .2);
+      color: #fff;
+      background: linear-gradient(135deg, var(--status-green), #059669);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
     }
 
     .gray {
       width: 100%;
       text-align: left;
-      background: rgba(255, 255, 255, .7);
+      justify-content: space-between;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    .gray:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
 
     .actions button, .actions a.btn-link {
       flex: 1;
-      min-width: 170px;
+      min-width: 160px;
     }
 
+    /* Status Bar */
     #status {
-      margin-bottom: 18px;
-      padding: 13px 17px;
-      border: 1px solid rgba(255, 255, 255, .72);
-      border-radius: 17px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, .48);
+      margin-bottom: 20px;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text-muted);
+      background: rgba(18, 24, 38, 0.3);
       font-size: 13px;
+      font-weight: 500;
       text-align: center;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     #statusText {
-      color: var(--orange);
+      color: var(--status-orange);
       font-weight: 700;
     }
 
@@ -319,56 +394,79 @@
       position: relative;
       z-index: 1;
       margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
     }
 
     .impostazioni.aperta {
       display: block;
-      animation: fade .25s ease both;
+      animation: fade 0.3s ease both;
     }
 
     .nota {
-      color: var(--muted);
+      color: var(--text-muted);
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.6;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .dominio-box {
-      position: relative;
-      z-index: 1;
-      padding: 16px;
-      border: 1px solid rgba(24, 173, 104, .22);
-      border-radius: 16px;
-      color: #087747;
-      background: rgba(24, 173, 104, .1);
+      padding: 16px 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+      color: var(--status-green);
+      background: rgba(16, 185, 129, 0.05);
       font-weight: 700;
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: 0.05em;
     }
 
     .campo {
-      margin-bottom: 15px;
+      margin-bottom: 16px;
+    }
+
+    .campo b {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
 
     .valore {
-      margin-top: 7px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       overflow-wrap: anywhere;
-      border: 1px solid rgba(130, 148, 177, .2);
-      border-radius: 15px;
-      background: rgba(255, 255, 255, .62);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(10, 13, 20, 0.5);
+      color: var(--text);
+      font-size: 14px;
     }
 
     .codice {
-      color: var(--blue);
-      font: 800 clamp(21px, 4vw, 30px) monospace;
-      letter-spacing: .12em;
+      color: var(--accent-cyan);
+      font-family: "JetBrains Mono", monospace;
+      font-size: clamp(22px, 4vw, 28px);
+      font-weight: 700;
+      letter-spacing: 0.15em;
       text-align: center;
+      background: rgba(6, 182, 212, 0.05);
+      border-color: rgba(6, 182, 212, 0.2);
+      padding: 18px;
+      text-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
     }
 
     #risultato {
       display: none;
+      border-color: rgba(6, 182, 212, 0.3);
     }
 
     @keyframes rise {
-      from { opacity: 0; transform: translateY(18px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -379,11 +477,7 @@
 
     @media (max-width: 650px) {
       .topbar {
-        min-height: 76px;
-      }
-
-      .brand {
-        max-width: 150px;
+        padding: 0 20px;
       }
 
       .brand small {
@@ -391,17 +485,15 @@
       }
 
       .logo-frame {
-        right: 18px;
-        width: 125px;
-        height: 44px;
+        height: 38px;
       }
 
       .hero {
-        padding-top: 55px;
+        padding-top: 40px;
       }
 
       .card {
-        border-radius: 23px;
+        border-radius: 16px;
       }
     }
   </style>
@@ -420,13 +512,17 @@
       </div>
     </div>
 
+    <!-- Logo Aziendale -->
     <div class="logo-frame" aria-label="Logo">
-      <img src="logo.png" alt="Logo aziendale">
+      <img src="HALINK_3.jpeg" alt="HA LINK Logo">
     </div>
   </header>
 
   <section class="hero">
-    <p class="eyebrow">Secure code workspace</p>
+    <div class="eyebrow">
+      <span style="width:6px; height:6px; border-radius:50%; background:var(--accent-cyan); display:inline-block;"></span>
+      Secure code workspace
+    </div>
     <h1>Codici pronti.<br>Accessi fluidi.</h1>
     <p class="hero-copy">
       Genera, archivia e sincronizza i tuoi codici direttamente con GitHub,
@@ -436,13 +532,14 @@
 
   <main class="container">
     <div id="status">
-      Stato:
+      <span>Stato:</span>
       <span id="statusText">Non connesso a GitHub</span>
     </div>
 
     <section class="card">
       <button type="button" class="gray" onclick="toggleImpostazioni()">
-        Configura connessione GitHub
+        <span>Configura connessione GitHub</span>
+        <span style="opacity: 0.5;">⚙️</span>
       </button>
 
       <div id="impostazioni" class="impostazioni">
@@ -453,9 +550,9 @@
         <input type="text" id="ghRepo" placeholder="utente/nome-repository">
 
         <div class="nota">
-          Esempio: <b>mario123/mio-repository</b><br><br>
+          Esempio: <b style="color:var(--text);">mario123/mio-repository</b><br><br>
           Il token deve avere permessi sufficienti per leggere e modificare
-          i contenuti del repository. Il file <b>dominio.json</b> deve essere
+          i contenuti del repository. Il file <b style="color:var(--text);">dominio.json</b> deve essere
           presente nella root.
         </div>
 
@@ -485,7 +582,7 @@
     </section>
 
     <section id="risultato" class="card">
-      <h2>Codice generato</h2>
+      <h2 style="color: var(--accent-cyan);">Codice generato</h2>
 
       <div class="campo">
         <b>Nome</b>
@@ -499,7 +596,7 @@
 
       <div class="campo">
         <b>Cliente</b>
-        <div id="risultatoCliente" class="valore"></div>
+        <div id="risultatoCliente" class="valore" style="font-family: monospace;"></div>
       </div>
 
       <div class="campo">
@@ -532,7 +629,7 @@
 
     function setStatus(messaggio, colore) {
       document.getElementById("statusText").innerText = messaggio;
-      document.getElementById("statusText").style.color = colore || "var(--orange)";
+      document.getElementById("statusText").style.color = colore || "var(--status-orange)";
     }
 
     function toggleImpostazioni() {
@@ -555,26 +652,26 @@
 
       config = { token, repo };
       localStorage.setItem("gh_codici_config", JSON.stringify(config));
-      setStatus("Configurazione salvata", "var(--green)");
+      setStatus("Configurazione salvata", "var(--status-green)");
       ghFetch();
     }
 
     async function ghFetch() {
       if (!config) {
-        setStatus("Configura prima GitHub", "var(--orange)");
+        setStatus("Configura prima GitHub", "var(--status-orange)");
         document.getElementById("impostazioni").classList.add("aperta");
         return;
       }
 
-      setStatus("Lettura dati da GitHub...", "var(--blue)");
+      setStatus("Lettura dati da GitHub...", "var(--accent-blue)");
 
       try {
         await ghFetchSilenzioso();
         await caricaDominio();
-        setStatus("Connesso e aggiornato", "var(--green)");
+        setStatus("Connesso e aggiornato", "var(--status-green)");
       } catch (error) {
         console.error(error);
-        setStatus("Errore: " + error.message, "var(--red)");
+        setStatus("Errore: " + error.message, "var(--status-red)");
         alert("Errore durante la lettura:\n\n" + error.message);
       }
     }
@@ -755,10 +852,10 @@
         document.getElementById("risultato").style.display = "block";
 
         nomeInput.value = "";
-        setStatus("Codice salvato su GitHub", "var(--green)");
+        setStatus("Codice salvato su GitHub", "var(--status-green)");
       } catch (error) {
         console.error(error);
-        setStatus("Errore durante il salvataggio", "var(--red)");
+        setStatus("Errore durante il salvataggio", "var(--status-red)");
         alert("Errore:\n\n" + error.message);
       } finally {
         generaBtn.disabled = false;
@@ -823,7 +920,7 @@
       ghFetch();
     } else {
       document.getElementById("impostazioni").classList.add("aperta");
-      setStatus("Inserisci le impostazioni GitHub", "var(--orange)");
+      setStatus("Inserisci le impostazioni GitHub", "var(--status-orange)");
     }
   </script>
 </body>
