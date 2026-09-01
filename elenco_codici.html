@@ -1,29 +1,41 @@
+```html
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#eef4ff">
-  <title>Elenco Codici Generati</title>
+  <meta name="theme-color" content="#0a0d14">
+  <title>Elenco Codici | Glass System</title>
 
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap");
 
     :root {
-      --ink: #101522;
-      --muted: #687386;
-      --blue: #1677ff;
-      --green: #18ad68;
-      --red: #e24755;
-      --orange: #d98520;
-      --surface: rgba(255, 255, 255, .62);
-      --surface-strong: rgba(255, 255, 255, .82);
-      --line: rgba(255, 255, 255, .78);
-      --shadow: 0 24px 70px rgba(49, 79, 125, .16);
+      --bg: #0a0d14;
+      --surface: rgba(18, 24, 38, 0.45);
+      --surface-hover: rgba(28, 36, 56, 0.55);
+      --surface-solid: #0d121d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.25);
+
+      --text: #f1f5f9;
+      --text-muted: #8493a8;
+
+      --accent-blue: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-purple: #6366f1;
+
+      --status-green: #10b981;
+      --status-red: #ef4444;
+      --status-orange: #f59e0b;
+
+      --shadow-glass: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html {
@@ -31,15 +43,17 @@
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-      background:
-        radial-gradient(circle at 12% 8%, rgba(80, 181, 255, .36), transparent 30rem),
-        radial-gradient(circle at 90% 12%, rgba(155, 122, 255, .3), transparent 28rem),
-        linear-gradient(135deg, #f4f8ff 0%, #e7eef9 48%, #f6f8fc 100%);
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 20% 15%, rgba(14, 165, 233, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 65%, rgba(99, 102, 241, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+      background-attachment: fixed;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     body::before {
@@ -47,246 +61,349 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: .26;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E");
-      mix-blend-mode: multiply;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: -2;
     }
 
     .orb {
       position: fixed;
-      width: 260px;
-      height: 260px;
       border-radius: 50%;
-      filter: blur(4px);
-      opacity: .45;
+      filter: blur(90px);
       pointer-events: none;
       z-index: -1;
     }
 
     .orb.one {
-      top: 38%;
-      left: -140px;
-      background: #72d5ff;
+      top: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: rgba(59, 130, 246, 0.15);
     }
 
     .orb.two {
-      right: -130px;
-      bottom: 8%;
-      background: #b7a1ff;
+      bottom: -150px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: rgba(99, 102, 241, 0.12);
     }
+
+    /* =========================================
+       TOPBAR
+       ========================================= */
 
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 20;
-      min-height: 86px;
-      padding: 18px clamp(20px, 5vw, 72px);
+      z-index: 50;
+      min-height: 80px;
+      padding: 0 clamp(20px, 5vw, 60px);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      background: rgba(248, 251, 255, .58);
-      border-bottom: 1px solid rgba(255, 255, 255, .7);
-      backdrop-filter: blur(24px) saturate(150%);
-      -webkit-backdrop-filter: blur(24px) saturate(150%);
+      background: rgba(10, 13, 20, 0.65);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 13px;
+      gap: 14px;
     }
 
     .brand-mark {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: grid;
       place-items: center;
-      border-radius: 13px;
-      color: white;
-      font: 800 15px "Manrope", sans-serif;
-      background: linear-gradient(145deg, #1c88ff, #725df2);
-      box-shadow: 0 10px 22px rgba(32, 112, 244, .28);
+      border-radius: 10px;
+      color: #fff;
+      font: 800 16px "Plus Jakarta Sans", sans-serif;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+      flex-shrink: 0;
     }
 
     .brand strong {
-      font: 800 18px "Manrope", sans-serif;
-      letter-spacing: -.04em;
+      display: block;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
     }
 
     .brand small {
       display: block;
-      margin-top: 2px;
-      color: var(--muted);
+      color: var(--text-muted);
       font-size: 11px;
-      letter-spacing: .08em;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
     .logo-frame {
-      position: absolute;
-      top: 15px;
-      right: clamp(20px, 5vw, 72px);
-      width: clamp(130px, 18vw, 230px);
-      height: 52px;
-      display: grid;
-      place-items: center;
+      height: 46px;
+      max-width: 230px;
+      padding: 4px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, .8);
-      border-radius: 18px;
-      background: rgba(255, 255, 255, .38);
-      box-shadow: 0 12px 35px rgba(45, 75, 130, .12);
-      backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .logo-frame:hover {
+      border-color: var(--border-glow);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
     }
 
     .logo-frame img {
-      width: 100%;
-      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      width: auto;
       object-fit: contain;
-      padding: 8px 15px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
     }
 
+    /* =========================================
+       HERO
+       ========================================= */
+
     .hero {
-      width: min(1120px, calc(100% - 36px));
+      width: min(1000px, calc(100% - 40px));
       margin: 0 auto;
       padding: 60px 0 30px;
-      animation: rise .7s ease both;
+      animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .eyebrow {
-      margin: 0 0 14px;
-      color: var(--blue);
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: var(--accent-cyan);
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: .16em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.2);
     }
 
-    h1, h2 {
-      font-family: "Manrope", sans-serif;
-      letter-spacing: -.065em;
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      display: inline-block;
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.7);
     }
 
     h1 {
-      max-width: 700px;
-      margin: 0;
-      font-size: clamp(38px, 6vw, 68px);
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
       line-height: 1.05;
+      letter-spacing: -0.03em;
+      background: linear-gradient(180deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .hero-copy {
-      max-width: 540px;
-      margin: 18px 0 0;
-      color: var(--muted);
-      font-size: 17px;
+      max-width: 600px;
+      margin-top: 18px;
+      color: var(--text-muted);
+      font-size: 16px;
       line-height: 1.6;
+      font-weight: 400;
     }
 
+    /* =========================================
+       CONTAINER / CARD
+       ========================================= */
+
     .container {
-      width: min(1020px, calc(100% - 36px));
+      width: min(1000px, calc(100% - 40px));
       margin: 0 auto;
-      padding-bottom: 70px;
+      padding-bottom: 80px;
     }
 
     .card {
       position: relative;
-      margin-bottom: 24px;
-      padding: clamp(22px, 4vw, 34px);
-      border: 1px solid var(--line);
-      border-radius: 30px;
+      margin-bottom: 20px;
+      padding: clamp(24px, 4vw, 36px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
       background: var(--surface);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(26px) saturate(140%);
-      -webkit-backdrop-filter: blur(26px) saturate(140%);
-      animation: rise .7s ease both;
+      box-shadow: var(--shadow-glass);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      animation: rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      overflow: hidden;
     }
 
-    .card::after {
+    .card::before {
       content: "";
       position: absolute;
-      inset: 1px;
-      border-radius: inherit;
-      pointer-events: none;
-      background: linear-gradient(125deg, rgba(255,255,255,.42), transparent 34%);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
     }
 
     h2 {
       position: relative;
       z-index: 1;
-      margin: 0;
-      font-size: 25px;
+      margin-bottom: 6px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
     }
 
-    button, .btn {
+    /* =========================================
+       PULSANTI
+       ========================================= */
+
+    button,
+    a.btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      border: 0;
-      border-radius: 15px;
-      padding: 14px 22px;
-      color: var(--ink);
       text-decoration: none;
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 14px 22px;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      font: 700 14px "DM Sans", sans-serif;
-      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    button:hover, .btn:hover {
+    button:hover,
+    a.btn:hover {
       transform: translateY(-2px);
-      filter: brightness(1.04);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active,
+    a.btn:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     .primary {
-      color: white;
-      background: linear-gradient(135deg, #1677ff, #625cf0);
-      box-shadow: 0 13px 25px rgba(35, 105, 236, .25);
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-blue), #2563eb);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .primary:hover {
+      background: linear-gradient(135deg, #60a5fa, var(--accent-blue));
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
     }
 
     .success {
-      color: white;
-      background: linear-gradient(135deg, #16af68, #10a89b);
-      box-shadow: 0 12px 24px rgba(17, 164, 110, .2);
+      color: #fff;
+      background: linear-gradient(135deg, var(--status-green), #059669);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+    }
+
+    .success:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
     }
 
     .excel-btn {
-      color: white;
-      background: linear-gradient(135deg, #107c41, #1f9a55);
-      box-shadow: 0 12px 24px rgba(16, 124, 65, .25);
+      color: #fff;
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
     }
 
+    .excel-btn:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    }
+
+    .back-btn {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* =========================================
+       STATUS
+       ========================================= */
+
     #status {
-      margin-bottom: 22px;
-      padding: 13px 17px;
-      border: 1px solid rgba(255, 255, 255, .72);
-      border-radius: 17px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, .48);
+      margin-bottom: 20px;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text-muted);
+      background: rgba(18, 24, 38, 0.3);
       font-size: 13px;
+      font-weight: 500;
       text-align: center;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     #statusText {
-      color: var(--orange);
+      color: var(--status-orange);
       font-weight: 700;
     }
 
-    .contatore {
-      color: var(--muted);
-      font-size: 14px;
-      margin-top: 6px;
-    }
+    /* =========================================
+       NAVIGAZIONE
+       ========================================= */
 
-    .section-head {
+    .nav-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-      position: relative;
-      z-index: 1;
+      gap: 12px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .action-group {
@@ -295,14 +412,30 @@
       flex-wrap: wrap;
     }
 
-    .nav-bar {
+    /* =========================================
+       INTESTAZIONE ARCHIVIO
+       ========================================= */
+
+    .section-head {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 15px;
-      margin-bottom: 20px;
       flex-wrap: wrap;
+      margin-bottom: 20px;
     }
+
+    .contatore {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    /* =========================================
+       RICERCA
+       ========================================= */
 
     .search-box {
       position: relative;
@@ -312,81 +445,126 @@
 
     .search-input {
       width: 100%;
-      padding: 15px 18px;
-      color: var(--ink);
-      border: 1px solid rgba(130, 148, 177, .25);
-      border-radius: 16px;
-      outline: none;
-      background: rgba(255, 255, 255, .72);
-      font: inherit;
+      padding: 14px 18px;
+      color: var(--text);
+      font-family: "Plus Jakarta Sans", sans-serif;
       font-size: 14px;
-      transition: .2s ease;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      background: rgba(10, 13, 20, 0.6);
+      transition: all 0.2s ease;
+    }
+
+    .search-input::placeholder {
+      color: #64748b;
     }
 
     .search-input:focus {
-      border-color: rgba(22, 119, 255, .7);
-      box-shadow: 0 0 0 4px rgba(22, 119, 255, .1);
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      background: rgba(10, 13, 20, 0.8);
     }
+
+    /* =========================================
+       TABELLA
+       ========================================= */
 
     .tabella-container {
       position: relative;
       z-index: 1;
       overflow-x: auto;
-      border: 1px solid rgba(130, 148, 177, .16);
-      border-radius: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(10, 13, 20, 0.25);
     }
 
     table {
       width: 100%;
       min-width: 850px;
       border-collapse: collapse;
-      background: rgba(255, 255, 255, .25);
+      background: transparent;
     }
 
     th {
-      padding: 16px 14px;
-      color: var(--muted);
-      border-bottom: 1px solid rgba(130, 148, 177, .2);
-      font-size: 11px;
-      letter-spacing: .1em;
+      padding: 15px 14px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-align: left;
       text-transform: uppercase;
-      background: rgba(255, 255, 255, .4);
+      background: rgba(255, 255, 255, 0.025);
+      white-space: nowrap;
     }
 
     td {
-      padding: 16px 14px;
-      border-bottom: 1px solid rgba(130, 148, 177, .12);
-      font-size: 14px;
+      padding: 15px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      font-size: 13px;
+      vertical-align: middle;
     }
 
     tr:last-child td {
       border-bottom: 0;
     }
 
-    tr:hover td {
-      background: rgba(255, 255, 255, .45);
+    tbody tr {
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.035);
     }
 
     .codice-tabella {
-      color: var(--blue);
-      font-family: monospace;
+      color: var(--accent-cyan);
+      font-family: "JetBrains Mono", monospace;
       font-weight: 700;
-      font-size: 15px;
-      letter-spacing: .05em;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 8px rgba(6, 182, 212, 0.15);
     }
 
     .ip-tabella {
-      color: var(--green);
-      font-family: monospace;
-      font-weight: 700;
+      color: var(--status-green);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
       white-space: nowrap;
     }
+
+    /* =========================================
+       SCROLLBAR
+       ========================================= */
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.4);
+    }
+
+    /* =========================================
+       ANIMAZIONI
+       ========================================= */
 
     @keyframes rise {
       from {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(20px);
       }
 
       to {
@@ -395,36 +573,59 @@
       }
     }
 
-    @media (max-width: 650px) {
-      .topbar {
-        min-height: 76px;
-      }
+    /* =========================================
+       RESPONSIVE
+       ========================================= */
 
-      .brand {
-        max-width: 150px;
+    @media (max-width: 650px) {
+
+      .topbar {
+        padding: 0 20px;
+        min-height: 76px;
       }
 
       .brand small {
         display: none;
       }
 
+      .brand strong {
+        font-size: 15px;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+      }
+
       .logo-frame {
-        right: 18px;
-        width: 125px;
-        height: 44px;
+        height: 38px;
+        max-width: 125px;
+        padding: 4px 10px;
       }
 
       .hero {
-        padding-top: 45px;
+        padding-top: 40px;
+      }
+
+      .hero-copy {
+        font-size: 15px;
+      }
+
+      .container {
+        width: min(1000px, calc(100% - 30px));
       }
 
       .card {
-        border-radius: 23px;
+        border-radius: 16px;
       }
 
       .nav-bar {
         flex-direction: column;
         align-items: stretch;
+      }
+
+      .nav-bar > .btn {
+        width: 100%;
       }
 
       .action-group {
@@ -433,6 +634,28 @@
 
       .action-group button {
         flex: 1;
+        min-width: 0;
+      }
+
+      #status {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+      }
+    }
+
+    @media (max-width: 430px) {
+
+      .action-group {
+        flex-direction: column;
+      }
+
+      .action-group button {
+        width: 100%;
+      }
+
+      .hero h1 {
+        font-size: 38px;
       }
     }
   </style>
@@ -443,75 +666,168 @@
   <div class="orb one"></div>
   <div class="orb two"></div>
 
+
+  <!-- =========================================
+       TOPBAR
+       ========================================= -->
+
   <header class="topbar">
+
     <div class="brand">
-      <div class="brand-mark">GC</div>
+
+      <div class="brand-mark">
+        GC
+      </div>
 
       <div>
         <strong>Generatore Codici</strong>
         <small>Access management system</small>
       </div>
+
     </div>
+
 
     <div class="logo-frame" aria-label="Logo">
-      <img src="logo.png" alt="Logo aziendale">
+
+      <img
+        src="logo.png"
+        alt="Logo aziendale"
+      >
+
     </div>
+
   </header>
 
+
+  <!-- =========================================
+       HERO
+       ========================================= -->
+
   <section class="hero">
-    <p class="eyebrow">Database & Archivio</p>
+
+    <div class="eyebrow">
+
+      <span class="eyebrow-dot"></span>
+
+      Database &amp; Archivio
+
+    </div>
+
 
     <h1>
-      Elenco Completo<br>
+
+      Elenco Completo.<br>
       Codici Generati.
+
     </h1>
 
+
     <p class="hero-copy">
-      Consulta la lista aggiornata di tutti i codici di accesso salvati su GitHub con tutti i dettagli.
+
+      Consulta la lista aggiornata di tutti i codici di accesso
+      salvati su GitHub con i relativi dettagli.
+
     </p>
+
   </section>
+
+
+  <!-- =========================================
+       CONTENUTO
+       ========================================= -->
 
   <main class="container">
 
+
+    <!-- =========================================
+         NAVIGAZIONE E AZIONI
+         ========================================= -->
+
     <div class="nav-bar">
 
-      <a href="index.html" class="btn primary">
+
+      <a
+        href="index.html"
+        class="btn back-btn"
+      >
         &larr; Torna alla Creazione Codici
       </a>
 
+
       <div class="action-group">
 
-        <button class="btn excel-btn" onclick="esportaExcel()">
+
+        <button
+          class="excel-btn"
+          onclick="esportaExcel()"
+        >
           &#x2193; Esporta Excel (.xlsx)
         </button>
 
-        <button class="btn success" onclick="ghFetch()">
+
+        <button
+          class="success"
+          onclick="ghFetch()"
+        >
           &#x21bb; Aggiorna Elenco
         </button>
 
+
       </div>
+
     </div>
 
+
+    <!-- =========================================
+         STATO
+         ========================================= -->
+
     <div id="status">
-      Stato:
+
+      <span>
+        Stato:
+      </span>
+
       <span id="statusText">
         Lettura configurazione...
       </span>
+
     </div>
+
+
+    <!-- =========================================
+         ARCHIVIO
+         ========================================= -->
 
     <section class="card">
 
+
       <div class="section-head">
 
-        <div>
-          <h2>Archivio Codici</h2>
 
-          <div id="contatore" class="contatore">
+        <div>
+
+          <h2>
+            Archivio Codici
+          </h2>
+
+
+          <div
+            id="contatore"
+            class="contatore"
+          >
             Caricamento dati...
           </div>
+
         </div>
 
+
       </div>
+
+
+      <!-- =========================================
+           RICERCA
+           ========================================= -->
 
       <div class="search-box">
 
@@ -525,6 +841,11 @@
 
       </div>
 
+
+      <!-- =========================================
+           TABELLA
+           ========================================= -->
+
       <div class="tabella-container">
 
         <table>
@@ -532,15 +853,35 @@
           <thead>
 
             <tr>
-              <th>Nome</th>
-              <th>Codice</th>
-              <th>Cliente</th>
-              <th>Indirizzo IP</th>
-              <th>Data</th>
-              <th>Ora</th>
+
+              <th>
+                Nome
+              </th>
+
+              <th>
+                Codice
+              </th>
+
+              <th>
+                Cliente
+              </th>
+
+              <th>
+                Indirizzo IP
+              </th>
+
+              <th>
+                Data
+              </th>
+
+              <th>
+                Ora
+              </th>
+
             </tr>
 
           </thead>
+
 
           <tbody id="tabella"></tbody>
 
@@ -548,147 +889,238 @@
 
       </div>
 
+
     </section>
+
 
   </main>
 
-  <!-- Libreria SheetJS per l'esportazione nativa in formato Excel (.xlsx) -->
+
+  <!-- =========================================
+       LIBRERIA SHEETJS
+       ========================================= -->
+
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 
   <script>
 
+
+    /*
+    ==================================================
+    CONFIGURAZIONE
+    ==================================================
+    */
+
     let config =
-      JSON.parse(localStorage.getItem("gh_codici_config")) || null;
+      JSON.parse(
+        localStorage.getItem(
+          "gh_codici_config"
+        )
+      ) || null;
+
+
+    /*
+    ==================================================
+    DATI
+    ==================================================
+    */
 
     let records = [];
+
 
     /*
      * Mappa degli indirizzi IP.
      *
-     * NON viene più usato un unico IP globale.
-     *
-     * La chiave della mappa viene ricavata dal record
-     * di CODICI_GENERATI.json e utilizzata per associare
-     * il relativo IP.
+     * La chiave della mappa viene ricavata
+     * dal dominio presente in dominio.json.
      */
+
     let mappaIP = {};
 
-    function setStatus(messaggio, colore) {
 
-      document.getElementById("statusText").innerText = messaggio;
+    /*
+    ==================================================
+    STATO
+    ==================================================
+    */
 
-      document.getElementById("statusText").style.color =
-        colore || "var(--orange)";
+    function setStatus(
+      messaggio,
+      colore
+    ) {
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .innerText =
+        messaggio;
+
+
+      document
+        .getElementById(
+          "statusText"
+        )
+        .style.color =
+        colore ||
+        "var(--status-orange)";
+
     }
 
 
-    function decodeBase64UTF8(base64) {
+    /*
+    ==================================================
+    DECODIFICA BASE64 UTF-8
+    ==================================================
+    */
+
+    function decodeBase64UTF8(
+      base64
+    ) {
 
       const binary =
-        atob(base64.replace(/\s/g, ""));
+        atob(
+          base64.replace(
+            /\s/g,
+            ""
+          )
+        );
+
 
       const bytes =
         Uint8Array.from(
           binary,
-          char => char.charCodeAt(0)
+          char =>
+            char.charCodeAt(0)
         );
 
-      return new TextDecoder("utf-8").decode(bytes);
+
+      return new TextDecoder(
+        "utf-8"
+      ).decode(
+        bytes
+      );
+
     }
 
 
     /*
-     * Normalizza un valore per poter effettuare
-     * confronti sicuri tra dominio/cliente.
-     */
-    function normalizzaValore(valore) {
+    ==================================================
+    NORMALIZZA VALORE
+    ==================================================
+    */
 
-      return String(valore || "")
+    function normalizzaValore(
+      valore
+    ) {
+
+      return String(
+        valore || ""
+      )
         .trim()
         .toLowerCase()
-        .replace(/^https?:\/\//i, "")
-        .replace(/\/+$/, "")
+        .replace(
+          /^https?:\/\//i,
+          ""
+        )
+        .replace(
+          /\/+$/,
+          ""
+        )
         .trim();
+
     }
 
 
     /*
-     * Estrae il dominio da un valore come:
-     *
-     * ABC123.miodominio.it
-     *
-     * ottenendo:
-     *
-     * miodominio.it
-     *
-     * Se il valore è già un dominio semplice,
-     * viene restituito così com'è.
-     */
-    function estraiDominioDaCliente(cliente) {
+    ==================================================
+    ESTRAE DOMINIO DAL CLIENTE
+    ==================================================
+    */
 
-      let valore = normalizzaValore(cliente);
+    function estraiDominioDaCliente(
+      cliente
+    ) {
+
+      let valore =
+        normalizzaValore(
+          cliente
+        );
+
 
       if (!valore) {
+
         return "";
+
       }
 
-      /*
-       * Rimuove eventuale porta.
-       */
-      valore = valore.split("/")[0];
 
-      /*
-       * Se contiene più parti separate da ".",
-       * prova a ricavare il dominio dalla parte finale.
-       *
-       * Esempio:
-       * codice.dominio.it
-       *
-       * diventa:
-       * dominio.it
-       */
-      const parti = valore.split(".");
+      valore =
+        valore.split("/")[0];
 
-      if (parti.length >= 3) {
+
+      const parti =
+        valore.split(".");
+
+
+      if (
+        parti.length >= 3
+      ) {
 
         return parti
           .slice(1)
           .join(".");
+
       }
 
+
       return valore;
+
     }
 
 
     /*
-     * Carica dominio.json.
-     *
-     * IMPORTANTE:
-     * vengono caricati TUTTI i record presenti nel file
-     * e viene costruita una mappa dominio -> indirizzo IP.
-     */
+    ==================================================
+    CARICA DOMINI E IP
+    ==================================================
+    */
+
     async function caricaDominiIP() {
 
       mappaIP = {};
 
+
       const url =
         `https://api.github.com/repos/${config.repo}/contents/dominio.json`;
 
-      const response = await fetch(url, {
 
-        headers: {
+      const response =
+        await fetch(
+          url,
+          {
 
-          Authorization: `token ${config.token}`,
+            headers: {
 
-          Accept: "application/vnd.github+json"
-        }
+              Authorization:
+                `token ${config.token}`,
 
-      });
+              Accept:
+                "application/vnd.github+json"
+
+            }
+
+          }
+        );
 
 
-      if (response.status === 404) {
+      if (
+        response.status ===
+        404
+      ) {
 
         return;
+
       }
 
 
@@ -698,6 +1130,7 @@
           "Impossibile leggere dominio.json. HTTP " +
           response.status
         );
+
       }
 
 
@@ -706,283 +1139,351 @@
 
 
       const testo =
-        decodeBase64UTF8(data.content).trim();
+        decodeBase64UTF8(
+          data.content
+        ).trim();
 
 
       if (!testo) {
 
         return;
+
       }
 
 
       let contenuto;
 
+
       try {
 
         contenuto =
-          JSON.parse(testo);
+          JSON.parse(
+            testo
+          );
 
       } catch (error) {
 
         throw new Error(
           "dominio.json non contiene un JSON valido."
         );
+
       }
 
 
-      /*
-       * Supporta sia:
-       *
-       * [
-       *   {...},
-       *   {...}
-       * ]
-       *
-       * sia un singolo oggetto:
-       *
-       * {
-       *   ...
-       * }
-       */
       let listaDomini;
 
-      if (Array.isArray(contenuto)) {
 
-        listaDomini = contenuto;
+      if (
+        Array.isArray(
+          contenuto
+        )
+      ) {
+
+        listaDomini =
+          contenuto;
 
       } else if (
         contenuto &&
-        typeof contenuto === "object"
+        typeof contenuto ===
+        "object"
       ) {
 
-        /*
-         * Se il JSON contiene una proprietà array,
-         * prova a utilizzarla.
-         */
-        if (Array.isArray(contenuto.domini)) {
 
-          listaDomini = contenuto.domini;
+        if (
+          Array.isArray(
+            contenuto.domini
+          )
+        ) {
 
-        } else if (Array.isArray(contenuto.records)) {
+          listaDomini =
+            contenuto.domini;
 
-          listaDomini = contenuto.records;
+        } else if (
+          Array.isArray(
+            contenuto.records
+          )
+        ) {
+
+          listaDomini =
+            contenuto.records;
 
         } else {
 
-          listaDomini = [contenuto];
+          listaDomini =
+            [contenuto];
+
         }
 
       } else {
 
         return;
+
       }
 
 
       /*
-       * Costruzione della mappa:
-       *
-       * dominio -> IP
-       */
-      listaDomini.forEach(record => {
+      ==================================================
+      COSTRUZIONE MAPPA DOMINIO -> IP
+      ==================================================
+      */
 
-        if (
-          !record ||
-          typeof record !== "object"
-        ) {
-          return;
+      listaDomini.forEach(
+        record => {
+
+          if (
+            !record ||
+            typeof record !==
+            "object"
+          ) {
+
+            return;
+
+          }
+
+
+          const ip =
+            String(
+              record.indirizzoip ??
+              record.ultimoindirizzoip ??
+              record.ultimoIndirizzoIp ??
+              record.ip ??
+              ""
+            ).trim();
+
+
+          const dominio =
+            String(
+              record.dominio ??
+              record.domain ??
+              ""
+            ).trim();
+
+
+          if (!dominio) {
+
+            return;
+
+          }
+
+
+          const dominioNormalizzato =
+            normalizzaValore(
+              dominio
+            );
+
+
+          if (
+            dominioNormalizzato
+          ) {
+
+            mappaIP[
+              dominioNormalizzato
+            ] =
+              ip;
+
+          }
+
+
+          const senzaWWW =
+            dominioNormalizzato
+              .replace(
+                /^www\./i,
+                ""
+              );
+
+
+          if (
+            senzaWWW
+          ) {
+
+            mappaIP[
+              senzaWWW
+            ] =
+              ip;
+
+          }
+
         }
-
-
-        const ip = String(
-          record.indirizzoip ??
-          record.ultimoindirizzoip ??
-          record.ultimoIndirizzoIp ??
-          record.ip ??
-          ""
-        ).trim();
-
-
-        /*
-         * Possibili nomi del campo dominio.
-         */
-        const dominio = String(
-          record.dominio ??
-          record.domain ??
-          ""
-        ).trim();
-
-
-        if (!dominio) {
-          return;
-        }
-
-
-        /*
-         * Salva la corrispondenza principale.
-         */
-        const dominioNormalizzato =
-          normalizzaValore(dominio);
-
-
-        if (dominioNormalizzato) {
-
-          mappaIP[dominioNormalizzato] = ip;
-        }
-
-
-        /*
-         * Salva anche senza eventuale www.
-         */
-        const senzaWWW =
-          dominioNormalizzato.replace(/^www\./i, "");
-
-
-        if (senzaWWW) {
-
-          mappaIP[senzaWWW] = ip;
-        }
-
-      });
+      );
 
     }
 
 
     /*
-     * Restituisce l'IP corretto per OGNI record
-     * di CODICI_GENERATI.json.
-     *
-     * Il collegamento viene fatto partendo dal campo
-     * "cliente" del record.
-     */
-    function trovaIPPerRecord(record) {
+    ==================================================
+    TROVA IP PER RECORD
+    ==================================================
+    */
+
+    function trovaIPPerRecord(
+      record
+    ) {
 
       if (!record) {
+
         return "";
+
       }
 
 
       /*
-       * Prima possibilità:
-       * se CODICI_GENERATI.json contiene già indirizzoip,
-       * utilizziamo direttamente quello.
+       * Se il record contiene già il proprio IP,
+       * viene utilizzato direttamente.
        */
-      if (record.indirizzoip) {
+
+      if (
+        record.indirizzoip
+      ) {
 
         return String(
           record.indirizzoip
         ).trim();
+
       }
 
 
-      /*
-       * Supporto per eventuali varianti.
-       */
-      if (record.ip) {
+      if (
+        record.ip
+      ) {
 
         return String(
           record.ip
         ).trim();
+
       }
 
 
-      if (record.ultimoindirizzoip) {
+      if (
+        record.ultimoindirizzoip
+      ) {
 
         return String(
           record.ultimoindirizzoip
         ).trim();
+
       }
 
 
       /*
-       * Recuperiamo il dominio dal campo cliente.
+       * Recupera il cliente.
        */
+
       const cliente =
-        normalizzaValore(record.cliente);
+        normalizzaValore(
+          record.cliente
+        );
 
 
       if (!cliente) {
+
         return "";
+
       }
 
 
       /*
-       * Proviamo prima una corrispondenza esatta.
-       *
-       * Questo è utile se il campo cliente contiene
-       * direttamente il dominio.
+       * Corrispondenza esatta.
        */
-      if (mappaIP[cliente]) {
 
-        return mappaIP[cliente];
+      if (
+        mappaIP[cliente]
+      ) {
+
+        return mappaIP[
+          cliente
+        ];
+
       }
 
 
       /*
-       * Poi cerchiamo il dominio contenuto nel cliente.
-       *
-       * Esempio:
-       *
-       * cliente:
-       * ABC123.miodominio.it
-       *
-       * dominio:
-       * miodominio.it
+       * Ricava il dominio.
        */
+
       const dominio =
-        estraiDominioDaCliente(cliente);
+        estraiDominioDaCliente(
+          cliente
+        );
 
 
-      if (dominio && mappaIP[dominio]) {
+      if (
+        dominio &&
+        mappaIP[dominio]
+      ) {
 
-        return mappaIP[dominio];
+        return mappaIP[
+          dominio
+        ];
+
       }
 
 
       /*
        * Ultimo controllo:
-       * cerca quale dominio di dominio.json
-       * è contenuto nel valore cliente.
+       * cerca il dominio all'interno del cliente.
        */
+
       const chiavi =
-        Object.keys(mappaIP);
+        Object.keys(
+          mappaIP
+        );
 
 
-      for (const chiave of chiavi) {
+      for (
+        const chiave of chiavi
+      ) {
 
         if (
           cliente === chiave ||
-          cliente.endsWith("." + chiave) ||
-          cliente.includes(chiave)
+          cliente.endsWith(
+            "." + chiave
+          ) ||
+          cliente.includes(
+            chiave
+          )
         ) {
 
-          return mappaIP[chiave];
+          return mappaIP[
+            chiave
+          ];
+
         }
+
       }
 
 
       return "";
+
     }
 
 
     /*
-     * Aggiunge l'IP corretto a ogni record.
-     *
-     * ATTENZIONE:
-     * non modifica CODICI_GENERATI.json.
-     * Crea solamente una proprietà temporanea
-     * utilizzata dalla visualizzazione e dall'Excel.
-     */
+    ==================================================
+    ASSOCIA IP AI RECORD
+    ==================================================
+    */
+
     function associaIPAiRecord() {
 
-      records.forEach(record => {
+      records.forEach(
+        record => {
 
-        record.__indirizzoip =
-          trovaIPPerRecord(record);
+          record.__indirizzoip =
+            trovaIPPerRecord(
+              record
+            );
 
-      });
+        }
+      );
 
     }
 
+
+    /*
+    ==================================================
+    LETTURA GITHUB
+    ==================================================
+    */
 
     async function ghFetch() {
 
@@ -990,64 +1491,84 @@
 
         setStatus(
           "Configurazione GitHub mancante. Torna alla pagina iniziale.",
-          "var(--red)"
+          "var(--status-red)"
         );
 
-        document.getElementById("contatore").textContent =
+
+        document
+          .getElementById(
+            "contatore"
+          )
+          .textContent =
           "Impossibile caricare i dati senza configurazione.";
 
+
         return;
+
       }
 
 
       setStatus(
         "Lettura dati da GitHub...",
-        "var(--blue)"
+        "var(--accent-blue)"
       );
 
 
       try {
 
         /*
-         * 1. Carica TUTTI i domini e relativi IP.
+         * 1. Carica domini e IP.
          */
+
         await caricaDominiIP();
 
 
         /*
          * 2. Carica CODICI_GENERATI.json.
          */
+
         const url =
           `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
 
 
         const response =
-          await fetch(url, {
+          await fetch(
+            url,
+            {
 
-            headers: {
+              headers: {
 
-              Authorization:
-                `token ${config.token}`,
+                Authorization:
+                  `token ${config.token}`,
 
-              Accept:
-                "application/vnd.github+json"
+                Accept:
+                  "application/vnd.github+json"
+
+              }
+
             }
+          );
 
-          });
 
-
-        if (response.status === 404) {
+        if (
+          response.status ===
+          404
+        ) {
 
           records = [];
 
+
           renderTable();
+
 
           setStatus(
             "Nessun codice trovato nel repository",
-            "var(--orange)"
+            "var(--status-orange)"
           );
 
+
           return;
+
         }
 
 
@@ -1057,6 +1578,7 @@
             "Impossibile leggere CODICI_GENERATI.json. HTTP " +
             response.status
           );
+
         }
 
 
@@ -1065,7 +1587,9 @@
 
 
         const testo =
-          decodeBase64UTF8(data.content).trim();
+          decodeBase64UTF8(
+            data.content
+          ).trim();
 
 
         if (!testo) {
@@ -1075,62 +1599,95 @@
         } else {
 
           records =
-            JSON.parse(testo);
+            JSON.parse(
+              testo
+            );
+
         }
 
 
-        if (!Array.isArray(records)) {
+        if (
+          !Array.isArray(
+            records
+          )
+        ) {
 
           throw new Error(
             "CODICI_GENERATI.json deve contenere un array."
           );
+
         }
 
 
         /*
-         * 3. Associa ad ogni record il suo IP.
+         * 3. Associa l'IP corretto
+         *    ad ogni singolo record.
          */
+
         associaIPAiRecord();
 
 
         /*
-         * 4. Visualizza la tabella.
+         * 4. Visualizza tabella.
          */
+
         renderTable();
 
 
         setStatus(
           "Sincronizzato con GitHub",
-          "var(--green)"
+          "var(--status-green)"
         );
+
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
+
 
         setStatus(
-          "Errore: " + error.message,
-          "var(--red)"
+          "Errore: " +
+          error.message,
+          "var(--status-red)"
         );
+
       }
 
     }
 
 
-    function renderTable(datiDaMostrare) {
+    /*
+    ==================================================
+    RENDER TABELLA
+    ==================================================
+    */
+
+    function renderTable(
+      datiDaMostrare
+    ) {
 
       const tbody =
-        document.getElementById("tabella");
+        document.getElementById(
+          "tabella"
+        );
 
 
       const list =
-        datiDaMostrare || records;
+        datiDaMostrare ||
+        records;
 
 
-      tbody.innerHTML = "";
+      tbody.innerHTML =
+        "";
 
 
-      document.getElementById("contatore").textContent =
+      document
+        .getElementById(
+          "contatore"
+        )
+        .textContent =
         `Totale codici: ${list.length}` +
         (
           datiDaMostrare
@@ -1139,7 +1696,9 @@
         );
 
 
-      if (!list.length) {
+      if (
+        !list.length
+      ) {
 
         tbody.innerHTML = `
 
@@ -1149,8 +1708,8 @@
               colspan="6"
               style="
                 text-align:center;
-                padding:32px;
-                color:var(--muted)
+                padding:40px 20px;
+                color:var(--text-muted);
               "
             >
 
@@ -1166,92 +1725,130 @@
 
         `;
 
+
         return;
+
       }
 
 
       /*
-       * Mostra i record dal più recente al più vecchio.
+       * Dal più recente al più vecchio.
        */
+
       [...list]
         .reverse()
-        .forEach(record => {
+        .forEach(
+          record => {
 
-          const tr =
-            document.createElement("tr");
-
-
-          /*
-           * L'IP viene calcolato sul SINGOLO record.
-           */
-          const indirizzoIP =
-            record.__indirizzoip || "";
+            const tr =
+              document.createElement(
+                "tr"
+              );
 
 
-          const valori = [
-
-            record.nome || "",
-
-            record.codice || "",
-
-            record.cliente || "",
-
-            indirizzoIP || "Non disponibile",
-
-            record.data || "",
-
-            record.ora || ""
-
-          ];
+            const indirizzoIP =
+              record.__indirizzoip ||
+              "";
 
 
-          valori.forEach((value, index) => {
+            const valori = [
 
-            const td =
-              document.createElement("td");
+              record.nome ||
+              "",
 
+              record.codice ||
+              "",
 
-            td.textContent =
-              value;
+              record.cliente ||
+              "",
 
+              indirizzoIP ||
+              "Non disponibile",
 
-            /*
-             * Colonna Codice.
-             */
-            if (index === 1) {
+              record.data ||
+              "",
 
-              td.className =
-                "codice-tabella";
-            }
+              record.ora ||
+              ""
 
-
-            /*
-             * Colonna IP.
-             */
-            if (index === 3) {
-
-              td.className =
-                "ip-tabella";
-            }
+            ];
 
 
-            tr.appendChild(td);
+            valori.forEach(
+              (
+                value,
+                index
+              ) => {
 
-          });
+                const td =
+                  document.createElement(
+                    "td"
+                  );
 
 
-          tbody.appendChild(tr);
+                td.textContent =
+                  value;
 
-        });
+
+                /*
+                 * Colonna codice.
+                 */
+
+                if (
+                  index === 1
+                ) {
+
+                  td.className =
+                    "codice-tabella";
+
+                }
+
+
+                /*
+                 * Colonna IP.
+                 */
+
+                if (
+                  index === 3
+                ) {
+
+                  td.className =
+                    "ip-tabella";
+
+                }
+
+
+                tr.appendChild(
+                  td
+                );
+
+              }
+            );
+
+
+            tbody.appendChild(
+              tr
+            );
+
+          }
+        );
 
     }
 
+
+    /*
+    ==================================================
+    FILTRO TABELLA
+    ==================================================
+    */
 
     function filtraTabella() {
 
       const query =
         document
-          .getElementById("searchInput")
+          .getElementById(
+            "searchInput"
+          )
           .value
           .toLowerCase()
           .trim();
@@ -1262,79 +1859,115 @@
         renderTable();
 
         return;
+
       }
 
 
       const filtrati =
-        records.filter(record => {
+        records.filter(
+          record => {
 
-          const ip =
-            record.__indirizzoip || "";
-
-
-          return (
-
-            (
-              record.nome &&
-              String(record.nome)
-                .toLowerCase()
-                .includes(query)
-            )
-
-            ||
-
-            (
-              record.codice &&
-              String(record.codice)
-                .toLowerCase()
-                .includes(query)
-            )
-
-            ||
-
-            (
-              record.cliente &&
-              String(record.cliente)
-                .toLowerCase()
-                .includes(query)
-            )
-
-            ||
-
-            (
-              ip &&
-              String(ip)
-                .toLowerCase()
-                .includes(query)
-            )
-
-            ||
-
-            (
-              record.data &&
-              String(record.data)
-                .toLowerCase()
-                .includes(query)
-            )
-
-            ||
-
-            (
-              record.ora &&
-              String(record.ora)
-                .toLowerCase()
-                .includes(query)
-            )
-
-          );
-
-        });
+            const ip =
+              record.__indirizzoip ||
+              "";
 
 
-      renderTable(filtrati);
+            return (
+
+              (
+                record.nome &&
+                String(
+                  record.nome
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+              ||
+
+              (
+                record.codice &&
+                String(
+                  record.codice
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+              ||
+
+              (
+                record.cliente &&
+                String(
+                  record.cliente
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+              ||
+
+              (
+                ip &&
+                String(
+                  ip
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+              ||
+
+              (
+                record.data &&
+                String(
+                  record.data
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+              ||
+
+              (
+                record.ora &&
+                String(
+                  record.ora
+                )
+                  .toLowerCase()
+                  .includes(
+                    query
+                  )
+              )
+
+            );
+
+          }
+        );
+
+
+      renderTable(
+        filtrati
+      );
 
     }
 
+
+    /*
+    ==================================================
+    ESPORTAZIONE EXCEL
+    ==================================================
+    */
 
     function esportaExcel() {
 
@@ -1347,38 +1980,48 @@
           "Nessun dato disponibile da esportare."
         );
 
+
         return;
+
       }
 
 
       /*
-       * Anche nell'Excel ogni record riceve
-       * il PROPRIO indirizzo IP.
+       * Ogni record mantiene il proprio IP.
        */
+
       const datiMappati =
         [...records]
           .reverse()
-          .map(item => ({
+          .map(
+            item => ({
 
-            "Nome":
-              item.nome || "",
+              "Nome":
+                item.nome ||
+                "",
 
-            "Codice":
-              item.codice || "",
+              "Codice":
+                item.codice ||
+                "",
 
-            "Cliente":
-              item.cliente || "",
+              "Cliente":
+                item.cliente ||
+                "",
 
-            "Indirizzo IP":
-              item.__indirizzoip || "",
+              "Indirizzo IP":
+                item.__indirizzoip ||
+                "",
 
-            "Data":
-              item.data || "",
+              "Data":
+                item.data ||
+                "",
 
-            "Ora":
-              item.ora || ""
+              "Ora":
+                item.ora ||
+                ""
 
-          }));
+            })
+          );
 
 
       const worksheet =
@@ -1398,10 +2041,46 @@
       );
 
 
+      /*
+       * Larghezza colonne.
+       */
+
+      worksheet["!cols"] = [
+
+        {
+          wch: 25
+        },
+
+        {
+          wch: 18
+        },
+
+        {
+          wch: 35
+        },
+
+        {
+          wch: 20
+        },
+
+        {
+          wch: 14
+        },
+
+        {
+          wch: 12
+        }
+
+      ];
+
+
       const oggi =
         new Date()
           .toISOString()
-          .slice(0, 10);
+          .slice(
+            0,
+            10
+          );
 
 
       XLSX.writeFile(
@@ -1413,8 +2092,11 @@
 
 
     /*
-     * Avvio automatico.
-     */
+    ==================================================
+    AVVIO AUTOMATICO
+    ==================================================
+    */
+
     if (config) {
 
       ghFetch();
@@ -1423,10 +2105,15 @@
 
       setStatus(
         "Configurazione GitHub mancante. Torna alla pagina iniziale.",
-        "var(--red)"
+        "var(--status-red)"
       );
 
-      document.getElementById("contatore").textContent =
+
+      document
+        .getElementById(
+          "contatore"
+        )
+        .textContent =
         "Nessuna configurazione trovata.";
 
     }
@@ -1435,3 +2122,4 @@
 
 </body>
 </html>
+```
