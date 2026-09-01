@@ -1,6 +1,4 @@
-```html
 <!DOCTYPE html>
-
 <html lang="it">
 
 <head>
@@ -710,7 +708,7 @@ button:disabled {
     </div>
 
 
-    <!-- DOMINIO MODIFICABILE -->
+    <!-- DOMINIO -->
 
     <div class="campo">
 
@@ -734,7 +732,7 @@ button:disabled {
 
 
 
-    <!-- DATA E ORA AUTOMATICHE -->
+    <!-- DATA E ORA -->
 
     <div class="griglia">
 
@@ -835,7 +833,7 @@ button:disabled {
 
 /*
 ==================================================
-CONFIGURAZIONE
+CONFIGURAZIONE GITHUB
 ==================================================
 */
 
@@ -848,9 +846,10 @@ let config =
     ) || null;
 
 
+
 /*
 ==================================================
-DATI DEL JSON
+DATI
 ==================================================
 */
 
@@ -895,13 +894,12 @@ const salvaBtn =
 
 /*
 ==================================================
-DATA E ORA AUTOMATICHE
+DATA E ORA
 ==================================================
 */
 
 
 function aggiornaDataOra() {
-
 
     const adesso =
         new Date();
@@ -911,14 +909,9 @@ function aggiornaDataOra() {
         adesso.toLocaleDateString(
             "it-IT",
             {
-                day:
-                    "2-digit",
-
-                month:
-                    "2-digit",
-
-                year:
-                    "numeric"
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
             }
         );
 
@@ -927,14 +920,9 @@ function aggiornaDataOra() {
         adesso.toLocaleTimeString(
             "it-IT",
             {
-                hour:
-                    "2-digit",
-
-                minute:
-                    "2-digit",
-
-                second:
-                    "2-digit"
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
             }
         );
 
@@ -963,7 +951,6 @@ function setStatus(
     tipo = ""
 ) {
 
-
     const status =
         document.getElementById(
             "status"
@@ -976,8 +963,7 @@ function setStatus(
         );
 
 
-    status.className =
-        "";
+    status.className = "";
 
 
     if (tipo) {
@@ -1004,7 +990,6 @@ IMPOSTAZIONI
 
 
 function toggleImpostazioni() {
-
 
     document
         .getElementById(
@@ -1117,7 +1102,6 @@ async function caricaDominio() {
 
     if (!config) {
 
-
         setStatus(
             "Configura prima GitHub",
             "error"
@@ -1139,7 +1123,7 @@ async function caricaDominio() {
 
 
     setStatus(
-        "Lettura DOMINIO.json...",
+        "Lettura dominio.json...",
         "loading"
     );
 
@@ -1175,18 +1159,46 @@ async function caricaDominio() {
             );
 
 
+        /*
+        ==================================================
+        FILE NON ESISTENTE
+        ==================================================
+        */
+
         if (
-            response.status ===
-            404
+            response.status === 404
         ) {
 
+            /*
+             * IMPORTANTE:
+             * Non consideriamo più il 404
+             * come un errore.
+             *
+             * Significa semplicemente che
+             * dominio.json non esiste ancora.
+             */
 
-            throw new Error(
-                "DOMINIO.json non trovato nel repository."
+            dominioJSON = {};
+
+            fileSha = "";
+
+            dominioInput.value = "";
+
+            setStatus(
+                "dominio.json non esiste ancora: verrà creato al primo salvataggio",
+                "loading"
             );
+
+            return;
 
         }
 
+
+        /*
+        ==================================================
+        ALTRI ERRORI
+        ==================================================
+        */
 
         if (!response.ok) {
 
@@ -1222,27 +1234,31 @@ async function caricaDominio() {
         }
 
 
+        /*
+        ==================================================
+        RISPOSTA
+        ==================================================
+        */
+
         const data =
             await response.json();
 
 
         /*
-        ==========================================
-        SALVIAMO SHA
-        ==========================================
+        ==================================================
+        SHA
+        ==================================================
         */
-
 
         fileSha =
             data.sha;
 
 
         /*
-        ==========================================
+        ==================================================
         DECODIFICA
-        ==========================================
+        ==================================================
         */
-
 
         const testo =
             decodeBase64UTF8(
@@ -1251,11 +1267,10 @@ async function caricaDominio() {
 
 
         /*
-        ==========================================
-        PARSE JSON
-        ==========================================
+        ==================================================
+        JSON
+        ==================================================
         */
-
 
         dominioJSON =
             JSON.parse(
@@ -1264,11 +1279,10 @@ async function caricaDominio() {
 
 
         /*
-        ==========================================
-        MOSTRA SOLO IL CAMPO DOMINIO
-        ==========================================
+        ==================================================
+        MOSTRA DOMINIO
+        ==================================================
         */
-
 
         dominioInput.value =
             dominioJSON.dominio || "";
@@ -1294,7 +1308,7 @@ async function caricaDominio() {
 
 
         alert(
-            "Errore durante la lettura di DOMINIO.json:\n\n" +
+            "Errore durante la lettura di dominio.json:\n\n" +
             error.message
         );
 
@@ -1313,6 +1327,12 @@ SALVA DOMINIO
 
 async function salvaDominio() {
 
+
+    /*
+    ==================================================
+    CONTROLLO CONFIGURAZIONE
+    ==================================================
+    */
 
     if (!config) {
 
@@ -1336,7 +1356,13 @@ async function salvaDominio() {
     }
 
 
-    const nuovoDominio =
+    /*
+    ==================================================
+    LEGGI DOMINIO
+    ==================================================
+    */
+
+    let nuovoDominio =
         dominioInput.value.trim();
 
 
@@ -1356,26 +1382,30 @@ async function salvaDominio() {
     }
 
 
-    if (!fileSha) {
+    /*
+    ==================================================
+    PULIZIA DOMINIO
+    ==================================================
+    */
 
-
-        alert(
-            "DOMINIO.json non è stato caricato.\n\n" +
-            "Premi prima 'Leggi dominio'."
-        );
-
-
-        return;
-
-    }
+    nuovoDominio =
+        nuovoDominio
+            .replace(
+                /^https?:\/\//i,
+                ""
+            )
+            .replace(
+                /\/+$/,
+                ""
+            )
+            .trim();
 
 
     /*
-    ==========================================
+    ==================================================
     DISABILITA PULSANTE
-    ==========================================
+    ==================================================
     */
-
 
     salvaBtn.disabled =
         true;
@@ -1386,7 +1416,7 @@ async function salvaDominio() {
 
 
     setStatus(
-        "Salvataggio DOMINIO.json...",
+        "Controllo dominio.json...",
         "loading"
     );
 
@@ -1395,49 +1425,82 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
-        AGGIORNA SOLO DOMINIO
-        ==========================================
+        ==================================================
+        RILEGGIAMO IL FILE PRIMA DI SALVARE
+        ==================================================
+
+        Questo è importante perché recuperiamo
+        lo SHA più recente del file.
         */
 
+        await aggiornaFilePrimaDelSalvataggio();
+
+
+        /*
+        ==================================================
+        DATA E ORA ATTUALI
+        ==================================================
+        */
+
+        const adesso =
+            new Date();
+
+
+        const data =
+            adesso.toLocaleDateString(
+                "it-IT",
+                {
+                    day:
+                        "2-digit",
+
+                    month:
+                        "2-digit",
+
+                    year:
+                        "numeric"
+                }
+            );
+
+
+        const ora =
+            adesso.toLocaleTimeString(
+                "it-IT",
+                {
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit",
+
+                    second:
+                        "2-digit"
+                }
+            );
+
+
+        /*
+        ==================================================
+        CREA / AGGIORNA OGGETTO
+        ==================================================
+        */
 
         dominioJSON.dominio =
             nuovoDominio;
 
 
-        /*
-        ==========================================
-        DATA E ORA
-        ==========================================
-        */
-
-
-        /*
-         * Se DOMINIO.json contiene già
-         * "data" e "ora", vengono aggiornati.
-         *
-         * Se non esistono, vengono aggiunti.
-         *
-         * Se NON vuoi salvarli nel JSON,
-         * elimina queste due righe.
-         */
-
-
         dominioJSON.data =
-            dataInput.value;
+            data;
 
 
         dominioJSON.ora =
-            oraInput.value;
-
+            ora;
 
 
         /*
-        ==========================================
+        ==================================================
         CREA JSON
-        ==========================================
+        ==================================================
         */
-
 
         const contenuto =
             JSON.stringify(
@@ -1449,11 +1512,10 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
-        CODIFICA BASE64
-        ==========================================
+        ==================================================
+        CODIFICA UTF-8
+        ==================================================
         */
-
 
         const encoded =
             encodeBase64UTF8(
@@ -1462,11 +1524,10 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
+        ==================================================
         URL GITHUB
-        ==========================================
+        ==================================================
         */
-
 
         const url =
             `https://api.github.com/repos/` +
@@ -1474,11 +1535,49 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
-        SALVATAGGIO
-        ==========================================
+        ==================================================
+        BODY
+        ==================================================
         */
 
+        const body = {
+
+            message:
+                "Aggiornamento dominio.json",
+
+            content:
+                encoded
+
+        };
+
+
+        /*
+        ==================================================
+        SE IL FILE ESISTE
+        ==================================================
+
+        Aggiungiamo SHA.
+
+        Se invece il file non esiste,
+        NON aggiungiamo SHA.
+
+        GitHub in questo modo creerà
+        automaticamente il nuovo file.
+        */
+
+        if (fileSha) {
+
+            body.sha =
+                fileSha;
+
+        }
+
+
+        /*
+        ==================================================
+        SALVATAGGIO GITHUB
+        ==================================================
+        */
 
         const response =
             await fetch(
@@ -1502,21 +1601,9 @@ async function salvaDominio() {
 
                     },
 
-
                     body:
                         JSON.stringify(
-                            {
-
-                                message:
-                                    "Aggiornamento DOMINIO.json",
-
-                                content:
-                                    encoded,
-
-                                sha:
-                                    fileSha
-
-                            }
+                            body
                         )
 
                 }
@@ -1524,17 +1611,16 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
+        ==================================================
         CONTROLLO RISPOSTA
-        ==========================================
+        ==================================================
         */
-
 
         if (!response.ok) {
 
 
             let messaggio =
-                "GitHub ha restituito errore " +
+                "GitHub ha restituito errore HTTP " +
                 response.status;
 
 
@@ -1565,22 +1651,20 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
-        RISPOSTA GITHUB
-        ==========================================
+        ==================================================
+        RISULTATO GITHUB
+        ==================================================
         */
-
 
         const risultato =
             await response.json();
 
 
         /*
-        ==========================================
+        ==================================================
         NUOVO SHA
-        ==========================================
+        ==================================================
         */
-
 
         if (
             risultato.content &&
@@ -1594,15 +1678,40 @@ async function salvaDominio() {
 
 
         /*
-        ==========================================
-        OK
-        ==========================================
+        ==================================================
+        AGGIORNA CAMPI VISUALIZZATI
+        ==================================================
         */
 
+        dataInput.value =
+            data;
+
+
+        oraInput.value =
+            ora;
+
+
+        dominioInput.value =
+            nuovoDominio;
+
+
+        /*
+        ==================================================
+        MESSAGGIO OK
+        ==================================================
+        */
 
         setStatus(
             "✓ Dominio salvato correttamente su GitHub",
             "success"
+        );
+
+
+        alert(
+            "Dominio salvato correttamente!\n\n" +
+            "Dominio: " +
+            nuovoDominio +
+            "\n\nFile: dominio.json"
         );
 
 
@@ -1633,6 +1742,142 @@ async function salvaDominio() {
 
         salvaBtn.innerText =
             "💾 Salva";
+
+    }
+
+}
+
+
+
+/*
+==================================================
+AGGIORNA FILE PRIMA DEL SALVATAGGIO
+==================================================
+*/
+
+
+async function aggiornaFilePrimaDelSalvataggio() {
+
+
+    const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/dominio.json`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method:
+                    "GET",
+
+                headers:
+                {
+
+                    Authorization:
+                        `token ${config.token}`,
+
+                    Accept:
+                        "application/vnd.github+json"
+
+                }
+
+            }
+        );
+
+
+    /*
+    ==================================================
+    FILE NON ESISTE
+    ==================================================
+    */
+
+    if (
+        response.status === 404
+    ) {
+
+        dominioJSON = {};
+
+        fileSha = "";
+
+        return;
+
+    }
+
+
+    /*
+    ==================================================
+    ERRORE
+    ==================================================
+    */
+
+    if (!response.ok) {
+
+        let messaggio =
+            "Impossibile controllare dominio.json. HTTP " +
+            response.status;
+
+
+        try {
+
+            const errore =
+                await response.json();
+
+
+            if (
+                errore.message
+            ) {
+
+                messaggio +=
+                    ": " +
+                    errore.message;
+
+            }
+
+        } catch(e) {}
+
+
+        throw new Error(
+            messaggio
+        );
+
+    }
+
+
+    /*
+    ==================================================
+    DATI
+    ==================================================
+    */
+
+    const data =
+        await response.json();
+
+
+    fileSha =
+        data.sha;
+
+
+    const testo =
+        decodeBase64UTF8(
+            data.content
+        );
+
+
+    dominioJSON =
+        JSON.parse(
+            testo
+        );
+
+
+    if (
+        !dominioJSON ||
+        typeof dominioJSON !== "object" ||
+        Array.isArray(dominioJSON)
+    ) {
+
+        dominioJSON = {};
 
     }
 
@@ -1681,7 +1926,7 @@ function decodeBase64UTF8(
 
 /*
 ==================================================
-CODIFICA BASE64 UTF-8
+CODIFICA UTF-8 BASE64
 ==================================================
 */
 
@@ -1733,7 +1978,7 @@ function encodeBase64UTF8(
 
 /*
 ==================================================
-TORNA A INDEX.HTML
+TORNA A INDEX
 ==================================================
 */
 
@@ -1749,7 +1994,31 @@ function tornaIndex() {
 
 /*
 ==================================================
-CARICAMENTO AUTOMATICO
+INVIO CON ENTER
+==================================================
+*/
+
+
+dominioInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            salvaDominio();
+
+        }
+
+    }
+);
+
+
+
+/*
+==================================================
+CARICAMENTO INIZIALE
 ==================================================
 */
 
@@ -1758,10 +2027,8 @@ if (config) {
 
 
     /*
-    Carica automaticamente
-    le impostazioni salvate
+    Mostra configurazione
     */
-
 
     document
         .getElementById(
@@ -1780,9 +2047,8 @@ if (config) {
 
 
     /*
-    Carica DOMINIO.json
+    Carica dominio.json
     */
-
 
     caricaDominio();
 
@@ -1792,11 +2058,8 @@ else {
 
 
     /*
-    Prima configurazione:
-    apre automaticamente
-    le impostazioni
+    Prima configurazione
     */
-
 
     document
         .getElementById(
@@ -1814,10 +2077,8 @@ else {
 
 }
 
-
 </script>
 
 </body>
 
 </html>
-```
