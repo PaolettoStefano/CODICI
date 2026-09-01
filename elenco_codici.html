@@ -249,6 +249,12 @@
       box-shadow: 0 12px 24px rgba(17, 164, 110, .2);
     }
 
+    .excel-btn {
+      color: white;
+      background: linear-gradient(135deg, #107c41, #1f9a55);
+      box-shadow: 0 12px 24px rgba(16, 124, 65, .25);
+    }
+
     #status {
       margin-bottom: 22px;
       padding: 13px 17px;
@@ -281,6 +287,12 @@
       position: relative;
       z-index: 1;
       margin-bottom: 20px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .nav-bar {
@@ -400,6 +412,14 @@
         flex-direction: column;
         align-items: stretch;
       }
+
+      .action-group {
+        width: 100%;
+      }
+
+      .action-group button {
+        flex: 1;
+      }
     }
   </style>
 </head>
@@ -435,9 +455,14 @@
       <a href="index.html" class="btn primary">
         &larr; Torna alla Creazione Codici
       </a>
-      <button class="btn success" onclick="ghFetch()">
-        &#x21bb; Aggiorna Elenco
-      </button>
+      <div class="action-group">
+        <button class="btn excel-btn" onclick="esportaExcel()">
+          &#x2193; Esporta Excel (.xlsx)
+        </button>
+        <button class="btn success" onclick="ghFetch()">
+          &#x21bb; Aggiorna Elenco
+        </button>
+      </div>
     </div>
 
     <div id="status">
@@ -472,6 +497,9 @@
       </div>
     </section>
   </main>
+
+  <!-- Libreria SheetJS per l'esportazione nativa in formato Excel (.xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <script>
     let config = JSON.parse(localStorage.getItem("gh_codici_config")) || null;
@@ -591,6 +619,31 @@
       );
 
       renderTable(filtrati);
+    }
+
+    function esportaExcel() {
+      if (!records || records.length === 0) {
+        alert("Nessun dato disponibile da esportare.");
+        return;
+      }
+
+      // Mappatura per formattare correttamente le intestazioni di colonna
+      const datiMappati = [...records].reverse().map(item => ({
+        "Nome": item.nome || "",
+        "Codice": item.codice || "",
+        "Cliente": item.cliente || "",
+        "Data": item.data || "",
+        "Ora": item.ora || ""
+      }));
+
+      // Creazione del foglio di calcolo con SheetJS
+      const worksheet = XLSX.utils.json_to_sheet(datiMappati);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Codici Generati");
+
+      // Generazione dinamica del nome del file con data corrente
+      const oggi = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(workbook, `codici_generati_${oggi}.xlsx`);
     }
 
     // Avvio automatico al caricamento della pagina
