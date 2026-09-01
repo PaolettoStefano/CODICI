@@ -12,142 +12,467 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Nome Utente - Data e Ora</title>
+<title>Generatore Codici</title>
+
 
 <style>
+
+    :root {
+        --blue: #007aff;
+        --green: #34c759;
+        --red: #ff3b30;
+        --orange: #ff9500;
+        --text: #1d1d1f;
+        --glass: rgba(255,255,255,0.75);
+        --border: rgba(255,255,255,0.5);
+    }
+
 
     * {
         box-sizing: border-box;
     }
 
+
     body {
+
         margin: 0;
+
         min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f1f5f9;
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Arial,
+            sans-serif;
 
-        padding: 20px;
+        color: var(--text);
+
+        background:
+            linear-gradient(
+                135deg,
+                #e0eafc 0%,
+                #cfdef3 100%
+            );
+
+        padding-bottom: 50px;
+
     }
 
-    .container {
-        width: 100%;
-        max-width: 500px;
 
-        background: white;
+    header {
 
-        padding: 35px;
+        background:
+            rgba(29,29,31,0.88);
 
-        border-radius: 16px;
+        backdrop-filter:
+            blur(20px);
 
-        box-shadow:
-            0 10px 30px rgba(0,0,0,0.10);
-
-        text-align: center;
-    }
-
-    h1 {
-        margin-top: 0;
-        color: #111827;
-    }
-
-    label {
-        display: block;
-
-        text-align: left;
-
-        font-weight: bold;
-
-        margin-bottom: 8px;
-
-        color: #374151;
-    }
-
-    input {
-        width: 100%;
-
-        padding: 14px;
-
-        border: 1px solid #d1d5db;
-
-        border-radius: 8px;
-
-        font-size: 16px;
-
-        margin-bottom: 15px;
-    }
-
-    input:focus {
-        outline: none;
-
-        border-color: #2563eb;
-    }
-
-    button {
-        width: 100%;
-
-        padding: 14px;
-
-        border: none;
-
-        border-radius: 8px;
-
-        background: #2563eb;
+        -webkit-backdrop-filter:
+            blur(20px);
 
         color: white;
 
-        font-size: 17px;
+        padding: 24px;
 
-        font-weight: bold;
+        text-align: center;
 
-        cursor: pointer;
+        font-size: 26px;
+
+        font-weight: 600;
+
+        position: sticky;
+
+        top: 0;
+
+        z-index: 1000;
+
+        box-shadow:
+            0 4px 30px
+            rgba(0,0,0,0.15);
+
     }
 
-    button:hover {
-        background: #1d4ed8;
+
+    .container {
+
+        width: 100%;
+
+        max-width: 850px;
+
+        margin: auto;
+
+        padding: 25px 20px;
+
     }
 
-    .risultato {
-        margin-top: 25px;
 
-        padding: 20px;
+    .card {
 
-        background: #f8fafc;
+        background:
+            var(--glass);
 
-        border-radius: 10px;
-    }
+        backdrop-filter:
+            blur(20px);
 
-    .nome {
-        font-size: 22px;
+        -webkit-backdrop-filter:
+            blur(20px);
 
-        font-weight: bold;
+        border:
+            1px solid var(--border);
 
-        color: #111827;
+        border-radius: 22px;
+
+        padding: 25px;
 
         margin-bottom: 20px;
+
+        box-shadow:
+            0 10px 35px
+            rgba(0,0,0,0.08);
+
     }
 
-    .data {
-        font-size: 18px;
 
-        color: #374151;
+    h2 {
 
-        margin-bottom: 10px;
+        margin-top: 0;
+
     }
 
-    .ora {
-        font-size: 32px;
+
+    label {
+
+        display: block;
+
+        font-weight: 600;
+
+        margin-bottom: 7px;
+
+    }
+
+
+    input {
+
+        width: 100%;
+
+        padding: 14px;
+
+        margin-bottom: 17px;
+
+        border-radius: 12px;
+
+        border:
+            1px solid #d5d5d5;
+
+        background:
+            rgba(255,255,255,0.9);
+
+        font-size: 16px;
+
+    }
+
+
+    input:focus {
+
+        outline: none;
+
+        border-color:
+            var(--blue);
+
+    }
+
+
+    button {
+
+        border: none;
+
+        border-radius: 13px;
+
+        padding: 13px 20px;
+
+        cursor: pointer;
+
+        font-size: 15px;
+
+        font-weight: 600;
+
+        transition:
+            0.2s;
+
+    }
+
+
+    button:hover {
+
+        transform:
+            translateY(-1px);
+
+        filter:
+            brightness(1.05);
+
+    }
+
+
+    button:disabled {
+
+        opacity: 0.6;
+
+        cursor: not-allowed;
+
+        transform: none;
+
+    }
+
+
+    .primary {
+
+        background:
+            var(--blue);
+
+        color: white;
+
+    }
+
+
+    .success {
+
+        background:
+            var(--green);
+
+        color: white;
+
+    }
+
+
+    .danger {
+
+        background:
+            var(--red);
+
+        color: white;
+
+    }
+
+
+    .gray {
+
+        background:
+            rgba(255,255,255,0.75);
+
+        color:
+            var(--text);
+
+    }
+
+
+    .actions {
+
+        display: flex;
+
+        gap: 10px;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .actions button {
+
+        flex: 1;
+
+        min-width: 160px;
+
+    }
+
+
+    #status {
+
+        padding: 12px;
+
+        border-radius: 12px;
+
+        background:
+            rgba(255,255,255,0.7);
+
+        margin-bottom: 20px;
+
+        text-align: center;
+
+        font-size: 14px;
+
+    }
+
+
+    #risultato {
+
+        display: none;
+
+    }
+
+
+    .campo {
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .valore {
+
+        margin-top: 6px;
+
+        padding: 13px;
+
+        background:
+            rgba(255,255,255,0.85);
+
+        border-radius: 10px;
+
+        border:
+            1px solid #ddd;
+
+        word-break: break-all;
+
+    }
+
+
+    .codice {
+
+        font-family:
+            monospace;
+
+        font-size: 25px;
 
         font-weight: bold;
 
-        color: #2563eb;
-
-        font-family: monospace;
-
         letter-spacing: 2px;
+
+        text-align: center;
+
+        color:
+            var(--blue);
+
+    }
+
+
+    .tabella-container {
+
+        overflow-x: auto;
+
+    }
+
+
+    table {
+
+        width: 100%;
+
+        border-collapse: collapse;
+
+        min-width: 650px;
+
+    }
+
+
+    th {
+
+        text-align: left;
+
+        padding: 13px 10px;
+
+        font-size: 12px;
+
+        text-transform: uppercase;
+
+        color: #777;
+
+        border-bottom:
+            1px solid #ddd;
+
+    }
+
+
+    td {
+
+        padding: 13px 10px;
+
+        border-bottom:
+            1px solid rgba(0,0,0,0.07);
+
+    }
+
+
+    .codice-tabella {
+
+        font-family:
+            monospace;
+
+        font-weight: bold;
+
+    }
+
+
+    .impostazioni {
+
+        display: none;
+
+        margin-top: 15px;
+
+    }
+
+
+    .impostazioni.aperta {
+
+        display: block;
+
+    }
+
+
+    .nota {
+
+        font-size: 13px;
+
+        color: #666;
+
+        line-height: 1.5;
+
+        margin-top: 5px;
+
+    }
+
+
+    .contatore {
+
+        color: #666;
+
+        font-size: 14px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    @media(max-width:600px) {
+
+        header {
+
+            font-size: 21px;
+
+        }
+
+        .container {
+
+            padding:
+                15px 10px;
+
+        }
+
+        .card {
+
+            padding: 20px;
+
+        }
+
     }
 
 </style>
@@ -157,52 +482,332 @@
 
 <body>
 
+<header>
+
+```
+Generatore Codici
+```
+
+</header>
+
 <div class="container">
 
 ```
-<h1>Benvenuto</h1>
+<!-- STATO -->
+
+<div id="status">
+
+    Stato:
+    <span id="statusText">
+        Non connesso a GitHub
+    </span>
+
+</div>
 
 
-<label for="nome">
-    Nome utente
-</label>
+
+<!-- CONFIGURAZIONE -->
+
+<div class="card">
 
 
-<input
-    type="text"
-    id="nome"
-    placeholder="Inserisci il tuo nome"
-    maxlength="100"
+    <button
+        type="button"
+        class="gray"
+        style="width:100%;"
+        onclick="toggleImpostazioni()"
+    >
+
+        ⚙️ Impostazioni GitHub
+
+    </button>
+
+
+    <div
+        id="impostazioni"
+        class="impostazioni"
+    >
+
+
+        <label for="ghToken">
+
+            Personal Access Token
+
+        </label>
+
+
+        <input
+            type="password"
+            id="ghToken"
+            placeholder="Inserisci il token GitHub"
+            autocomplete="off"
+        >
+
+
+        <label for="ghRepo">
+
+            Repository
+
+        </label>
+
+
+        <input
+            type="text"
+            id="ghRepo"
+            placeholder="utente/nome-repository"
+        >
+
+
+        <div class="nota">
+
+            Esempio:
+            <b>mario123/mio-repository</b>
+
+            <br><br>
+
+            Il token deve avere permessi sufficienti
+            per leggere e modificare i contenuti
+            del repository.
+
+        </div>
+
+
+        <br>
+
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                onclick="salvaConfigurazione()"
+            >
+
+                Salva configurazione
+
+            </button>
+
+
+            <button
+                class="success"
+                onclick="ghFetch()"
+            >
+
+                🔄 Leggi JSON
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- GENERATORE -->
+
+<div class="card">
+
+
+    <h2>
+
+        Genera nuovo codice
+
+    </h2>
+
+
+    <label for="nome">
+
+        Nome utente
+
+    </label>
+
+
+    <input
+        type="text"
+        id="nome"
+        maxlength="100"
+        placeholder="Inserisci il nome"
+        autocomplete="off"
+    >
+
+
+    <button
+        id="generaBtn"
+        class="primary"
+        style="width:100%;"
+        onclick="generaESalva()"
+    >
+
+        🔑 Genera Codice
+
+    </button>
+
+
+</div>
+
+
+
+<!-- RISULTATO -->
+
+<div
+    id="risultato"
+    class="card"
 >
 
 
-<button onclick="mostraNome()">
-    Conferma
-</button>
+    <h2>
+
+        ✅ Codice generato
+
+    </h2>
 
 
-<div class="risultato">
+    <div class="campo">
 
-    <div
-        id="nomeVisualizzato"
-        class="nome"
-    >
-        Inserisci il tuo nome
+        <strong>Nome</strong>
+
+        <div
+            id="risultatoNome"
+            class="valore"
+        ></div>
+
     </div>
 
 
-    <div
-        id="data"
-        class="data"
-    >
+    <div class="campo">
+
+        <strong>Codice</strong>
+
+        <div
+            id="risultatoCodice"
+            class="valore codice"
+        ></div>
+
     </div>
 
 
-    <div
-        id="ora"
-        class="ora"
-    >
+    <div class="campo">
+
+        <strong>Cliente</strong>
+
+        <div
+            id="risultatoCliente"
+            class="valore"
+        ></div>
+
     </div>
+
+
+    <div class="campo">
+
+        <strong>Data</strong>
+
+        <div
+            id="risultatoData"
+            class="valore"
+        ></div>
+
+    </div>
+
+
+    <div class="campo">
+
+        <strong>Ora</strong>
+
+        <div
+            id="risultatoOra"
+            class="valore"
+        ></div>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- ELENCO -->
+
+<div class="card">
+
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            flex-wrap:wrap;
+        "
+    >
+
+        <h2 style="margin:0;">
+
+            Codici generati
+
+        </h2>
+
+
+        <button
+            class="success"
+            onclick="ghFetch()"
+        >
+
+            🔄 Aggiorna
+
+        </button>
+
+    </div>
+
+
+    <br>
+
+
+    <div
+        id="contatore"
+        class="contatore"
+    >
+
+        Nessun dato caricato.
+
+    </div>
+
+
+    <div class="tabella-container">
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Nome</th>
+
+                    <th>Codice</th>
+
+                    <th>Cliente</th>
+
+                    <th>Data</th>
+
+                    <th>Ora</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="tabella">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
 
 </div>
 ```
@@ -212,102 +817,1231 @@
 <script>
 
 
-function mostraNome() {
-
-    const nome =
-        document
-            .getElementById("nome")
-            .value
-            .trim();
+/*
+==================================================
+CONFIGURAZIONE
+==================================================
+*/
 
 
-    if (nome === "") {
+let config =
+    JSON.parse(
+        localStorage.getItem(
+            "gh_codici_config"
+        )
+    ) || null;
 
-        document
-            .getElementById("nomeVisualizzato")
-            .textContent =
-                "Inserisci il tuo nome";
+
+let records = [];
+
+let fileSha = "";
+
+
+
+/*
+==================================================
+ELEMENTI HTML
+==================================================
+*/
+
+
+const nomeInput =
+    document.getElementById(
+        "nome"
+    );
+
+
+const generaBtn =
+    document.getElementById(
+        "generaBtn"
+    );
+
+
+
+/*
+==================================================
+STATO
+==================================================
+*/
+
+
+function setStatus(
+    messaggio,
+    colore = "black"
+) {
+
+    document.getElementById(
+        "statusText"
+    ).innerText =
+        messaggio;
+
+    document.getElementById(
+        "statusText"
+    ).style.color =
+        colore;
+
+}
+
+
+
+/*
+==================================================
+APRI / CHIUDI IMPOSTAZIONI
+==================================================
+*/
+
+
+function toggleImpostazioni() {
+
+    const area =
+        document.getElementById(
+            "impostazioni"
+        );
+
+
+    area.classList.toggle(
+        "aperta"
+    );
+
+}
+
+
+
+/*
+==================================================
+SALVA CONFIGURAZIONE
+==================================================
+*/
+
+
+function salvaConfigurazione() {
+
+
+    const token =
+        document.getElementById(
+            "ghToken"
+        ).value.trim();
+
+
+    const repo =
+        document.getElementById(
+            "ghRepo"
+        ).value.trim();
+
+
+    if (!token) {
+
+        alert(
+            "Inserisci il Personal Access Token."
+        );
 
         return;
+
     }
 
 
-    document
-        .getElementById("nomeVisualizzato")
-        .textContent =
-            "Ciao, " + nome + "!";
+    if (!repo || !repo.includes("/")) {
+
+        alert(
+            "Inserisci il repository nel formato:\nutente/nome-repository"
+        );
+
+        return;
+
+    }
+
+
+    config = {
+
+        token: token,
+
+        repo: repo
+
+    };
+
+
+    localStorage.setItem(
+
+        "gh_codici_config",
+
+        JSON.stringify(config)
+
+    );
+
+
+    setStatus(
+        "Configurazione salvata",
+        "var(--apple-green)"
+    );
+
+
+    ghFetch();
 
 }
 
 
-function aggiornaDataOra() {
 
-    const adesso =
-        new Date();
+/*
+==================================================
+LEGGI CODICI DA GITHUB
+==================================================
+*/
 
 
-    const data =
-        adesso.toLocaleDateString(
-            "it-IT",
-            {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }
+async function ghFetch() {
+
+
+    if (!config) {
+
+        setStatus(
+            "Configura prima GitHub",
+            "var(--apple-orange)"
+        );
+
+        document
+            .getElementById("impostazioni")
+            .classList.add("aperta");
+
+        return;
+
+    }
+
+
+    setStatus(
+        "Lettura CODICI_GENERATI.json...",
+        "var(--blue)"
+    );
+
+
+    const url =
+        `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
+
+
+    try {
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+
+                    headers: {
+
+                        Authorization:
+                            `token ${config.token}`,
+
+                        Accept:
+                            "application/vnd.github+json"
+
+                    }
+
+                }
+            );
+
+
+        /*
+        ==========================================
+        FILE NON ESISTENTE
+        ==========================================
+        */
+
+
+        if (response.status === 404) {
+
+            records = [];
+
+            fileSha = "";
+
+            renderTable();
+
+            setStatus(
+                "CODICI_GENERATI.json non esiste ancora",
+                "var(--apple-orange)"
+            );
+
+            return;
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "GitHub ha restituito errore " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        fileSha =
+            data.sha;
+
+
+        /*
+        ==========================================
+        DECODIFICA BASE64
+        ==========================================
+        */
+
+
+        const testo =
+            decodeBase64UTF8(
+                data.content
+            );
+
+
+        records =
+            JSON.parse(
+                testo
+            );
+
+
+        if (!Array.isArray(records)) {
+
+            throw new Error(
+                "CODICI_GENERATI.json deve contenere un array."
+            );
+
+        }
+
+
+        renderTable();
+
+
+        setStatus(
+            "Connesso e aggiornato",
+            "var(--green)"
         );
 
 
-    const ora =
-        adesso.toLocaleTimeString(
-            "it-IT",
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            }
+    } catch(error) {
+
+
+        console.error(error);
+
+
+        setStatus(
+            "Errore: " + error.message,
+            "var(--red)"
         );
 
 
-    document
-        .getElementById("data")
-        .textContent =
+        alert(
+            "Errore durante la lettura del JSON:\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/*
+==================================================
+DECODIFICA UTF-8
+==================================================
+*/
+
+
+function decodeBase64UTF8(
+    base64
+) {
+
+
+    const binary =
+        atob(
+            base64.replace(
+                /\s/g,
+                ""
+            )
+        );
+
+
+    const bytes =
+        Uint8Array.from(
+            binary,
+            char => char.charCodeAt(0)
+        );
+
+
+    return new TextDecoder(
+        "utf-8"
+    ).decode(
+        bytes
+    );
+
+}
+
+
+
+/*
+==================================================
+CODIFICA UTF-8 IN BASE64
+==================================================
+*/
+
+
+function encodeBase64UTF8(
+    testo
+) {
+
+
+    const bytes =
+        new TextEncoder().encode(
+            testo
+        );
+
+
+    let binary = "";
+
+
+    const blocco = 0x8000;
+
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += blocco
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                i + blocco
+            )
+        );
+
+    }
+
+
+    return btoa(
+        binary
+    );
+
+}
+
+
+
+/*
+==================================================
+GENERA CODICE CASUALE
+==================================================
+*/
+
+
+function generaCodice() {
+
+
+    const caratteri =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+    let codice = "";
+
+
+    for (
+        let i = 0;
+        i < 11;
+        i++
+    ) {
+
+        const posizione =
+            Math.floor(
+                Math.random() *
+                caratteri.length
+            );
+
+
+        codice +=
+            caratteri[
+                posizione
+            ];
+
+    }
+
+
+    return codice;
+
+}
+
+
+
+/*
+==================================================
+CONTROLLA DUPLICATO
+==================================================
+*/
+
+
+function codiceEsistente(
+    codice
+) {
+
+
+    return records.some(
+        record =>
+            String(
+                record.codice || ""
+            ).toUpperCase() ===
+            codice.toUpperCase()
+    );
+
+}
+
+
+
+/*
+==================================================
+GENERA CODICE UNICO
+==================================================
+*/
+
+
+function generaCodiceUnico() {
+
+
+    let codice;
+
+
+    let tentativi = 0;
+
+
+    do {
+
+        codice =
+            generaCodice();
+
+
+        tentativi++;
+
+
+        if (tentativi > 1000) {
+
+            throw new Error(
+                "Impossibile generare un codice unico."
+            );
+
+        }
+
+
+    } while (
+        codiceEsistente(
+            codice
+        )
+    );
+
+
+    return codice;
+
+}
+
+
+
+/*
+==================================================
+GENERA E SALVA
+==================================================
+*/
+
+
+async function generaESalva() {
+
+
+    if (!config) {
+
+        alert(
+            "Prima configura GitHub nelle Impostazioni Cloud."
+        );
+
+
+        document
+            .getElementById("impostazioni")
+            .classList.add("aperta");
+
+
+        return;
+
+    }
+
+
+    const nome =
+        nomeInput.value.trim();
+
+
+    if (!nome) {
+
+        alert(
+            "Inserisci un nome utente."
+        );
+
+        nomeInput.focus();
+
+        return;
+
+    }
+
+
+    generaBtn.disabled =
+        true;
+
+
+    generaBtn.innerText =
+        "⏳ Generazione...";
+
+
+    try {
+
+
+        /*
+        ==========================================
+        AGGIORNA IL JSON PRIMA DI GENERARE
+        ==========================================
+        */
+
+
+        await ghFetchSilenzioso();
+
+
+
+        /*
+        ==========================================
+        GENERA CODICE UNICO
+        ==========================================
+        */
+
+
+        const codice =
+            generaCodiceUnico();
+
+
+
+        /*
+        ==========================================
+        DATA E ORA
+        ==========================================
+        */
+
+
+        const adesso =
+            new Date();
+
+
+        const data =
+            adesso.toLocaleDateString(
+                "it-IT",
+                {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                }
+            );
+
+
+        const ora =
+            adesso.toLocaleTimeString(
+                "it-IT",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+
+
+
+        /*
+        ==========================================
+        CLIENTE
+        ==========================================
+        */
+
+
+        const cliente =
+            codice +
+            ".aaaaa.ee";
+
+
+
+        /*
+        ==========================================
+        NUOVO RECORD
+        ==========================================
+        */
+
+
+        const nuovoRecord = {
+
+            nome: nome,
+
+            codice: codice,
+
+            cliente: cliente,
+
+            data: data,
+
+            ora: ora
+
+        };
+
+
+        records.push(
+            nuovoRecord
+        );
+
+
+
+        /*
+        ==========================================
+        SALVA SU GITHUB
+        ==========================================
+        */
+
+
+        await ghPush();
+
+
+
+        /*
+        ==========================================
+        MOSTRA RISULTATO
+        ==========================================
+        */
+
+
+        document.getElementById(
+            "risultatoNome"
+        ).textContent =
+            nome;
+
+
+        document.getElementById(
+            "risultatoCodice"
+        ).textContent =
+            codice;
+
+
+        document.getElementById(
+            "risultatoCliente"
+        ).textContent =
+            cliente;
+
+
+        document.getElementById(
+            "risultatoData"
+        ).textContent =
             data;
 
 
-    document
-        .getElementById("ora")
-        .textContent =
+        document.getElementById(
+            "risultatoOra"
+        ).textContent =
             ora;
+
+
+        document.getElementById(
+            "risultato"
+        ).style.display =
+            "block";
+
+
+        nomeInput.value =
+            "";
+
+
+        renderTable();
+
+
+        setStatus(
+            "Codice salvato su GitHub",
+            "var(--green)"
+        );
+
+
+    } catch(error) {
+
+
+        console.error(error);
+
+
+        setStatus(
+            "Errore durante il salvataggio",
+            "var(--red)"
+        );
+
+
+        alert(
+            "Errore:\n\n" +
+            error.message
+        );
+
+
+    } finally {
+
+
+        generaBtn.disabled =
+            false;
+
+
+        generaBtn.innerText =
+            "🔑 Genera Codice";
+
+    }
 
 }
 
 
-mostraNome();
 
-aggiornaDataOra();
-
-
-setInterval(
-    aggiornaDataOra,
-    1000
-);
+/*
+==================================================
+LETTURA SILENZIOSA
+==================================================
+*/
 
 
-document
-    .getElementById("nome")
-    .addEventListener(
-        "keydown",
-        function(event) {
+async function ghFetchSilenzioso() {
 
-            if (event.key === "Enter") {
 
-                mostraNome();
+    const url =
+        `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
+
+
+    const response =
+        await fetch(
+            url,
+            {
+                method: "GET",
+
+                headers: {
+
+                    Authorization:
+                        `token ${config.token}`,
+
+                    Accept:
+                        "application/vnd.github+json"
+
+                }
+
+            }
+        );
+
+
+    if (response.status === 404) {
+
+        records = [];
+
+        fileSha = "";
+
+        return;
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Impossibile leggere CODICI_GENERATI.json. HTTP " +
+            response.status
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    fileSha =
+        data.sha;
+
+
+    const testo =
+        decodeBase64UTF8(
+            data.content
+        );
+
+
+    records =
+        JSON.parse(
+            testo
+        );
+
+
+    if (!Array.isArray(records)) {
+
+        throw new Error(
+            "Il file JSON deve contenere un array."
+        );
+
+    }
+
+}
+
+
+
+/*
+==================================================
+SCRIVE IL JSON SU GITHUB
+==================================================
+*/
+
+
+async function ghPush() {
+
+
+    const url =
+        `https://api.github.com/repos/${config.repo}/contents/CODICI_GENERATI.json`;
+
+
+    const contenuto =
+        JSON.stringify(
+            records,
+            null,
+            2
+        );
+
+
+    const body = {
+
+        message:
+            "Nuovo codice generato",
+
+        content:
+            encodeBase64UTF8(
+                contenuto
+            )
+
+    };
+
+
+    /*
+    ==========================================
+    SE IL FILE ESISTE, SERVE LO SHA
+    ==========================================
+    */
+
+
+    if (fileSha) {
+
+        body.sha =
+            fileSha;
+
+    }
+
+
+    const response =
+        await fetch(
+            url,
+            {
+
+                method: "PUT",
+
+                headers: {
+
+                    Authorization:
+                        `token ${config.token}`,
+
+                    Accept:
+                        "application/vnd.github+json",
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify(
+                        body
+                    )
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+
+        let messaggio =
+            "Errore GitHub HTTP " +
+            response.status;
+
+
+        try {
+
+            const errore =
+                await response.json();
+
+
+            if (errore.message) {
+
+                messaggio +=
+                    ": " +
+                    errore.message;
 
             }
 
+        } catch(e) {}
+
+
+        throw new Error(
+            messaggio
+        );
+
+    }
+
+
+    const risultato =
+        await response.json();
+
+
+    /*
+    ==========================================
+    AGGIORNA SHA
+    ==========================================
+    */
+
+
+    if (
+        risultato.content &&
+        risultato.content.sha
+    ) {
+
+        fileSha =
+            risultato.content.sha;
+
+    }
+
+}
+
+
+
+/*
+==================================================
+VISUALIZZA TABELLA
+==================================================
+*/
+
+
+function renderTable() {
+
+
+    const tbody =
+        document.getElementById(
+            "tabella"
+        );
+
+
+    tbody.innerHTML =
+        "";
+
+
+    document.getElementById(
+        "contatore"
+    ).textContent =
+        "Totale codici: " +
+        records.length;
+
+
+    if (records.length === 0) {
+
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        padding:25px;
+                        color:#777;
+                    "
+                >
+
+                    Nessun codice presente.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    /*
+    ==========================================
+    PIÙ RECENTE PRIMA
+    ==========================================
+    */
+
+
+    const ordinati =
+        [...records].reverse();
+
+
+    ordinati.forEach(
+        record => {
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const tdNome =
+                document.createElement(
+                    "td"
+                );
+
+
+            tdNome.textContent =
+                record.nome || "";
+
+
+            const tdCodice =
+                document.createElement(
+                    "td"
+                );
+
+
+            tdCodice.textContent =
+                record.codice || "";
+
+
+            tdCodice.className =
+                "codice-tabella";
+
+
+            const tdCliente =
+                document.createElement(
+                    "td"
+                );
+
+
+            tdCliente.textContent =
+                record.cliente || "";
+
+
+            const tdData =
+                document.createElement(
+                    "td"
+                );
+
+
+            tdData.textContent =
+                record.data || "";
+
+
+            const tdOra =
+                document.createElement(
+                    "td"
+                );
+
+
+            tdOra.textContent =
+                record.ora || "";
+
+
+            tr.appendChild(
+                tdNome
+            );
+
+
+            tr.appendChild(
+                tdCodice
+            );
+
+
+            tr.appendChild(
+                tdCliente
+            );
+
+
+            tr.appendChild(
+                tdData
+            );
+
+
+            tr.appendChild(
+                tdOra
+            );
+
+
+            tbody.appendChild(
+                tr
+            );
+
         }
     );
+
+}
+
+
+
+/*
+==================================================
+INVIO CON ENTER
+==================================================
+*/
+
+
+nomeInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            generaESalva();
+
+        }
+
+    }
+);
+
+
+
+/*
+==================================================
+CARICAMENTO INIZIALE
+==================================================
+*/
+
+
+if (config) {
+
+
+    ghFetch();
+
+
+}
+else {
+
+
+    document
+        .getElementById("impostazioni")
+        .classList.add("aperta");
+
+
+    setStatus(
+        "Inserisci le impostazioni GitHub",
+        "var(--orange)"
+    );
+
+}
 
 
 </script>
@@ -315,4 +2049,3 @@ document
 </body>
 
 </html>
-
