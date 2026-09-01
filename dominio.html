@@ -1,305 +1,726 @@
 ```html
 <!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gestione dominio</title>
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Gestione Dominio</title>
+
 
 <style>
-    * {
-        box-sizing: border-box;
+
+:root {
+
+    --blue: #007aff;
+    --green: #34c759;
+    --red: #ff3b30;
+    --orange: #ff9500;
+
+    --text: #1d1d1f;
+
+    --glass:
+        rgba(255,255,255,0.78);
+
+    --border:
+        rgba(255,255,255,0.55);
+
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            135deg,
+            #e0eafc 0%,
+            #cfdef3 100%
+        );
+
+    padding-bottom: 50px;
+
+}
+
+
+/* ==================================================
+   HEADER
+   ================================================== */
+
+header {
+
+    background:
+        rgba(29,29,31,0.88);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    color: white;
+
+    padding: 24px;
+
+    text-align: center;
+
+    font-size: 26px;
+
+    font-weight: 600;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 4px 30px
+        rgba(0,0,0,0.15);
+
+}
+
+
+/* ==================================================
+   CONTAINER
+   ================================================== */
+
+.container {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: auto;
+
+    padding: 30px 20px;
+
+}
+
+
+/* ==================================================
+   CARD
+   ================================================== */
+
+.card {
+
+    background:
+        var(--glass);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    padding: 28px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,0.08);
+
+}
+
+
+/* ==================================================
+   TITOLO
+   ================================================== */
+
+h2 {
+
+    margin-top: 0;
+
+    margin-bottom: 8px;
+
+}
+
+
+.sottotitolo {
+
+    color: #666;
+
+    font-size: 14px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ==================================================
+   CAMPI
+   ================================================== */
+
+.campo {
+
+    margin-bottom: 20px;
+
+}
+
+
+label {
+
+    display: block;
+
+    font-weight: 600;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+
+}
+
+
+input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    border:
+        1px solid #d5d5d5;
+
+    background:
+        rgba(255,255,255,0.92);
+
+    font-size: 17px;
+
+    transition:
+        0.2s;
+
+}
+
+
+input:focus {
+
+    outline: none;
+
+    border-color:
+        var(--blue);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(0,122,255,0.12);
+
+}
+
+
+/* ==================================================
+   CAMPI AUTOMATICI
+   ================================================== */
+
+input.automatico {
+
+    background:
+        rgba(235,235,235,0.75);
+
+    color:
+        #666;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+/* ==================================================
+   GRIGLIA DATA ORA
+   ================================================== */
+
+.griglia {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 15px;
+
+}
+
+
+/* ==================================================
+   BOTTONI
+   ================================================== */
+
+button {
+
+    border: none;
+
+    border-radius: 13px;
+
+    padding: 14px 20px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    transition:
+        0.2s;
+
+}
+
+
+button:hover {
+
+    transform:
+        translateY(-1px);
+
+    filter:
+        brightness(1.05);
+
+}
+
+
+button:disabled {
+
+    opacity: 0.6;
+
+    cursor:
+        not-allowed;
+
+    transform:
+        none;
+
+}
+
+
+.primary {
+
+    background:
+        var(--blue);
+
+    color:
+        white;
+
+}
+
+
+.success {
+
+    background:
+        var(--green);
+
+    color:
+        white;
+
+}
+
+
+.gray {
+
+    background:
+        rgba(255,255,255,0.75);
+
+    color:
+        var(--text);
+
+}
+
+
+.danger {
+
+    background:
+        var(--red);
+
+    color:
+        white;
+
+}
+
+
+.azioni {
+
+    display:
+        flex;
+
+    gap:
+        10px;
+
+    margin-top:
+        10px;
+
+}
+
+
+.azioni button {
+
+    flex:
+        1;
+
+}
+
+
+/* ==================================================
+   STATO
+   ================================================== */
+
+#status {
+
+    padding:
+        13px 15px;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(255,255,255,0.70);
+
+    margin-bottom:
+        20px;
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+
+}
+
+
+#status.success {
+
+    color:
+        #16803c;
+
+    background:
+        rgba(52,199,89,0.12);
+
+}
+
+
+#status.error {
+
+    color:
+        #c62828;
+
+    background:
+        rgba(255,59,48,0.12);
+
+}
+
+
+#status.loading {
+
+    color:
+        #0066cc;
+
+    background:
+        rgba(0,122,255,0.10);
+
+}
+
+
+/* ==================================================
+   IMPOSTAZIONI
+   ================================================== */
+
+.impostazioni {
+
+    display:
+        none;
+
+    margin-top:
+        20px;
+
+}
+
+
+.impostazioni.aperta {
+
+    display:
+        block;
+
+}
+
+
+.nota {
+
+    font-size:
+        13px;
+
+    color:
+        #666;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* ==================================================
+   INFO
+   ================================================== */
+
+.info {
+
+    font-size:
+        13px;
+
+    color:
+        #777;
+
+    margin-top:
+        20px;
+
+    text-align:
+        center;
+
+}
+
+
+/* ==================================================
+   MOBILE
+   ================================================== */
+
+@media(max-width:600px) {
+
+    header {
+
+        font-size:
+            21px;
+
     }
 
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif;
 
-        background: linear-gradient(135deg, #f4f7fb, #e9eef7);
+    .container {
 
-        color: #1f2937;
+        padding:
+            15px 10px;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
+
 
     .card {
-        width: min(520px, calc(100% - 32px));
 
-        background: rgba(255,255,255,0.96);
+        padding:
+            22px;
 
-        border-radius: 20px;
-
-        padding: 34px;
-
-        box-shadow:
-            0 20px 50px rgba(0,0,0,0.10),
-            0 4px 12px rgba(0,0,0,0.05);
     }
 
-    .header {
-        text-align: center;
-        margin-bottom: 30px;
+
+    .griglia {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            0;
+
     }
 
-    .icon {
-        width: 58px;
-        height: 58px;
 
-        margin: 0 auto 16px;
+    .azioni {
 
-        border-radius: 16px;
+        flex-direction:
+            column;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        background: #eef2ff;
-
-        font-size: 28px;
     }
 
-    h1 {
-        margin: 0;
+}
 
-        font-size: 25px;
-
-        font-weight: 700;
-
-        color: #111827;
-    }
-
-    .subtitle {
-        margin-top: 8px;
-
-        color: #6b7280;
-
-        font-size: 14px;
-    }
-
-    .field {
-        margin-bottom: 20px;
-    }
-
-    label {
-        display: block;
-
-        margin-bottom: 8px;
-
-        font-size: 13px;
-
-        font-weight: 600;
-
-        color: #374151;
-    }
-
-    input {
-        width: 100%;
-
-        height: 50px;
-
-        border-radius: 10px;
-
-        border: 1px solid #d1d5db;
-
-        padding: 0 15px;
-
-        font-size: 16px;
-
-        outline: none;
-
-        transition: all 0.2s ease;
-    }
-
-    input:focus {
-        border-color: #6366f1;
-
-        box-shadow:
-            0 0 0 3px rgba(99,102,241,0.12);
-    }
-
-    input.readonly {
-        background: #f3f4f6;
-
-        color: #6b7280;
-
-        cursor: not-allowed;
-    }
-
-    .row {
-        display: grid;
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 14px;
-    }
-
-    .status {
-        display: none;
-
-        padding: 12px 14px;
-
-        margin-bottom: 20px;
-
-        border-radius: 10px;
-
-        font-size: 14px;
-
-        line-height: 1.4;
-    }
-
-    .status.success {
-        display: block;
-
-        background: #ecfdf3;
-
-        color: #067647;
-
-        border: 1px solid #abefc6;
-    }
-
-    .status.error {
-        display: block;
-
-        background: #fef3f2;
-
-        color: #b42318;
-
-        border: 1px solid #fecdca;
-    }
-
-    .status.loading {
-        display: block;
-
-        background: #eff8ff;
-
-        color: #175cd3;
-
-        border: 1px solid #b2ddff;
-    }
-
-    .buttons {
-        display: flex;
-
-        gap: 12px;
-
-        margin-top: 28px;
-    }
-
-    button {
-        flex: 1;
-
-        height: 48px;
-
-        border: 0;
-
-        border-radius: 10px;
-
-        font-size: 14px;
-
-        font-weight: 600;
-
-        cursor: pointer;
-
-        transition: all 0.2s ease;
-    }
-
-    .save {
-        background: #4f46e5;
-
-        color: white;
-    }
-
-    .save:hover {
-        background: #4338ca;
-
-        transform: translateY(-1px);
-    }
-
-    .back {
-        background: #f3f4f6;
-
-        color: #374151;
-    }
-
-    .back:hover {
-        background: #e5e7eb;
-    }
-
-    button:disabled {
-        opacity: 0.6;
-
-        cursor: not-allowed;
-
-        transform: none !important;
-    }
-
-    .footer {
-        margin-top: 25px;
-
-        text-align: center;
-
-        color: #9ca3af;
-
-        font-size: 11px;
-    }
-
-    @media (max-width: 500px) {
-
-        .card {
-            padding: 25px;
-        }
-
-        .row {
-            grid-template-columns: 1fr;
-        }
-
-        .buttons {
-            flex-direction: column;
-        }
-    }
 </style>
+
 </head>
+
 
 <body>
 
+
+<header>
+
+    Gestione Dominio
+
+</header>
+
+
+<div class="container">
+
+
+<!-- ==================================================
+     STATO
+     ================================================== -->
+
+<div id="status">
+
+    Stato:
+    <span id="statusText">
+        Non connesso a GitHub
+    </span>
+
+</div>
+
+
+
+<!-- ==================================================
+     CONFIGURAZIONE GITHUB
+     ================================================== -->
+
 <div class="card">
 
-    <div class="header">
 
-        <div class="icon">
-            🌐
+    <button
+        type="button"
+        class="gray"
+        style="width:100%;"
+        onclick="toggleImpostazioni()"
+    >
+
+        ⚙️ Impostazioni GitHub
+
+    </button>
+
+
+    <div
+        id="impostazioni"
+        class="impostazioni"
+    >
+
+
+        <label for="ghToken">
+
+            Personal Access Token
+
+        </label>
+
+
+        <input
+            type="password"
+            id="ghToken"
+            placeholder="Inserisci il token GitHub"
+            autocomplete="off"
+        >
+
+
+        <label for="ghRepo">
+
+            Repository
+
+        </label>
+
+
+        <input
+            type="text"
+            id="ghRepo"
+            placeholder="utente/nome-repository"
+        >
+
+
+        <div class="nota">
+
+            Esempio:
+            <b>mario123/mio-repository</b>
+
+            <br><br>
+
+            Il token deve avere i permessi necessari
+            per leggere e modificare i contenuti
+            del repository.
+
         </div>
 
-        <h1>Gestione dominio</h1>
 
-        <div class="subtitle">
-            Modifica le impostazioni del dominio
+        <br>
+
+
+        <div class="azioni">
+
+
+            <button
+                class="primary"
+                onclick="salvaConfigurazione()"
+            >
+
+                Salva configurazione
+
+            </button>
+
+
+            <button
+                class="success"
+                onclick="caricaDominio()"
+            >
+
+                🔄 Leggi dominio
+
+            </button>
+
+
         </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     GESTIONE DOMINIO
+     ================================================== -->
+
+<div class="card">
+
+
+    <h2>
+
+        🌐 Dominio
+
+    </h2>
+
+
+    <div class="sottotitolo">
+
+        Modifica il dominio del sito.
 
     </div>
 
 
-    <div id="status" class="status"></div>
+    <!-- DOMINIO MODIFICABILE -->
 
+    <div class="campo">
 
-    <!-- DOMINIO -->
-
-    <div class="field">
 
         <label for="dominio">
+
             Dominio
+
         </label>
+
 
         <input
             type="text"
@@ -308,157 +729,220 @@
             autocomplete="off"
         >
 
+
     </div>
 
 
-    <!-- DATA E ORA -->
 
-    <div class="row">
+    <!-- DATA E ORA AUTOMATICHE -->
 
-        <div class="field">
+    <div class="griglia">
+
+
+        <div class="campo">
+
 
             <label for="data">
+
                 Data
+
             </label>
+
 
             <input
                 type="text"
                 id="data"
-                class="readonly"
+                class="automatico"
                 readonly
             >
+
 
         </div>
 
 
-        <div class="field">
+
+        <div class="campo">
+
 
             <label for="ora">
+
                 Ora
+
             </label>
+
 
             <input
                 type="text"
                 id="ora"
-                class="readonly"
+                class="automatico"
                 readonly
             >
 
+
         </div>
 
+
     </div>
 
 
-    <!-- PULSANTI -->
 
-    <div class="buttons">
+    <!-- AZIONI -->
+
+    <div class="azioni">
+
 
         <button
-            class="back"
+            class="gray"
             onclick="tornaIndex()"
         >
+
             ← Torna al sito
+
         </button>
+
 
         <button
-            class="save"
-            id="saveButton"
-            onclick="salva()"
+            id="salvaBtn"
+            class="success"
+            onclick="salvaDominio()"
         >
-            Salva
+
+            💾 Salva
+
         </button>
 
+
     </div>
 
 
-    <div class="footer">
-        Ultima lettura da GitHub: <span id="lettura">—</span>
+    <div class="info">
+
+        File gestito:
+        <b>DOMINIO.json</b>
+
     </div>
+
 
 </div>
 
 
+</div>
+
+
+
 <script>
 
-/* =========================================================
-   CONFIGURAZIONE GITHUB
-   ========================================================= */
 
-const GITHUB_OWNER = "TUO_USERNAME";
-
-const GITHUB_REPO = "TUO_REPOSITORY";
-
-const GITHUB_BRANCH = "main";
-
-const GITHUB_TOKEN = "INCOLLA_QUI_IL_TUO_TOKEN";
+/*
+==================================================
+CONFIGURAZIONE
+==================================================
+*/
 
 
-/* =========================================================
-   FILE
-   ========================================================= */
-
-const FILE_PATH = "dominio.json";
-
-const API_URL =
-    `https://api.github.com/repos/` +
-    `${GITHUB_OWNER}/${GITHUB_REPO}/contents/${FILE_PATH}`;
+let config =
+    JSON.parse(
+        localStorage.getItem(
+            "gh_dominio_config"
+        )
+    ) || null;
 
 
-/* SHA necessario per aggiornare il file */
+/*
+==================================================
+DATI DEL JSON
+==================================================
+*/
 
-let fileSHA = null;
+
+let dominioJSON = {};
+
+let fileSha = "";
 
 
-/* =========================================================
-   ELEMENTI
-   ========================================================= */
+
+/*
+==================================================
+ELEMENTI
+==================================================
+*/
+
 
 const dominioInput =
-    document.getElementById("dominio");
+    document.getElementById(
+        "dominio"
+    );
+
 
 const dataInput =
-    document.getElementById("data");
+    document.getElementById(
+        "data"
+    );
+
 
 const oraInput =
-    document.getElementById("ora");
-
-const statusBox =
-    document.getElementById("status");
-
-const saveButton =
-    document.getElementById("saveButton");
+    document.getElementById(
+        "ora"
+    );
 
 
-/* =========================================================
-   OROLOGIO
-   ========================================================= */
+const salvaBtn =
+    document.getElementById(
+        "salvaBtn"
+    );
+
+
+
+/*
+==================================================
+DATA E ORA AUTOMATICHE
+==================================================
+*/
+
 
 function aggiornaDataOra() {
 
-    const now = new Date();
+
+    const adesso =
+        new Date();
+
 
     dataInput.value =
-        now.toLocaleDateString("it-IT", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
+        adesso.toLocaleDateString(
+            "it-IT",
+            {
+                day:
+                    "2-digit",
+
+                month:
+                    "2-digit",
+
+                year:
+                    "numeric"
+            }
+        );
+
 
     oraInput.value =
-        now.toLocaleTimeString("it-IT", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-        });
+        adesso.toLocaleTimeString(
+            "it-IT",
+            {
+                hour:
+                    "2-digit",
+
+                minute:
+                    "2-digit",
+
+                second:
+                    "2-digit"
+            }
+        );
+
 }
 
 
-/* Aggiorna immediatamente */
-
 aggiornaDataOra();
 
-
-/* Aggiorna ogni secondo */
 
 setInterval(
     aggiornaDataOra,
@@ -466,81 +950,275 @@ setInterval(
 );
 
 
-/* =========================================================
-   STATUS
-   ========================================================= */
 
-function mostraStatus(tipo, testo) {
-
-    statusBox.className = "status " + tipo;
-
-    statusBox.textContent = testo;
-}
+/*
+==================================================
+STATO
+==================================================
+*/
 
 
-/* =========================================================
-   HEADER GITHUB
-   ========================================================= */
-
-function headersGitHub() {
-
-    return {
-
-        "Accept":
-            "application/vnd.github+json",
-
-        "Authorization":
-            `Bearer ${GITHUB_TOKEN}`,
-
-        "X-GitHub-Api-Version":
-            "2022-11-28"
-    };
-}
+function setStatus(
+    messaggio,
+    tipo = ""
+) {
 
 
-/* =========================================================
-   CARICAMENTO JSON
-   ========================================================= */
-
-async function carica() {
-
-    if (
-        !GITHUB_TOKEN ||
-        GITHUB_TOKEN === "INCOLLA_QUI_IL_TUO_TOKEN"
-    ) {
-
-        mostraStatus(
-            "error",
-            "Token GitHub non configurato."
+    const status =
+        document.getElementById(
+            "status"
         );
 
-        return;
+
+    const text =
+        document.getElementById(
+            "statusText"
+        );
+
+
+    status.className =
+        "";
+
+
+    if (tipo) {
+
+        status.classList.add(
+            tipo
+        );
+
     }
 
 
-    mostraStatus(
-        "loading",
-        "Caricamento configurazione..."
+    text.innerText =
+        messaggio;
+
+}
+
+
+
+/*
+==================================================
+IMPOSTAZIONI
+==================================================
+*/
+
+
+function toggleImpostazioni() {
+
+
+    document
+        .getElementById(
+            "impostazioni"
+        )
+        .classList.toggle(
+            "aperta"
+        );
+
+}
+
+
+
+/*
+==================================================
+SALVA CONFIGURAZIONE
+==================================================
+*/
+
+
+function salvaConfigurazione() {
+
+
+    const token =
+        document
+            .getElementById(
+                "ghToken"
+            )
+            .value
+            .trim();
+
+
+    const repo =
+        document
+            .getElementById(
+                "ghRepo"
+            )
+            .value
+            .trim();
+
+
+    if (!token) {
+
+        alert(
+            "Inserisci il Personal Access Token."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !repo ||
+        !repo.includes("/")
+    ) {
+
+        alert(
+            "Inserisci il repository nel formato:\nutente/nome-repository"
+        );
+
+        return;
+
+    }
+
+
+    config = {
+
+        token:
+            token,
+
+        repo:
+            repo
+
+    };
+
+
+    localStorage.setItem(
+
+        "gh_dominio_config",
+
+        JSON.stringify(
+            config
+        )
+
     );
+
+
+    setStatus(
+        "Configurazione salvata",
+        "success"
+    );
+
+
+    caricaDominio();
+
+}
+
+
+
+/*
+==================================================
+CARICA DOMINIO.JSON
+==================================================
+*/
+
+
+async function caricaDominio() {
+
+
+    if (!config) {
+
+
+        setStatus(
+            "Configura prima GitHub",
+            "error"
+        );
+
+
+        document
+            .getElementById(
+                "impostazioni"
+            )
+            .classList.add(
+                "aperta"
+            );
+
+
+        return;
+
+    }
+
+
+    setStatus(
+        "Lettura DOMINIO.json...",
+        "loading"
+    );
+
+
+    const url =
+        `https://api.github.com/repos/` +
+        `${config.repo}/contents/DOMINIO.json`;
 
 
     try {
 
-        const response = await fetch(
-            `${API_URL}?ref=${encodeURIComponent(GITHUB_BRANCH)}`,
-            {
-                method: "GET",
 
-                headers: headersGitHub()
-            }
-        );
+        const response =
+            await fetch(
+                url,
+                {
+
+                    method:
+                        "GET",
+
+                    headers:
+                    {
+
+                        Authorization:
+                            `token ${config.token}`,
+
+                        Accept:
+                            "application/vnd.github+json"
+
+                    }
+
+                }
+            );
+
+
+        if (
+            response.status ===
+            404
+        ) {
+
+
+            throw new Error(
+                "DOMINIO.json non trovato nel repository."
+            );
+
+        }
 
 
         if (!response.ok) {
 
-            await erroreGitHub(response);
 
-            return;
+            let messaggio =
+                "GitHub ha restituito errore " +
+                response.status;
+
+
+            try {
+
+                const errore =
+                    await response.json();
+
+
+                if (
+                    errore.message
+                ) {
+
+                    messaggio +=
+                        "\n" +
+                        errore.message;
+
+                }
+
+            } catch(e) {}
+
+
+            throw new Error(
+                messaggio
+            );
+
         }
 
 
@@ -549,371 +1227,597 @@ async function carica() {
 
 
         /*
-         * Salviamo lo SHA
-         */
+        ==========================================
+        SALVIAMO SHA
+        ==========================================
+        */
 
-        fileSHA = data.sha;
+
+        fileSha =
+            data.sha;
 
 
         /*
-         * Decodifica Base64
-         */
+        ==========================================
+        DECODIFICA
+        ==========================================
+        */
+
 
         const testo =
-            decodeBase64(data.content);
+            decodeBase64UTF8(
+                data.content
+            );
 
 
         /*
-         * Convertiamo in JSON
-         */
+        ==========================================
+        PARSE JSON
+        ==========================================
+        */
 
-        const json =
-            JSON.parse(testo);
+
+        dominioJSON =
+            JSON.parse(
+                testo
+            );
 
 
         /*
-         * Prendiamo SOLO il campo dominio
-         */
+        ==========================================
+        MOSTRA SOLO IL CAMPO DOMINIO
+        ==========================================
+        */
+
 
         dominioInput.value =
-            json.dominio || "";
+            dominioJSON.dominio || "";
 
 
-        /*
-         * Data/ora ultima lettura
-         */
-
-        document.getElementById("lettura")
-            .textContent =
-            new Date().toLocaleString("it-IT");
+        setStatus(
+            "Dominio caricato correttamente",
+            "success"
+        );
 
 
-        statusBox.className =
-            "status";
+    } catch(error) {
 
-
-    } catch (error) {
 
         console.error(error);
 
-        mostraStatus(
-            "error",
-            "Errore nel caricamento del file."
+
+        setStatus(
+            "Errore: " +
+            error.message,
+            "error"
         );
+
+
+        alert(
+            "Errore durante la lettura di DOMINIO.json:\n\n" +
+            error.message
+        );
+
     }
+
 }
 
 
-/* =========================================================
-   SALVATAGGIO
-   ========================================================= */
 
-async function salva() {
+/*
+==================================================
+SALVA DOMINIO
+==================================================
+*/
 
-    const dominio =
+
+async function salvaDominio() {
+
+
+    if (!config) {
+
+
+        alert(
+            "Prima configura GitHub."
+        );
+
+
+        document
+            .getElementById(
+                "impostazioni"
+            )
+            .classList.add(
+                "aperta"
+            );
+
+
+        return;
+
+    }
+
+
+    const nuovoDominio =
         dominioInput.value.trim();
 
 
-    /*
-     * Controllo dominio vuoto
-     */
+    if (!nuovoDominio) {
 
-    if (!dominio) {
 
-        mostraStatus(
-            "error",
+        alert(
             "Inserisci un dominio."
         );
 
+
         dominioInput.focus();
 
+
         return;
+
     }
 
 
-    /*
-     * Controllo SHA
-     */
+    if (!fileSha) {
 
-    if (!fileSHA) {
 
-        mostraStatus(
-            "error",
-            "Impossibile salvare: il file non è stato caricato."
+        alert(
+            "DOMINIO.json non è stato caricato.\n\n" +
+            "Premi prima 'Leggi dominio'."
         );
 
+
         return;
+
     }
 
 
     /*
-     * Disabilita pulsante
-     */
-
-    saveButton.disabled = true;
-
-    saveButton.textContent =
-        "Salvataggio...";
+    ==========================================
+    DISABILITA PULSANTE
+    ==========================================
+    */
 
 
-    mostraStatus(
-        "loading",
-        "Salvataggio su GitHub..."
+    salvaBtn.disabled =
+        true;
+
+
+    salvaBtn.innerText =
+        "⏳ Salvataggio...";
+
+
+    setStatus(
+        "Salvataggio DOMINIO.json...",
+        "loading"
     );
 
 
     try {
 
+
         /*
-         * Creiamo il JSON.
+        ==========================================
+        AGGIORNA SOLO DOMINIO
+        ==========================================
+        */
+
+
+        dominioJSON.dominio =
+            nuovoDominio;
+
+
+        /*
+        ==========================================
+        DATA E ORA
+        ==========================================
+        */
+
+
+        /*
+         * Se DOMINIO.json contiene già
+         * "data" e "ora", vengono aggiornati.
          *
-         * Se in futuro aggiungerai altri campi,
-         * qui possiamo conservarli.
+         * Se non esistono, vengono aggiunti.
+         *
+         * Se NON vuoi salvarli nel JSON,
+         * elimina queste due righe.
          */
 
-        const nuovoJSON = {
 
-            dominio: dominio
+        dominioJSON.data =
+            dataInput.value;
 
-        };
+
+        dominioJSON.ora =
+            oraInput.value;
+
+
+
+        /*
+        ==========================================
+        CREA JSON
+        ==========================================
+        */
 
 
         const contenuto =
             JSON.stringify(
-                nuovoJSON,
+                dominioJSON,
                 null,
                 2
-            ) + "\n";
+            ) +
+            "\n";
 
 
         /*
-         * Base64
-         */
+        ==========================================
+        CODIFICA BASE64
+        ==========================================
+        */
+
 
         const encoded =
-            encodeBase64(contenuto);
+            encodeBase64UTF8(
+                contenuto
+            );
 
 
         /*
-         * PUT GitHub
-         */
+        ==========================================
+        URL GITHUB
+        ==========================================
+        */
 
-        const response = await fetch(
-            API_URL,
-            {
 
-                method: "PUT",
+        const url =
+            `https://api.github.com/repos/` +
+            `${config.repo}/contents/DOMINIO.json`;
 
-                headers: {
 
-                    ...headersGitHub(),
+        /*
+        ==========================================
+        SALVATAGGIO
+        ==========================================
+        */
 
-                    "Content-Type":
-                        "application/json"
-                },
 
-                body: JSON.stringify({
+        const response =
+            await fetch(
+                url,
+                {
 
-                    message:
-                        `Aggiornamento dominio.json - ${dominio}`,
+                    method:
+                        "PUT",
 
-                    content:
-                        encoded,
+                    headers:
+                    {
 
-                    sha:
-                        fileSHA,
+                        Authorization:
+                            `token ${config.token}`,
 
-                    branch:
-                        GITHUB_BRANCH
+                        Accept:
+                            "application/vnd.github+json",
 
-                })
-            }
-        );
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+
+                    body:
+                        JSON.stringify(
+                            {
+
+                                message:
+                                    "Aggiornamento DOMINIO.json",
+
+                                content:
+                                    encoded,
+
+                                sha:
+                                    fileSha
+
+                            }
+                        )
+
+                }
+            );
+
+
+        /*
+        ==========================================
+        CONTROLLO RISPOSTA
+        ==========================================
+        */
 
 
         if (!response.ok) {
 
-            await erroreGitHub(response);
 
-            return;
+            let messaggio =
+                "GitHub ha restituito errore " +
+                response.status;
+
+
+            try {
+
+                const errore =
+                    await response.json();
+
+
+                if (
+                    errore.message
+                ) {
+
+                    messaggio +=
+                        "\n\n" +
+                        errore.message;
+
+                }
+
+            } catch(e) {}
+
+
+            throw new Error(
+                messaggio
+            );
+
         }
 
 
-        const result =
+        /*
+        ==========================================
+        RISPOSTA GITHUB
+        ==========================================
+        */
+
+
+        const risultato =
             await response.json();
 
 
         /*
-         * Aggiorniamo SHA
-         */
+        ==========================================
+        NUOVO SHA
+        ==========================================
+        */
+
 
         if (
-            result.content &&
-            result.content.sha
+            risultato.content &&
+            risultato.content.sha
         ) {
 
-            fileSHA =
-                result.content.sha;
+            fileSha =
+                risultato.content.sha;
+
         }
 
 
-        mostraStatus(
-            "success",
-            "✓ Dominio salvato correttamente."
+        /*
+        ==========================================
+        OK
+        ==========================================
+        */
+
+
+        setStatus(
+            "✓ Dominio salvato correttamente su GitHub",
+            "success"
         );
 
 
-    } catch (error) {
+    } catch(error) {
+
 
         console.error(error);
 
-        mostraStatus(
-            "error",
-            "Errore durante il salvataggio."
+
+        setStatus(
+            "Errore durante il salvataggio",
+            "error"
         );
+
+
+        alert(
+            "Errore durante il salvataggio:\n\n" +
+            error.message
+        );
+
 
     } finally {
 
-        saveButton.disabled = false;
 
-        saveButton.textContent =
-            "Salva";
+        salvaBtn.disabled =
+            false;
+
+
+        salvaBtn.innerText =
+            "💾 Salva";
+
     }
+
 }
 
 
-/* =========================================================
-   TORNA A INDEX
-   ========================================================= */
 
-function tornaIndex() {
-
-    window.location.href =
-        "index.html";
-}
+/*
+==================================================
+DECODIFICA BASE64 UTF-8
+==================================================
+*/
 
 
-/* =========================================================
-   GESTIONE ERRORI GITHUB
-   ========================================================= */
+function decodeBase64UTF8(
+    base64
+) {
 
-async function erroreGitHub(response) {
-
-    let messaggio =
-        `Errore GitHub HTTP ${response.status}`;
-
-
-    try {
-
-        const data =
-            await response.json();
-
-        if (data.message) {
-
-            messaggio +=
-                "\n\n" + data.message;
-        }
-
-    } catch (e) {
-        // nessun dettaglio
-    }
-
-
-    if (response.status === 403) {
-
-        messaggio +=
-            "\n\nControlla il Personal Access Token:" +
-            "\n• repository corretto" +
-            "\n• Contents → Read and write";
-    }
-
-
-    if (response.status === 404) {
-
-        messaggio +=
-            "\n\nControlla owner, repository, branch e file.";
-    }
-
-
-    if (response.status === 409) {
-
-        messaggio +=
-            "\n\nIl file è stato modificato. " +
-            "Ricarica la pagina e riprova.";
-    }
-
-
-    mostraStatus(
-        "error",
-        messaggio
-    );
-}
-
-
-/* =========================================================
-   BASE64 UTF-8
-   ========================================================= */
-
-function decodeBase64(base64) {
 
     const binary =
         atob(
-            base64.replace(/\n/g, "")
+            base64.replace(
+                /\s/g,
+                ""
+            )
         );
+
 
     const bytes =
         Uint8Array.from(
             binary,
-            c => c.charCodeAt(0)
+            carattere =>
+                carattere.charCodeAt(0)
         );
+
 
     return new TextDecoder(
         "utf-8"
-    ).decode(bytes);
+    ).decode(
+        bytes
+    );
+
 }
 
 
-function encodeBase64(text) {
+
+/*
+==================================================
+CODIFICA BASE64 UTF-8
+==================================================
+*/
+
+
+function encodeBase64UTF8(
+    testo
+) {
+
 
     const bytes =
-        new TextEncoder().encode(text);
+        new TextEncoder().encode(
+            testo
+        );
 
-    let binary = "";
 
-    const chunkSize =
+    let binary =
+        "";
+
+
+    const blocco =
         0x8000;
 
 
     for (
         let i = 0;
         i < bytes.length;
-        i += chunkSize
+        i += blocco
     ) {
 
-        binary += String.fromCharCode(
-            ...bytes.subarray(
-                i,
-                Math.min(
-                    i + chunkSize,
-                    bytes.length
+
+        binary +=
+            String.fromCharCode(
+                ...bytes.subarray(
+                    i,
+                    i + blocco
                 )
-            )
-        );
+            );
+
     }
 
 
-    return btoa(binary);
+    return btoa(
+        binary
+    );
+
 }
 
 
-/* =========================================================
-   AVVIO
-   ========================================================= */
 
-carica();
+/*
+==================================================
+TORNA A INDEX.HTML
+==================================================
+*/
+
+
+function tornaIndex() {
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/*
+==================================================
+CARICAMENTO AUTOMATICO
+==================================================
+*/
+
+
+if (config) {
+
+
+    /*
+    Carica automaticamente
+    le impostazioni salvate
+    */
+
+
+    document
+        .getElementById(
+            "ghToken"
+        )
+        .value =
+        config.token || "";
+
+
+    document
+        .getElementById(
+            "ghRepo"
+        )
+        .value =
+        config.repo || "";
+
+
+    /*
+    Carica DOMINIO.json
+    */
+
+
+    caricaDominio();
+
+
+}
+else {
+
+
+    /*
+    Prima configurazione:
+    apre automaticamente
+    le impostazioni
+    */
+
+
+    document
+        .getElementById(
+            "impostazioni"
+        )
+        .classList.add(
+            "aperta"
+        );
+
+
+    setStatus(
+        "Inserisci le impostazioni GitHub",
+        "error"
+    );
+
+}
+
 
 </script>
 
 </body>
+
 </html>
 ```
